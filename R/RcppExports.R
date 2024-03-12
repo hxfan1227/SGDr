@@ -2,9 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' 
-NULL
-
-#' 
 #' Return a numeric vector of moving average with leading NAs filled with first average value
 #' 
 #' @param x A numeric vector with no NAs
@@ -31,6 +28,18 @@ cal_recharge <- function(t, R, E0, H2O_SB1, H2O_SB2, params, calibration) {
     .Call(`_SGDr_cal_recharge`, t, R, E0, H2O_SB1, H2O_SB2, params, calibration)
 }
 
+#' 
+#' Calculate the Submarine Groundwater Discharge using an analytical solution for sharp-interface steady state
+#' 
+#' @param GWL A numeric vector of daily groundwater level (mm)
+#' @param Wrechg A numeric vector of daily surface water recharge (mm) calculated from `cal_recharge()`.
+#' @param WrechgAve A numeric vector of moving average of `Wrechg`
+#' @param Pumping A numeric vector of daily pumping rate
+#' @param H2O_SB2 A numeric vector of depth of water in SB2 (initial condition)
+#' @param params A list for parameters of the model
+#' @param calibration If true return only the water level value (for computational efficiency)
+#' @return A data.frame with daily SGD
+#' @export
 cal_sgd <- function(GWL, Wrechg, WrechgAve, Pumping, params, calibration) {
     .Call(`_SGDr_cal_sgd`, GWL, Wrechg, WrechgAve, Pumping, params, calibration)
 }

@@ -231,18 +231,18 @@ DataFrame cal_recharge(NumericVector t, // Simulation day
 }
 
 //' 
- //' Calculate the Submarine Groundwater Discharge using an analytical solution for sharp-interface steady state
- //' 
- //' @param GWL A numeric vector of daily groundwater level (mm)
- //' @param Wrechg A numeric vector of daily surface water recharge (mm) calculated from `cal_recharge()`.
- //' @param WrechgAve A numeric vector of moving average of `Wrechg`
- //' @param Pumping A numeric vector of daily pumping rate
- //' @param H2O_SB2 A numeric vector of depth of water in SB2 (initial condition)
- //' @param params A list for parameters of the model
- //' @param calibration If true return only the water level value (for computational efficiency)
- //' @return A data.frame with daily SGD
- //' @export
- // [[Rcpp::export]]
+//' Calculate the Submarine Groundwater Discharge using an analytical solution for sharp-interface steady state
+//' 
+//' @param GWL A numeric vector of daily groundwater level (mm)
+//' @param Wrechg A numeric vector of daily surface water recharge (mm) calculated from `cal_recharge()`.
+//' @param WrechgAve A numeric vector of moving average of `Wrechg`
+//' @param Pumping A numeric vector of daily pumping rate
+//' @param H2O_SB2 A numeric vector of depth of water in SB2 (initial condition)
+//' @param params A list for parameters of the model
+//' @param calibration If true return only the water level value (for computational efficiency)
+//' @return A data.frame with daily SGD
+//' @export
+// [[Rcpp::export]]
 DataFrame cal_sgd(NumericVector GWL,
                   NumericVector Wrechg,
                   NumericVector WrechgAve,
