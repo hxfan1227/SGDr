@@ -10,6 +10,7 @@ NULL
 #' @param x A numeric vector with no NAs
 #' @param windowSize A integer of window size
 #' @return A numeric vector of moving average with leading NAs filled with first average value
+#' @export
 moving_average <- function(x, windowSize) {
     .Call(`_SGDr_moving_average`, x, windowSize)
 }
@@ -25,6 +26,7 @@ moving_average <- function(x, windowSize) {
 #' @param params A list for parameters of the model
 #' @param calibration If true return only the recharge value (for computational efficiency)
 #' @return A data.frame with daily surface water recharge
+#' @export
 cal_recharge <- function(t, R, E0, H2O_SB1, H2O_SB2, params, calibration) {
     .Call(`_SGDr_cal_recharge`, t, R, E0, H2O_SB1, H2O_SB2, params, calibration)
 }

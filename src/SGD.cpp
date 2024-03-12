@@ -8,7 +8,9 @@ using namespace Rcpp;
 //' @param x A numeric vector with no NAs
 //' @param windowSize A integer of window size
 //' @return A numeric vector of moving average with leading NAs filled with first average value
+//' @export
 // [[Rcpp::export]]
+
 NumericVector moving_average(NumericVector x, int windowSize)
 {
   int n = x.size();
@@ -58,6 +60,7 @@ NumericVector moving_average(NumericVector x, int windowSize)
 //' @param params A list for parameters of the model
 //' @param calibration If true return only the recharge value (for computational efficiency)
 //' @return A data.frame with daily surface water recharge
+//' @export
 // [[Rcpp::export]]
 
 DataFrame cal_recharge(NumericVector t, // Simulation day 
@@ -238,6 +241,7 @@ DataFrame cal_recharge(NumericVector t, // Simulation day
  //' @param params A list for parameters of the model
  //' @param calibration If true return only the water level value (for computational efficiency)
  //' @return A data.frame with daily SGD
+ //' @export
  // [[Rcpp::export]]
 DataFrame cal_sgd(NumericVector GWL,
                   NumericVector Wrechg,
