@@ -68,9 +68,10 @@ cal_sgd <- function(GWL, Wrechg, WrechgAve, Pumping, params, consts) {
 #' @param H2O_SB2 A numeric vector of depth of water in SB2 (initial condition)
 #' @param params A list for parameters of the model
 #' @param consts A list for constants of the model
-#' @return A data.frame with daily SGD
+#' @param sgd if TRUE return SDG time series. The default is FALSE.
+#' @return A vector of daiyly SGD or water level.
 #' @export
-cal_sgd_c <- function(GWL, Wrechg, WrechgAve, Pumping, params, consts) {
-    .Call(`_SGDr_cal_sgd_c`, GWL, Wrechg, WrechgAve, Pumping, params, consts)
+cal_sgd_c <- function(GWL, Wrechg, WrechgAve, Pumping, params, consts, sgd = FALSE) {
+    .Call(`_SGDr_cal_sgd_c`, GWL, Wrechg, WrechgAve, Pumping, params, consts, sgd)
 }
 

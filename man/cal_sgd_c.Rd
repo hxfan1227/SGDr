@@ -4,7 +4,7 @@
 \alias{cal_sgd_c}
 \title{Calculate the Submarine Groundwater Discharge using an analytical solution for sharp-interface steady state (for calibration)}
 \usage{
-cal_sgd_c(GWL, Wrechg, WrechgAve, Pumping, params, consts)
+cal_sgd_c(GWL, Wrechg, WrechgAve, Pumping, params, consts, sgd = FALSE)
 }
 \arguments{
 \item{GWL}{A numeric vector of daily groundwater level (mm)}
@@ -19,10 +19,12 @@ cal_sgd_c(GWL, Wrechg, WrechgAve, Pumping, params, consts)
 
 \item{consts}{A list for constants of the model}
 
+\item{sgd}{if TRUE return SDG time series. The default is FALSE.}
+
 \item{H2O_SB2}{A numeric vector of depth of water in SB2 (initial condition)}
 }
 \value{
-A data.frame with daily SGD
+A vector of daiyly SGD or water level.
 }
 \description{
 Calculate the Submarine Groundwater Discharge using an analytical solution for sharp-interface steady state (for calibration)

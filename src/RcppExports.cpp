@@ -71,8 +71,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // cal_sgd_c
-NumericVector cal_sgd_c(NumericVector GWL, NumericVector Wrechg, NumericVector WrechgAve, NumericVector Pumping, List params, List consts);
-RcppExport SEXP _SGDr_cal_sgd_c(SEXP GWLSEXP, SEXP WrechgSEXP, SEXP WrechgAveSEXP, SEXP PumpingSEXP, SEXP paramsSEXP, SEXP constsSEXP) {
+NumericVector cal_sgd_c(NumericVector GWL, NumericVector Wrechg, NumericVector WrechgAve, NumericVector Pumping, List params, List consts, bool sgd);
+RcppExport SEXP _SGDr_cal_sgd_c(SEXP GWLSEXP, SEXP WrechgSEXP, SEXP WrechgAveSEXP, SEXP PumpingSEXP, SEXP paramsSEXP, SEXP constsSEXP, SEXP sgdSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -82,7 +82,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type Pumping(PumpingSEXP);
     Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
     Rcpp::traits::input_parameter< List >::type consts(constsSEXP);
-    rcpp_result_gen = Rcpp::wrap(cal_sgd_c(GWL, Wrechg, WrechgAve, Pumping, params, consts));
+    Rcpp::traits::input_parameter< bool >::type sgd(sgdSEXP);
+    rcpp_result_gen = Rcpp::wrap(cal_sgd_c(GWL, Wrechg, WrechgAve, Pumping, params, consts, sgd));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -92,7 +93,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SGDr_cal_recharge", (DL_FUNC) &_SGDr_cal_recharge, 6},
     {"_SGDr_cal_recharge_c", (DL_FUNC) &_SGDr_cal_recharge_c, 6},
     {"_SGDr_cal_sgd", (DL_FUNC) &_SGDr_cal_sgd, 6},
-    {"_SGDr_cal_sgd_c", (DL_FUNC) &_SGDr_cal_sgd_c, 6},
+    {"_SGDr_cal_sgd_c", (DL_FUNC) &_SGDr_cal_sgd_c, 7},
     {NULL, NULL, 0}
 };
 

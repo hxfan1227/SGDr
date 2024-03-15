@@ -572,7 +572,8 @@ DataFrame cal_sgd(NumericVector GWL,
 //' @param H2O_SB2 A numeric vector of depth of water in SB2 (initial condition)
 //' @param params A list for parameters of the model
 //' @param consts A list for constants of the model
-//' @return A data.frame with daily SGD
+//' @param sgd if TRUE return SDG time series. The default is FALSE.
+//' @return A vector of daiyly SGD or water level.
 //' @export
 // [[Rcpp::export]]
 NumericVector cal_sgd_c(NumericVector GWL,
@@ -580,7 +581,8 @@ NumericVector cal_sgd_c(NumericVector GWL,
                         NumericVector WrechgAve,
                         NumericVector Pumping,
                         List params,
-                        List consts // a list for constants of the model
+                        List consts, // a list for constants of the model
+                        bool sgd = false
 )
 {
   NumericVector H2O1_AQ(GWL.size(), NA_REAL);
@@ -739,6 +741,9 @@ NumericVector cal_sgd_c(NumericVector GWL,
     // sqrt(std::pow(SGD1[i] / con_W, 2) / (WrechgAve[i] / 1000) / aq_K + aq_rho_s / aq_rho_f * aq_z0 * aq_z0) - aq_z0 : 1000;
     // hn2[i] = (WrechgAve[i] > 1E-30) ?
     // sqrt(std::pow(SGD2[i] / con_W, 2) / (WrechgAve[i] / 1000) / aq_K + aq_rho_s / aq_rho_f * aq_z0 * aq_z0) - aq_z0 : 1000;
+  }
+  if (sgd) {
+    return(SGD);
   }
   return H2O3_AQ;
 }
