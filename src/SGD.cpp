@@ -424,7 +424,7 @@ DataFrame cal_sgd(NumericVector GWL,
     }
 
     H2O1_AQ[i] = GWL[i] + Wrechg[i] / 1000 / aq_Sy;
-    if (WrechgAve[i] > 1E-30)
+    if (WrechgAve[i] > 0.0)
     {
       SGD1[i] = ((aq_K / 2 / con_x * aq_rho_s / (aq_rho_s - aq_rho_f) * std::pow(GWL[i], 2)) + (WrechgAve[i] / 1000) * con_x / 2) * con_W;
       SGD2[i] = (aq_K * ((std::pow((GWL[i] + aq_z0), 2) - aq_rho_s / aq_rho_f * std::pow(aq_z0, 2))) + (WrechgAve[i] / 1000) * std::pow(con_x, 2)) / 2 / con_x * con_W;
@@ -524,17 +524,17 @@ DataFrame cal_sgd(NumericVector GWL,
     FWLdrop[i] = i == 0 ? 0 : (SWvol[i - 1] - SWvol[i]) * con_W / con_Area * 1000;
     H2O3_AQ[i] = i == 0 ? H2O2_AQ[i] : H2O2_AQ[i] - FWLdrop[i] / 1000;
 
-    // SGD1[i] = (WrechgAve[i] > 1E-30) ?
+    // SGD1[i] = (WrechgAve[i] > 0.0) ?
     // ((aq_K / 2 / con_x * aq_rho_s / (aq_rho_s - aq_rho_f) * std::pow(GWL[i], 2)) + (WrechgAve[i] / 1000) * con_x / 2) * con_W :
     //   (aq_K / 2 / con_x * aq_rho_s / (aq_rho_s - aq_rho_f) * std::pow(GWL[i], 2)) * con_W;
-    // SGD2[i] = (WrechgAve[i] > 1E-30) ?
+    // SGD2[i] = (WrechgAve[i] > 0.0) ?
     // ((aq_K * ((std::pow((GWL[i] + aq_z0), 2) - aq_rho_s / aq_rho_f * std::pow(aq_z0, 2)) + (WrechgAve[i] / 1000) * std::pow(con_x, 2))) / 2 / con_x * con_W) :
     //   (aq_K * ((std::pow((GWL[i] + aq_z0), 2) - aq_rho_s / aq_rho_f * std::pow(aq_z0, 2))) / 2 / con_x * con_W);
-    // xn1[i] = (WrechgAve[i] > 1E-30) ? SGD1[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
-    // xn2[i] = (WrechgAve[i] > 1E-30) ? SGD2[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
-    // hn1[i] = (WrechgAve[i] > 1E-30) ?
+    // xn1[i] = (WrechgAve[i] > 0.0) ? SGD1[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
+    // xn2[i] = (WrechgAve[i] > 0.0) ? SGD2[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
+    // hn1[i] = (WrechgAve[i] > 0.0) ?
     // sqrt(std::pow(SGD1[i] / con_W, 2) / (WrechgAve[i] / 1000) / aq_K + aq_rho_s / aq_rho_f * aq_z0 * aq_z0) - aq_z0 : 1000;
-    // hn2[i] = (WrechgAve[i] > 1E-30) ?
+    // hn2[i] = (WrechgAve[i] > 0.0) ?
     // sqrt(std::pow(SGD2[i] / con_W, 2) / (WrechgAve[i] / 1000) / aq_K + aq_rho_s / aq_rho_f * aq_z0 * aq_z0) - aq_z0 : 1000;
   }
   DataFrame result = DataFrame::create(Named("H2O1_AQ") = H2O1_AQ,
@@ -629,7 +629,7 @@ NumericVector cal_sgd_c(NumericVector GWL,
     }
 
     H2O1_AQ[i] = GWL[i] + Wrechg[i] / 1000 / aq_Sy;
-    if (WrechgAve[i] > 1E-30)
+    if (WrechgAve[i] > 0.0)
     {
       SGD1[i] = ((aq_K / 2 / con_x * aq_rho_s / (aq_rho_s - aq_rho_f) * std::pow(GWL[i], 2)) + (WrechgAve[i] / 1000) * con_x / 2) * con_W;
       SGD2[i] = (aq_K * ((std::pow((GWL[i] + aq_z0), 2) - aq_rho_s / aq_rho_f * std::pow(aq_z0, 2))) + (WrechgAve[i] / 1000) * std::pow(con_x, 2)) / 2 / con_x * con_W;
@@ -729,17 +729,17 @@ NumericVector cal_sgd_c(NumericVector GWL,
     FWLdrop[i] = i == 0 ? 0 : (SWvol[i - 1] - SWvol[i]) * con_W / con_Area * 1000;
     H2O3_AQ[i] = i == 0 ? H2O2_AQ[i] : H2O2_AQ[i] - FWLdrop[i] / 1000;
 
-    // SGD1[i] = (WrechgAve[i] > 1E-30) ?
+    // SGD1[i] = (WrechgAve[i] > 0.0) ?
     // ((aq_K / 2 / con_x * aq_rho_s / (aq_rho_s - aq_rho_f) * std::pow(GWL[i], 2)) + (WrechgAve[i] / 1000) * con_x / 2) * con_W :
     //   (aq_K / 2 / con_x * aq_rho_s / (aq_rho_s - aq_rho_f) * std::pow(GWL[i], 2)) * con_W;
-    // SGD2[i] = (WrechgAve[i] > 1E-30) ?
+    // SGD2[i] = (WrechgAve[i] > 0.0) ?
     // ((aq_K * ((std::pow((GWL[i] + aq_z0), 2) - aq_rho_s / aq_rho_f * std::pow(aq_z0, 2)) + (WrechgAve[i] / 1000) * std::pow(con_x, 2))) / 2 / con_x * con_W) :
     //   (aq_K * ((std::pow((GWL[i] + aq_z0), 2) - aq_rho_s / aq_rho_f * std::pow(aq_z0, 2))) / 2 / con_x * con_W);
-    // xn1[i] = (WrechgAve[i] > 1E-30) ? SGD1[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
-    // xn2[i] = (WrechgAve[i] > 1E-30) ? SGD2[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
-    // hn1[i] = (WrechgAve[i] > 1E-30) ?
+    // xn1[i] = (WrechgAve[i] > 0.0) ? SGD1[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
+    // xn2[i] = (WrechgAve[i] > 0.0) ? SGD2[i] / (WrechgAve[i] / 1000) / con_W : 1000000000;
+    // hn1[i] = (WrechgAve[i] > 0.0) ?
     // sqrt(std::pow(SGD1[i] / con_W, 2) / (WrechgAve[i] / 1000) / aq_K + aq_rho_s / aq_rho_f * aq_z0 * aq_z0) - aq_z0 : 1000;
-    // hn2[i] = (WrechgAve[i] > 1E-30) ?
+    // hn2[i] = (WrechgAve[i] > 0.0) ?
     // sqrt(std::pow(SGD2[i] / con_W, 2) / (WrechgAve[i] / 1000) / aq_K + aq_rho_s / aq_rho_f * aq_z0 * aq_z0) - aq_z0 : 1000;
   }
   if (sgd) {
