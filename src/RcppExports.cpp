@@ -10,6 +10,17 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// calc_cn_runoff
+double calc_cn_runoff(Rcpp::List sb1);
+RcppExport SEXP _SGDr_calc_cn_runoff(SEXP sb1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sb1(sb1SEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_cn_runoff(sb1));
+    return rcpp_result_gen;
+END_RCPP
+}
 // moving_average
 NumericVector moving_average(NumericVector x, int windowSize);
 RcppExport SEXP _SGDr_moving_average(SEXP xSEXP, SEXP windowSizeSEXP) {
@@ -88,12 +99,16 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_BucketModule();
+
 static const R_CallMethodDef CallEntries[] = {
+    {"_SGDr_calc_cn_runoff", (DL_FUNC) &_SGDr_calc_cn_runoff, 1},
     {"_SGDr_moving_average", (DL_FUNC) &_SGDr_moving_average, 2},
     {"_SGDr_cal_recharge", (DL_FUNC) &_SGDr_cal_recharge, 6},
     {"_SGDr_cal_recharge_c", (DL_FUNC) &_SGDr_cal_recharge_c, 6},
     {"_SGDr_cal_sgd", (DL_FUNC) &_SGDr_cal_sgd, 6},
     {"_SGDr_cal_sgd_c", (DL_FUNC) &_SGDr_cal_sgd_c, 7},
+    {"_rcpp_module_boot_BucketModule", (DL_FUNC) &_rcpp_module_boot_BucketModule, 0},
     {NULL, NULL, 0}
 };
 
