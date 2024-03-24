@@ -10,93 +10,11 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// moving_average
-NumericVector moving_average(NumericVector x, int windowSize);
-RcppExport SEXP _SGDr_moving_average(SEXP xSEXP, SEXP windowSizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type windowSize(windowSizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(moving_average(x, windowSize));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cal_recharge
-DataFrame cal_recharge(NumericVector t, NumericVector R, NumericVector E0, NumericVector H2O_SB1, NumericVector H2O_SB2, List params);
-RcppExport SEXP _SGDr_cal_recharge(SEXP tSEXP, SEXP RSEXP, SEXP E0SEXP, SEXP H2O_SB1SEXP, SEXP H2O_SB2SEXP, SEXP paramsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type t(tSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type R(RSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type E0(E0SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type H2O_SB1(H2O_SB1SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type H2O_SB2(H2O_SB2SEXP);
-    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(cal_recharge(t, R, E0, H2O_SB1, H2O_SB2, params));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cal_recharge_c
-NumericVector cal_recharge_c(NumericVector t, NumericVector R, NumericVector E0, NumericVector H2O_SB1, NumericVector H2O_SB2, List params);
-RcppExport SEXP _SGDr_cal_recharge_c(SEXP tSEXP, SEXP RSEXP, SEXP E0SEXP, SEXP H2O_SB1SEXP, SEXP H2O_SB2SEXP, SEXP paramsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type t(tSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type R(RSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type E0(E0SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type H2O_SB1(H2O_SB1SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type H2O_SB2(H2O_SB2SEXP);
-    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(cal_recharge_c(t, R, E0, H2O_SB1, H2O_SB2, params));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cal_sgd
-DataFrame cal_sgd(NumericVector GWL, NumericVector Wrechg, NumericVector WrechgAve, NumericVector Pumping, List params, List consts);
-RcppExport SEXP _SGDr_cal_sgd(SEXP GWLSEXP, SEXP WrechgSEXP, SEXP WrechgAveSEXP, SEXP PumpingSEXP, SEXP paramsSEXP, SEXP constsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type GWL(GWLSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type Wrechg(WrechgSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type WrechgAve(WrechgAveSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type Pumping(PumpingSEXP);
-    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
-    Rcpp::traits::input_parameter< List >::type consts(constsSEXP);
-    rcpp_result_gen = Rcpp::wrap(cal_sgd(GWL, Wrechg, WrechgAve, Pumping, params, consts));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cal_sgd_c
-NumericVector cal_sgd_c(NumericVector GWL, NumericVector Wrechg, NumericVector WrechgAve, NumericVector Pumping, List params, List consts, bool sgd);
-RcppExport SEXP _SGDr_cal_sgd_c(SEXP GWLSEXP, SEXP WrechgSEXP, SEXP WrechgAveSEXP, SEXP PumpingSEXP, SEXP paramsSEXP, SEXP constsSEXP, SEXP sgdSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type GWL(GWLSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type Wrechg(WrechgSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type WrechgAve(WrechgAveSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type Pumping(PumpingSEXP);
-    Rcpp::traits::input_parameter< List >::type params(paramsSEXP);
-    Rcpp::traits::input_parameter< List >::type consts(constsSEXP);
-    Rcpp::traits::input_parameter< bool >::type sgd(sgdSEXP);
-    rcpp_result_gen = Rcpp::wrap(cal_sgd_c(GWL, Wrechg, WrechgAve, Pumping, params, consts, sgd));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP _rcpp_module_boot_ModelModule();
 RcppExport SEXP _rcpp_module_boot_ParametersModule();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SGDr_moving_average", (DL_FUNC) &_SGDr_moving_average, 2},
-    {"_SGDr_cal_recharge", (DL_FUNC) &_SGDr_cal_recharge, 6},
-    {"_SGDr_cal_recharge_c", (DL_FUNC) &_SGDr_cal_recharge_c, 6},
-    {"_SGDr_cal_sgd", (DL_FUNC) &_SGDr_cal_sgd, 6},
-    {"_SGDr_cal_sgd_c", (DL_FUNC) &_SGDr_cal_sgd_c, 7},
     {"_rcpp_module_boot_ModelModule", (DL_FUNC) &_rcpp_module_boot_ModelModule, 0},
     {"_rcpp_module_boot_ParametersModule", (DL_FUNC) &_rcpp_module_boot_ParametersModule, 0},
     {NULL, NULL, 0}
