@@ -13,7 +13,6 @@ Model::Model(Rcpp::DataFrame inputData,
                                               H2O_SB2(Rcpp::as<Rcpp::NumericVector>(inputData["H2O_SB2"]))
 
 {
-    initializeVector();
 }
 void Model::initializeVector()
 {
@@ -61,25 +60,28 @@ void Model::initializeVector()
     H2O3_AQ = Rcpp::NumericVector(simLength, NA_REAL);
     SGD1 = Rcpp::NumericVector(simLength, NA_REAL);
     SGD2 = Rcpp::NumericVector(simLength, NA_REAL);
-    xn1 = Rcpp::NumericVector(simLength, NA_REAL);
-    xn2 = Rcpp::NumericVector(simLength, NA_REAL);
-    hn1 = Rcpp::NumericVector(simLength, NA_REAL);
-    hn2 = Rcpp::NumericVector(simLength, NA_REAL);
-    M1 = Rcpp::NumericVector(simLength, NA_REAL);
-    M2 = Rcpp::NumericVector(simLength, NA_REAL);
-    xT1 = Rcpp::NumericVector(simLength, NA_REAL);
-    xT2 = Rcpp::NumericVector(simLength, NA_REAL);
-    SGD = Rcpp::NumericVector(simLength, NA_REAL);
-    SGDdrop = Rcpp::NumericVector(simLength, NA_REAL);
-    PumpingDrop = Rcpp::NumericVector(simLength, NA_REAL);
-    dxT = Rcpp::NumericVector(simLength, NA_REAL);
-    xT3 = Rcpp::NumericVector(simLength, NA_REAL);
-    SWvol = Rcpp::NumericVector(simLength, NA_REAL);
-    FWLdrop = Rcpp::NumericVector(simLength, NA_REAL);
+    xn = Rcpp::NumericVector(simLength, NA_REAL);          // the distance from the coast to the peak of the groundwater mound
+    xn1 = Rcpp::NumericVector(simLength, NA_REAL);         // the distance from the coast to the peak of the groundwater mound when x < xT
+    xn2 = Rcpp::NumericVector(simLength, NA_REAL);         // the distance from the coast to the peak of the groundwater mound when x > xT
+    hn = Rcpp::NumericVector(simLength, NA_REAL);          // the elevation of the groundwater mount (0m AHD)
+    hn1 = Rcpp::NumericVector(simLength, NA_REAL);         // the elevation of the groundwater mount (0m AHD) when x < xT
+    hn2 = Rcpp::NumericVector(simLength, NA_REAL);         // the elevation of the groundwater mount (0m AHD) when x > xT
+    M1 = Rcpp::NumericVector(simLength, NA_REAL);          //
+    M2 = Rcpp::NumericVector(simLength, NA_REAL);          //
+    xT1 = Rcpp::NumericVector(simLength, NA_REAL);         // positioning of the saltwater toe when x < xT
+    xT2 = Rcpp::NumericVector(simLength, NA_REAL);         // positioning of the saltwater toe when x > xT
+    SGD = Rcpp::NumericVector(simLength, NA_REAL);         // SGD calculated based on the calculate position of the saltwater toe
+    SGDdrop = Rcpp::NumericVector(simLength, NA_REAL);     // drop in water level of the bucket due to SGD (m)
+    PumpingDrop = Rcpp::NumericVector(simLength, NA_REAL); // drop in water level of the bucket due to pumping extraction (m)
+    dxT = Rcpp::NumericVector(simLength, NA_REAL);         // saltwater toe moving speed m/day
+    xT3 = Rcpp::NumericVector(simLength, NA_REAL);         // the position of the saltwater toe at the end of the day
+    SWvol = Rcpp::NumericVector(simLength, NA_REAL);       // volume of soil water in the aquifer bucket
+    FWLdrop = Rcpp::NumericVector(simLength, NA_REAL);     // change in water level in the bucket
 }
 
 void Model::calc_recharge()
 {
+    initializeVector();
     for (int i = 0; i < simLength; ++i)
     {
         update_head(i);
@@ -182,6 +184,7 @@ void Model::calc_aquifer_recharge(int i)
 //' @param x A numeric vector with no NAs
 //' @param windowSize A integer of window size
 //' @return A numeric vector of moving average with leading NAs filled with first average value
+//' @name moving_average
 Rcpp::NumericVector Model::moving_average(Rcpp::NumericVector x, int windowSize)
 {
     int n = x.size();
@@ -273,28 +276,38 @@ void Model::calc_sgds(int i)
     if (xT2[i] < 0)
     {
         SGD[i] = SGD1[i];
+        xn[i] = xn1[i];
+        hn[i] = hn1[i];
     }
     else
     {
         if (M1[i] >= 1)
         {
             SGD[i] = SGD1[i];
+            xn[i] = xn1[i];
+            hn[i] = hn1[i];
         }
         else
         {
             if (parameters.get_constParameter().get_W() <= xT2[i])
             {
                 SGD[i] = SGD1[i];
+                xn[i] = xn1[i];
+                hn[i] = hn1[i];
             }
             else
             {
                 if (parameters.get_constParameter().get_x() > xT2[i])
                 {
                     SGD[i] = SGD2[i];
+                    xn[i] = xn2[i];
+                    hn[i] = hn2[i];
                 }
                 else
                 {
                     SGD[i] = SGD1[i];
+                    xn[i] = xn1[i];
+                    hn[i] = hn1[i];
                 }
             }
         }
@@ -334,6 +347,11 @@ void Model::update_aq_head(int i)
     SWvol[i] = parameters.get_aquifer().get_Sy() * parameters.get_aquifer().get_z0() * xT3[i] / 3;
     FWLdrop[i] = i == 0 ? 0 : (SWvol[i - 1] - SWvol[i]) * parameters.get_constParameter().get_W() / parameters.get_constParameter().get_Area() * 1000;
     H2O3_AQ[i] = i == 0 ? H2O2_AQ[i] : H2O2_AQ[i] - FWLdrop[i] / 1000;
+}
+
+void Model::update_parameters(const Rcpp::List &newCalibratableParams, const Rcpp::List &newConstParams)
+{
+    parameters.update(newCalibratableParams, newConstParams);
 }
 
 // Getters
@@ -380,8 +398,10 @@ Rcpp::NumericVector Model::get_H2O2_AQ() { return H2O2_AQ; }
 Rcpp::NumericVector Model::get_H2O3_AQ() { return H2O3_AQ; }
 Rcpp::NumericVector Model::get_SGD1() { return SGD1; }
 Rcpp::NumericVector Model::get_SGD2() { return SGD2; }
+Rcpp::NumericVector Model::get_xn() { return xn; }
 Rcpp::NumericVector Model::get_xn1() { return xn1; }
 Rcpp::NumericVector Model::get_xn2() { return xn2; }
+Rcpp::NumericVector Model::get_hn() { return hn; }
 Rcpp::NumericVector Model::get_hn1() { return hn1; }
 Rcpp::NumericVector Model::get_hn2() { return hn2; }
 Rcpp::NumericVector Model::get_M1() { return M1; }
@@ -395,12 +415,13 @@ Rcpp::NumericVector Model::get_dxT() { return dxT; }
 Rcpp::NumericVector Model::get_xT3() { return xT3; }
 Rcpp::NumericVector Model::get_SWvol() { return SWvol; }
 Rcpp::NumericVector Model::get_FWLdrop() { return FWLdrop; }
-Rcpp::DataFrame Model::get_recharge_output() {   
+Rcpp::DataFrame Model::get_recharge_output()
+{
     return Rcpp::DataFrame::create(
         Rcpp::Named("H2O3_SB1") = H2O3_SB1,
         Rcpp::Named("H2O3_SB2") = H2O3_SB2,
         Rcpp::Named("Wperc2") = Wperc2,
-        // Wrechg    
+        // Wrechg
         Rcpp::Named("Wrechg") = Wrechg,
         // SW
         Rcpp::Named("SW") = SW,
@@ -418,7 +439,8 @@ Rcpp::DataFrame Model::get_recharge_output() {
         Rcpp::Named("finfla_SB1") = finfla_SB1);
 }
 
-Rcpp::DataFrame Model::get_sgd_output() {   
+Rcpp::DataFrame Model::get_sgd_output()
+{
     return Rcpp::DataFrame::create(
         Rcpp::Named("H2O1_AQ") = H2O1_AQ,
         Rcpp::Named("SGD1") = SGD1,
@@ -438,9 +460,12 @@ Rcpp::DataFrame Model::get_sgd_output() {
         Rcpp::Named("dxT") = dxT,
         Rcpp::Named("xT3") = xT3,
         Rcpp::Named("SWvol") = SWvol,
-        Rcpp::Named("FWLdrop") = FWLdrop
-    );
-        
+        Rcpp::Named("FWLdrop") = FWLdrop);
+}
+
+Rcpp::List Model::get_all_params_list()
+{
+    return parameters.get_all_params_list();
 }
 
 RCPP_MODULE(ModelModule)
@@ -494,8 +519,10 @@ RCPP_MODULE(ModelModule)
         .method("calc_sgd", &Model::calc_sgd)
         .method("get_SGD1", &Model::get_SGD1)
         .method("get_SGD2", &Model::get_SGD2)
+        .method("get_xn", &Model::get_xn)
         .method("get_xn1", &Model::get_xn1)
         .method("get_xn2", &Model::get_xn2)
+        .method("get_hn", &Model::get_hn)
         .method("get_hn1", &Model::get_hn1)
         .method("get_hn2", &Model::get_hn2)
         .method("get_M1", &Model::get_M1)
@@ -508,5 +535,7 @@ RCPP_MODULE(ModelModule)
         .method("get_dxT", &Model::get_dxT)
         .method("get_xT3", &Model::get_xT3)
         .method("get_SWvol", &Model::get_SWvol)
-        .method("get_FWLdrop", &Model::get_FWLdrop);
+        .method("get_FWLdrop", &Model::get_FWLdrop)
+        .method("update_parameters", &Model::update_parameters)
+        .method("get_all_params_list", &Model::get_all_params_list);
 }

@@ -1,7 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
 #include "Parameters.h"
-
 class Model
 {
 private:
@@ -57,8 +56,10 @@ private:
     Rcpp::NumericVector H2O3_AQ;
     Rcpp::NumericVector SGD1;
     Rcpp::NumericVector SGD2;
+    Rcpp::NumericVector xn;
     Rcpp::NumericVector xn1;
     Rcpp::NumericVector xn2;
+    Rcpp::NumericVector hn;
     Rcpp::NumericVector hn1;
     Rcpp::NumericVector hn2;
     Rcpp::NumericVector M1;
@@ -89,6 +90,8 @@ public:
     void update_gwl(int i);
     void calc_sgds(int i);
     void update_aq_head(int i);
+    void update_parameters(const Rcpp::List &newCalibratableParams, const Rcpp::List &newConstParams);
+    Rcpp::List get_all_params_list();
     // getters
     Rcpp::NumericVector get_SW();
     Rcpp::NumericVector get_S();
@@ -133,8 +136,10 @@ public:
     Rcpp::NumericVector get_H2O3_AQ();
     Rcpp::NumericVector get_SGD1();
     Rcpp::NumericVector get_SGD2();
+    Rcpp::NumericVector get_xn();
     Rcpp::NumericVector get_xn1();
     Rcpp::NumericVector get_xn2();
+    Rcpp::NumericVector get_hn();
     Rcpp::NumericVector get_hn1();
     Rcpp::NumericVector get_hn2();
     Rcpp::NumericVector get_M1();
@@ -152,4 +157,4 @@ public:
     Rcpp::DataFrame get_sgd_output();
 };
 
-#endif
+#endif // MODEL_H
