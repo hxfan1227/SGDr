@@ -7,5 +7,6 @@
 #' @param x A numeric vector with no NAs
 #' @param windowSize A integer of window size
 #' @return A numeric vector of moving average with leading NAs filled with first average value
+#' @name moving_average
 NULL
 
