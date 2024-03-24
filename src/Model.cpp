@@ -468,6 +468,8 @@ Rcpp::List Model::get_all_params_list()
     return parameters.get_all_params_list();
 }
 
+// RCPP_EXPOSED_CLASS(Model);
+
 RCPP_MODULE(ModelModule)
 {
     Rcpp::class_<Model>("Model")

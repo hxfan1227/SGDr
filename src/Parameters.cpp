@@ -50,6 +50,8 @@ void Parameters::update(const Rcpp::List& newCalibratableParams, const Rcpp::Lis
     constParameter = ConstParameter(newConstParams);
 }
 
+// RCPP_EXPOSED_CLASS(Parameters);
+
 RCPP_MODULE(ParametersModule)
 {
     Rcpp::class_<Parameters>("Parameters")
