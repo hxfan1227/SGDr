@@ -1,0 +1,14 @@
+---
+title: "1_introduction"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(SGDr)
+```

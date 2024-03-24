@@ -1,0 +1,5 @@
+url: https://hxfan1227.github.io/SGDr/
+template:
+  bootstrap: 5
+development:
+  model: auto
