@@ -1,6 +1,6 @@
 #' @import jsonlite
 NULL
-#' @name R_model_interface
+#' @name create_sgd_model
 #' @aliases R_model_interface
 #' @title Gernerate a SGD model in R
 #' @rdname R_model_interface
