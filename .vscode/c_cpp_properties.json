@@ -5,7 +5,6 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${env:HOME}/.cache/R/renv/library/SGDr-168d7280/R-4.3/x86_64-pc-linux-gnu/Rcpp/include",
-                "${env:HOME}/.cache/R/renv/library/SGDr-168d7280/R-4.3/x86_64-pc-linux-gnu/RcppArmadillo/include",
                 "/usr/share/R/include"
             ],
             "defines": [],
