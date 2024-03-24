@@ -163,5 +163,6 @@ public:
     Rcpp::List get_calibratable_params_list();
     Rcpp::List get_const_params_list();
     Rcpp::List get_all_params_list();
+    void update(const Rcpp::List& newCalibratableParams, const Rcpp::List& newConstParams);
 };
 #endif // Parameters_H
