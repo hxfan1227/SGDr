@@ -8,3 +8,10 @@
 \description{
 One paragraph description of what the package does as one or more full sentences.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://hxfan1227.github.io/SGDr/}
+}
+
+}
