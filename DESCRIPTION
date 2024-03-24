@@ -11,6 +11,7 @@ License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.12)
 LinkingTo: Rcpp
 RoxygenNote: 7.3.1
+Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Suggests: 
     testthat (>= 3.0.0)
