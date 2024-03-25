@@ -1,12 +1,9 @@
 Package: SGDr
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Submarine Groundwater Discharge (SGD) calculation in R
 Version: 1.0.0.9000
 Date: 2024-03-12
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one
-        or more full sentences.
+Description: Estimate SGD using 1-D bucket model and Strack (1976) analytical solution.
 License: GPL (>= 2)
 Imports: 
     jsonlite,
@@ -22,3 +19,9 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://hxfan1227.github.io/SGDr/
 Config/Needs/website: rmarkdown
+Authors@R: c(
+    person("Hongxiang", "Fan", , "hxfan@niglas.ac.cn", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7626-1344")),
+    person("Adrian", "Werner", , "adrian.werner@flinders.edu.au", role = c("aut", "ctb"),
+           comment = c(ORCID = "0000-0002-1190-1301"))
+  )

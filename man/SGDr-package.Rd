@@ -4,14 +4,23 @@
 \name{SGDr-package}
 \alias{SGDr}
 \alias{SGDr-package}
-\title{SGDr: What the Package Does in One 'Title Case' Line}
+\title{SGDr: Submarine Groundwater Discharge (SGD) calculation in R}
 \description{
-One paragraph description of what the package does as one or more full sentences.
+Estimate SGD using 1-D bucket model and Strack (1976) analytical solution.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://hxfan1227.github.io/SGDr/}
+}
+
+}
+\author{
+\strong{Maintainer}: Hongxiang Fan \email{hxfan@niglas.ac.cn} (\href{https://orcid.org/0000-0001-7626-1344}{ORCID})
+
+Authors:
+\itemize{
+  \item Adrian Werner \email{adrian.werner@flinders.edu.au} (\href{https://orcid.org/0000-0002-1190-1301}{ORCID}) [contributor]
 }
 
 }
