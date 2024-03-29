@@ -93,6 +93,7 @@ public:
     void update_parameters(const Rcpp::List &newCalibratableParams, const Rcpp::List &newConstParams);
     Rcpp::List get_all_params_list();
     // getters
+    Rcpp::DataFrame get_inputData();
     Rcpp::NumericVector get_SW();
     Rcpp::NumericVector get_S();
     Rcpp::NumericVector get_Ia();

@@ -467,6 +467,10 @@ Rcpp::List Model::get_all_params_list()
 {
     return parameters.get_all_params_list();
 }
+Rcpp::DataFrame Model::get_inputData()
+{
+    return inputData;
+}
 
 // RCPP_EXPOSED_CLASS(Model);
 
@@ -477,6 +481,7 @@ RCPP_MODULE(ModelModule)
         .method("calc_recharge", &Model::calc_recharge)
         .method("get_recharge_output", &Model::get_recharge_output)
         .method("get_sgd_output", &Model::get_sgd_output)
+        .method("get_inputData", &Model::get_inputData)
         .method("get_SW", &Model::get_SW)
         .method("get_S", &Model::get_S)
         .method("get_Ia", &Model::get_Ia)
