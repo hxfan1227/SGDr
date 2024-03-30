@@ -12,6 +12,7 @@ Imports:
     methods,
     pracma,
     Rcpp (>= 1.0.12),
+    scales,
     tidyr
 LinkingTo: Rcpp
 RoxygenNote: 7.3.1

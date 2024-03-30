@@ -2,7 +2,7 @@
 
 export(estimate_sgd)
 export(json_to_paramter_list)
-export(model_diagnosis)
+export(model_diagnose)
 export(paramter_vec_to_list)
 import(Rcpp)
 import(dplyr)
