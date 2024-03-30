@@ -52,16 +52,6 @@ void Parameters::update(const Rcpp::List& newCalibratableParams, const Rcpp::Lis
 
 // RCPP_EXPOSED_CLASS(Parameters);
 
-RCPP_MODULE(ParametersModule)
-{
-    Rcpp::class_<Parameters>("Parameters")
-        .constructor<Rcpp::List, Rcpp::List>()
-        .method("get_all_params_list", &Parameters::get_all_params_list)
-        .method("get_const_params_list", &Parameters::get_const_params_list)
-        .method("get_calibratable_params_list", &Parameters::get_calibratable_params_list)
-        .method("update", &Parameters::update);
-}
-
 double Bucket::interp1(Rcpp::NumericVector x, Rcpp::NumericVector y, double xi)
 {
     Rcpp::Environment pracmaEnv = Rcpp::Environment::namespace_env("pracma");

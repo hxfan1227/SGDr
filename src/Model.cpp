@@ -178,13 +178,7 @@ void Model::calc_aquifer_recharge(int i)
     Wrechg[i] = i == 0 ? (1 - exp(-1 / parameters.get_aquifer().get_delta())) * Wperc2[i] : (1 - exp(-1 / parameters.get_aquifer().get_delta())) * Wperc2[i] + exp(-1 / parameters.get_aquifer().get_delta()) * Wrechg[i - 1];
 }
 
-//'
-//' Return a numeric vector of moving average with leading NAs filled with first average value
-//'
-//' @param x A numeric vector with no NAs
-//' @param windowSize A integer of window size
-//' @return A numeric vector of moving average with leading NAs filled with first average value
-//' @name moving_average
+
 Rcpp::NumericVector Model::moving_average(Rcpp::NumericVector x, int windowSize)
 {
     int n = x.size();
@@ -442,25 +436,13 @@ Rcpp::DataFrame Model::get_recharge_output()
 Rcpp::DataFrame Model::get_sgd_output()
 {
     return Rcpp::DataFrame::create(
-        Rcpp::Named("H2O1_AQ") = H2O1_AQ,
-        Rcpp::Named("SGD1") = SGD1,
-        Rcpp::Named("SGD2") = SGD2,
-        Rcpp::Named("xn1") = xn1,
-        Rcpp::Named("xn2") = xn2,
-        Rcpp::Named("hn1") = hn1,
-        Rcpp::Named("hn2") = hn2,
-        Rcpp::Named("M1") = M1,
-        Rcpp::Named("M2") = M2,
-        Rcpp::Named("xT1") = xT1,
-        Rcpp::Named("xT2") = xT2,
+        Rcpp::Named("t") = inputData["t"],
+        Rcpp::Named("wl") = H2O3_AQ,
         Rcpp::Named("SGD") = SGD,
-        Rcpp::Named("SGDdrop") = SGDdrop,
-        Rcpp::Named("PumpingDrop") = PumpingDrop,
-        Rcpp::Named("H2O2_AQ") = H2O2_AQ,
-        Rcpp::Named("dxT") = dxT,
-        Rcpp::Named("xT3") = xT3,
-        Rcpp::Named("SWvol") = SWvol,
-        Rcpp::Named("FWLdrop") = FWLdrop);
+        Rcpp::Named("xn") = xn,
+        Rcpp::Named("hn") = hn,
+        Rcpp::Named("Wrechg") = Wrechg,
+        Rcpp::Named("WrechgAve") = WrechgAve);
 }
 
 Rcpp::List Model::get_all_params_list()
@@ -473,76 +455,3 @@ Rcpp::DataFrame Model::get_inputData()
 }
 
 // RCPP_EXPOSED_CLASS(Model);
-
-RCPP_MODULE(ModelModule)
-{
-    Rcpp::class_<Model>("Model")
-        .constructor<Rcpp::DataFrame, Rcpp::List, Rcpp::List>()
-        .method("calc_recharge", &Model::calc_recharge)
-        .method("get_recharge_output", &Model::get_recharge_output)
-        .method("get_sgd_output", &Model::get_sgd_output)
-        .method("get_inputData", &Model::get_inputData)
-        .method("get_SW", &Model::get_SW)
-        .method("get_S", &Model::get_S)
-        .method("get_Ia", &Model::get_Ia)
-        .method("get_CN", &Model::get_CN)
-        .method("get_Qsurf", &Model::get_Qsurf)
-        .method("get_MC_SB1", &Model::get_MC_SB1)
-        .method("get_DoS_SB1", &Model::get_DoS_SB1)
-        .method("get_finf_SB1", &Model::get_finf_SB1)
-        .method("get_finfla_SB1", &Model::get_finfla_SB1)
-        .method("get_H2O1_SB1", &Model::get_H2O1_SB1)
-        .method("get_IntercH2O", &Model::get_IntercH2O)
-        .method("get_CanopyH2O", &Model::get_CanopyH2O)
-        .method("get_E0_Int", &Model::get_E0_Int)
-        .method("get_YE", &Model::get_YE)
-        .method("get_E", &Model::get_E)
-        .method("get_H2O2_SB1", &Model::get_H2O2_SB1)
-        .method("get_QSE", &Model::get_QSE)
-        .method("get_SWexcess", &Model::get_SWexcess)
-        .method("get_Kunsat", &Model::get_Kunsat)
-        .method("get_Kunsat2", &Model::get_Kunsat2)
-        .method("get_TT", &Model::get_TT)
-        .method("get_TT2", &Model::get_TT2)
-        .method("get_Wdperc", &Model::get_Wdperc)
-        .method("get_Wperc", &Model::get_Wperc)
-        .method("get_Wperc2", &Model::get_Wperc2)
-        .method("get_H2O3_SB1", &Model::get_H2O3_SB1)
-        .method("get_H2O3_SB2", &Model::get_H2O3_SB2)
-        .method("get_MC_SB2", &Model::get_MC_SB2)
-        .method("get_DoS_SB2", &Model::get_DoS_SB2)
-        .method("get_H2O1_SB2", &Model::get_H2O1_SB2)
-        .method("get_YE2", &Model::get_YE2)
-        .method("get_Edd", &Model::get_Edd)
-        .method("get_H2O2_SB2", &Model::get_H2O2_SB2)
-        .method("get_Sw", &Model::get_Sw)
-        .method("get_Sw2", &Model::get_Sw2)
-        .method("get_SWexcess2", &Model::get_SWexcess2)
-        .method("get_Wrechg", &Model::get_Wrechg)
-        .method("get_H2O1_AQ", &Model::get_H2O1_AQ)
-        .method("get_WrechgAve", &Model::get_WrechgAve)
-        .method("get_H2O2_AQ", &Model::get_H2O2_AQ)
-        .method("get_H2O3_AQ", &Model::get_H2O3_AQ)
-        .method("calc_sgd", &Model::calc_sgd)
-        .method("get_SGD1", &Model::get_SGD1)
-        .method("get_SGD2", &Model::get_SGD2)
-        .method("get_xn", &Model::get_xn)
-        .method("get_xn1", &Model::get_xn1)
-        .method("get_xn2", &Model::get_xn2)
-        .method("get_hn", &Model::get_hn)
-        .method("get_hn1", &Model::get_hn1)
-        .method("get_hn2", &Model::get_hn2)
-        .method("get_M1", &Model::get_M1)
-        .method("get_M2", &Model::get_M2)
-        .method("get_xT1", &Model::get_xT1)
-        .method("get_xT2", &Model::get_xT2)
-        .method("get_SGD", &Model::get_SGD)
-        .method("get_SGDdrop", &Model::get_SGDdrop)
-        .method("get_PumpingDrop", &Model::get_PumpingDrop)
-        .method("get_dxT", &Model::get_dxT)
-        .method("get_xT3", &Model::get_xT3)
-        .method("get_SWvol", &Model::get_SWvol)
-        .method("get_FWLdrop", &Model::get_FWLdrop)
-        .method("update_parameters", &Model::update_parameters)
-        .method("get_all_params_list", &Model::get_all_params_list);
-}

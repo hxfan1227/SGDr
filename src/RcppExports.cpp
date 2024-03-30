@@ -10,13 +10,26 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// estimate_sgd
+Rcpp::DataFrame estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize);
+RcppExport SEXP _SGDr_estimate_sgd(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP windowSizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type inputData(inputDataSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type calibratableParams(calibratableParamsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type constParams(constParamsSEXP);
+    Rcpp::traits::input_parameter< int >::type windowSize(windowSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(estimate_sgd(inputData, calibratableParams, constParams, windowSize));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_ModelModule();
-RcppExport SEXP _rcpp_module_boot_ParametersModule();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_SGDr_estimate_sgd", (DL_FUNC) &_SGDr_estimate_sgd, 4},
     {"_rcpp_module_boot_ModelModule", (DL_FUNC) &_rcpp_module_boot_ModelModule, 0},
-    {"_rcpp_module_boot_ParametersModule", (DL_FUNC) &_rcpp_module_boot_ParametersModule, 0},
     {NULL, NULL, 0}
 };
 
