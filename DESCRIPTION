@@ -6,10 +6,13 @@ Date: 2024-03-12
 Description: Estimate SGD using 1-D bucket model and Strack (1976) analytical solution.
 License: GPL (>= 2)
 Imports: 
+    dplyr,
+    hydroGOF,
     jsonlite,
     methods,
     pracma,
-    Rcpp (>= 1.0.12)
+    Rcpp (>= 1.0.12),
+    tidyr
 LinkingTo: Rcpp
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
@@ -25,3 +28,5 @@ Authors@R: c(
     person("Adrian", "Werner", , "adrian.werner@flinders.edu.au", role = c("aut", "ctb"),
            comment = c(ORCID = "0000-0002-1190-1301"))
   )
+Depends: 
+    tidyverse
