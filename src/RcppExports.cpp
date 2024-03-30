@@ -25,11 +25,8 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP _rcpp_module_boot_ModelModule();
-
 static const R_CallMethodDef CallEntries[] = {
     {"_SGDr_estimate_sgd", (DL_FUNC) &_SGDr_estimate_sgd, 4},
-    {"_rcpp_module_boot_ModelModule", (DL_FUNC) &_rcpp_module_boot_ModelModule, 0},
     {NULL, NULL, 0}
 };
 

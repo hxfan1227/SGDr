@@ -4,7 +4,7 @@
 \alias{estimate_sgd}
 \title{Estimate the SGD volume.}
 \usage{
-estimate_sgd(...)
+estimate_sgd(inputData, calibratableParams, constParams, windowSize)
 }
 \arguments{
 \item{inputData}{A data frame containing the input data for the model.}
