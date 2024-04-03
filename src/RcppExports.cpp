@@ -24,9 +24,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// estimate_sgd_fixed_hxn
+Rcpp::DataFrame estimate_sgd_fixed_hxn(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize, const double hn, const double xn);
+RcppExport SEXP _SGDr_estimate_sgd_fixed_hxn(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP windowSizeSEXP, SEXP hnSEXP, SEXP xnSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type inputData(inputDataSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type calibratableParams(calibratableParamsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type constParams(constParamsSEXP);
+    Rcpp::traits::input_parameter< int >::type windowSize(windowSizeSEXP);
+    Rcpp::traits::input_parameter< const double >::type hn(hnSEXP);
+    Rcpp::traits::input_parameter< const double >::type xn(xnSEXP);
+    rcpp_result_gen = Rcpp::wrap(estimate_sgd_fixed_hxn(inputData, calibratableParams, constParams, windowSize, hn, xn));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_SGDr_estimate_sgd", (DL_FUNC) &_SGDr_estimate_sgd, 4},
+    {"_SGDr_estimate_sgd_fixed_hxn", (DL_FUNC) &_SGDr_estimate_sgd_fixed_hxn, 6},
     {NULL, NULL, 0}
 };
 
