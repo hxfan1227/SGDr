@@ -87,8 +87,10 @@ public:
     void calc_bucket2_h2o(int i);
     void calc_aquifer_recharge(int i);
     void calc_sgd(int windowSize);
+    void calc_sgd(int windowSize, const double hn, const double xn);
     void update_gwl(int i);
     void calc_sgds(int i);
+    void calc_sgds(int i, const double hn, const double xn);
     void update_aq_head(int i);
     void update_parameters(const Rcpp::List &newCalibratableParams, const Rcpp::List &newConstParams);
     Rcpp::List get_all_params_list();
@@ -159,5 +161,6 @@ public:
 };
 
 Rcpp::DataFrame estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize);
-
+Rcpp::DataFrame estimate_sgd_fixed_hxn(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, 
+                                       const Rcpp::List& constParams, int windowSize, const double hn, const double xn);
 #endif // MODEL_H

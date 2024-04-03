@@ -107,6 +107,17 @@ void Model::calc_sgd(int windowSize)
     }
 }
 
+void Model::calc_sgd(int windowSize, const double hn, const double xn)
+{
+    WrechgAve = moving_average(Wrechg, windowSize);
+    for (int i = 0; i < simLength; ++i)
+    {
+        update_gwl(i);
+        calc_sgds(i, hn, xn);
+        update_aq_head(i);
+    }
+}
+
 void Model::update_head(int i)
 {
     if (i > 0)
@@ -267,6 +278,113 @@ void Model::calc_sgds(int i)
         }
     }
 
+    if (xT2[i] < 0)
+    {
+        SGD[i] = SGD1[i];
+        xn[i] = xn1[i];
+        hn[i] = hn1[i];
+    }
+    else
+    {
+        if (M1[i] >= 1)
+        {
+            SGD[i] = SGD1[i];
+            xn[i] = xn1[i];
+            hn[i] = hn1[i];
+        }
+        else
+        {
+            if (parameters.get_constParameter().get_W() <= xT2[i])
+            {
+                SGD[i] = SGD1[i];
+                xn[i] = xn1[i];
+                hn[i] = hn1[i];
+            }
+            else
+            {
+                if (parameters.get_constParameter().get_x() > xT2[i])
+                {
+                    SGD[i] = SGD2[i];
+                    xn[i] = xn2[i];
+                    hn[i] = hn2[i];
+                }
+                else
+                {
+                    SGD[i] = SGD1[i];
+                    xn[i] = xn1[i];
+                    hn[i] = hn1[i];
+                }
+            }
+        }
+    }
+}
+
+void Model::calc_sgds(int i, const double h_n, const double x_n) 
+{
+    if (WrechgAve[i] > 0.0)
+    {
+        SGD1[i] = ((parameters.get_aquifer().get_K() / 2 / parameters.get_constParameter().get_x() * parameters.get_aquifer().get_rho_s() / (parameters.get_aquifer().get_rho_s() - parameters.get_aquifer().get_rho_f()) * std::pow(GWL[i], 2)) + (WrechgAve[i] / 1000) * parameters.get_constParameter().get_x() / 2) * parameters.get_constParameter().get_W();
+        SGD2[i] = (parameters.get_aquifer().get_K() * ((std::pow((GWL[i] + parameters.get_aquifer().get_z0()), 2) - parameters.get_aquifer().get_rho_s() / parameters.get_aquifer().get_rho_f() * std::pow(parameters.get_aquifer().get_z0(), 2))) + (WrechgAve[i] / 1000) * std::pow(parameters.get_constParameter().get_x(), 2)) / 2 / parameters.get_constParameter().get_x() * parameters.get_constParameter().get_W();
+        if (SGD1[i] / (WrechgAve[i] / 1000) / parameters.get_constParameter().get_W() > x_n)
+        {
+            xn1[i] = x_n;
+        }
+        else
+        {
+            xn1[i] = SGD1[i] / (WrechgAve[i] / 1000) / parameters.get_constParameter().get_W();
+        }
+        if (SGD2[i] / (WrechgAve[i] / 1000) / parameters.get_constParameter().get_W() > x_n) {
+            xn2[i] = x_n;
+        }
+        else
+        {
+            xn2[i] = SGD2[i] / (WrechgAve[i] / 1000) / parameters.get_constParameter().get_W();
+        }
+        if (sqrt(std::pow(SGD1[i] / parameters.get_constParameter().get_W(), 2) / (WrechgAve[i] / 1000) / parameters.get_aquifer().get_K() + parameters.get_aquifer().get_rho_s() / parameters.get_aquifer().get_rho_f() * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0()) - parameters.get_aquifer().get_z0() > h_n) {
+            hn1[i] = h_n;
+        }
+        else
+        {
+            hn1[i] = sqrt(std::pow(SGD1[i] / parameters.get_constParameter().get_W(), 2) / (WrechgAve[i] / 1000) / parameters.get_aquifer().get_K() + parameters.get_aquifer().get_rho_s() / parameters.get_aquifer().get_rho_f() * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0()) - parameters.get_aquifer().get_z0();
+        }
+        if (sqrt(std::pow(SGD2[i] / parameters.get_constParameter().get_W(), 2) / (WrechgAve[i] / 1000) / parameters.get_aquifer().get_K() + parameters.get_aquifer().get_rho_s() / parameters.get_aquifer().get_rho_f() * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0()) - parameters.get_aquifer().get_z0() > h_n) {
+            hn2[i] = h_n;
+        }
+        else
+        {
+            hn2[i] = sqrt(std::pow(SGD2[i] / parameters.get_constParameter().get_W(), 2) / (WrechgAve[i] / 1000) / parameters.get_aquifer().get_K() + parameters.get_aquifer().get_rho_s() / parameters.get_aquifer().get_rho_f() * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0()) - parameters.get_aquifer().get_z0();
+        }
+        M1[i] = parameters.get_aquifer().get_K() * parameters.get_aquifer().get_a() * (1 + parameters.get_aquifer().get_a()) * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0() / (WrechgAve[i] / 1000) / (xn1[i] * xn1[i]);
+        M2[i] = parameters.get_aquifer().get_K() * parameters.get_aquifer().get_a() * (1 + parameters.get_aquifer().get_a()) * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0() / (WrechgAve[i] / 1000) / (xn2[i] * xn2[i]);
+        if (M1[i] < 1)
+        {
+            xT1[i] = (SGD1[i] / parameters.get_constParameter().get_W()) / (WrechgAve[i] / 1000) - sqrt(pow((SGD1[i] / parameters.get_constParameter().get_W()) / (WrechgAve[i] / 1000), 2) - parameters.get_aquifer().get_K() * parameters.get_aquifer().get_a() * (1 + parameters.get_aquifer().get_a()) * (parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0()) / (WrechgAve[i] / 1000));
+        }
+        if (M2[i] < 1)
+        {
+            xT2[i] = (SGD2[i] / parameters.get_constParameter().get_W()) / (WrechgAve[i] / 1000) - sqrt(pow((SGD2[i] / parameters.get_constParameter().get_W()) / (WrechgAve[i] / 1000), 2) - parameters.get_aquifer().get_K() * parameters.get_aquifer().get_a() * (1 + parameters.get_aquifer().get_a()) * (parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0()) / (WrechgAve[i] / 1000));
+        }
+    }
+    else
+    {
+        SGD1[i] = (parameters.get_aquifer().get_K() / 2 / parameters.get_constParameter().get_x() * parameters.get_aquifer().get_rho_s() / (parameters.get_aquifer().get_rho_s() - parameters.get_aquifer().get_rho_f()) * std::pow(GWL[i], 2)) * parameters.get_constParameter().get_W();
+        SGD2[i] = (parameters.get_aquifer().get_K() * ((std::pow((GWL[i] + parameters.get_aquifer().get_z0()), 2) - parameters.get_aquifer().get_rho_s() / parameters.get_aquifer().get_rho_f() * std::pow(parameters.get_aquifer().get_z0(), 2))) / 2 / parameters.get_constParameter().get_x() * parameters.get_constParameter().get_W());
+        xn1[i] = x_n;
+        xn2[i] = x_n;
+        hn1[i] = h_n;
+        hn2[i] = h_n;
+        M1[i] = 0;
+        M2[i] = 0;
+        if (M1[i] < 1)
+        {
+            xT1[i] = parameters.get_aquifer().get_K() * parameters.get_aquifer().get_a() * (1 + parameters.get_aquifer().get_a()) * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0() / 2 / (SGD1[i] / parameters.get_constParameter().get_W());
+        }
+        if (M2[i] < 1)
+        {
+            xT2[i] = parameters.get_aquifer().get_K() * parameters.get_aquifer().get_a() * (1 + parameters.get_aquifer().get_a()) * parameters.get_aquifer().get_z0() * parameters.get_aquifer().get_z0() / 2 / (SGD2[i] / parameters.get_constParameter().get_W());
+        }
+    }
+    
     if (xT2[i] < 0)
     {
         SGD[i] = SGD1[i];
