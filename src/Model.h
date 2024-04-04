@@ -87,12 +87,17 @@ public:
     void calc_bucket2_h2o(int i);
     void calc_aquifer_recharge(int i);
     void calc_sgd(int windowSize);
-    void calc_sgd(int windowSize, const double hn, const double xn);
     void update_gwl(int i);
     void calc_sgds(int i);
-    void calc_sgds(int i, const double hn, const double xn);
     void update_aq_head(int i);
     void update_parameters(const Rcpp::List &newCalibratableParams, const Rcpp::List &newConstParams);
+    double calc_sgd1(int i);
+    double calc_sgd2(int i);
+    double calc_xn(double sgd, int i);
+    double calc_hn(double sgd, int i);
+    double calc_M(double xn, int i);
+    double calc_xT(double sgd, int i);
+    double calc_xT0(double sgd, int i);
     Rcpp::List get_all_params_list();
     // getters
     Rcpp::DataFrame get_inputData();
