@@ -7,6 +7,8 @@ private:
     Rcpp::DataFrame inputData;
     Parameters parameters;
     int simLength;
+    int warmUp;
+    Rcpp::IntegerVector validIndices;
     Rcpp::NumericVector R;       // precipitation (mm)
     Rcpp::NumericVector E0;      // potential evapotranspiration (mm)
     Rcpp::NumericVector Pumping; // pumping rate (m3/day)
@@ -79,7 +81,7 @@ private:
 public:
     Model(Rcpp::DataFrame  inputData, 
           const Rcpp::List &calibratableParams,
-          const Rcpp::List &constParams);
+          const Rcpp::List &constParams, int warmUp = 0);
     void calc_recharge();
     void update_head(int i);
     void calc_cn_runoff(int i);
@@ -165,5 +167,5 @@ public:
     Rcpp::DataFrame get_sgd_output();
 };
 
-Rcpp::List estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize);
+Rcpp::List estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize, int warmUp);
 #endif // MODEL_H

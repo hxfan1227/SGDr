@@ -16,13 +16,14 @@
 //'   * \code{H2O_SB1} is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.
 //'   * \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
 //' * \code{calibratableParams} should be a list of calibratable parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
-//' * \code{windowSize} should be a list of constant parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
-//' @return A data frame containing the estimated SGD volume.
+//' * \code{windowSize} A integer indicating the period you want to average the recharge.
+//' * \code{warmUp} A integer indicating the number of days to warm up the model.
+//' @return A SGD_ESTIMATION_DF class.
 //' @export 
 // [[Rcpp::export]]
-Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize = 120)
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize = 120, int warmUp = 1500)
 {
-    Model model(inputData, calibratableParams, constParams);
+    Model model(inputData, calibratableParams, constParams, warmUp);
     model.calc_recharge();
     model.calc_sgd(windowSize);
     Rcpp::List output = Rcpp::List::create(Rcpp::Named("results") = model.get_sgd_output(),

@@ -4,7 +4,13 @@
 \alias{estimate_sgd}
 \title{Estimate the SGD volume.}
 \usage{
-estimate_sgd(inputData, calibratableParams, constParams, windowSize = 120L)
+estimate_sgd(
+  inputData,
+  calibratableParams,
+  constParams,
+  windowSize = 120L,
+  warmUp = 1500L
+)
 }
 \arguments{
 \item{inputData}{A data frame containing the input data for the model.}
@@ -16,7 +22,7 @@ estimate_sgd(inputData, calibratableParams, constParams, windowSize = 120L)
 \item{windowSize}{A integer indicating the period you want to average the recharge.}
 }
 \value{
-A data frame containing the estimated SGD volume.
+A SGD_ESTIMATION_DF class.
 }
 \description{
 Estimate the SGD volume based on Strack (1976) analytical solution.
@@ -34,6 +40,7 @@ Estimate the SGD volume based on Strack (1976) analytical solution.
 \item \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
 }
 \item \code{calibratableParams} should be a list of calibratable parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
-\item \code{windowSize} should be a list of constant parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
+\item \code{windowSize} A integer indicating the period you want to average the recharge.
+\item \code{warmUp} A integer indicating the number of days to warm up the model.
 }
 }

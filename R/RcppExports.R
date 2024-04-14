@@ -16,10 +16,11 @@
 #'   * \code{H2O_SB1} is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.
 #'   * \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
 #' * \code{calibratableParams} should be a list of calibratable parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
-#' * \code{windowSize} should be a list of constant parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
-#' @return A data frame containing the estimated SGD volume.
+#' * \code{windowSize} A integer indicating the period you want to average the recharge.
+#' * \code{warmUp} A integer indicating the number of days to warm up the model.
+#' @return A SGD_ESTIMATION_DF class.
 #' @export 
-estimate_sgd <- function(inputData, calibratableParams, constParams, windowSize = 120L) {
-    .Call(`_SGDr_estimate_sgd`, inputData, calibratableParams, constParams, windowSize)
+estimate_sgd <- function(inputData, calibratableParams, constParams, windowSize = 120L, warmUp = 1500L) {
+    .Call(`_SGDr_estimate_sgd`, inputData, calibratableParams, constParams, windowSize, warmUp)
 }
 
