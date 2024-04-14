@@ -20,10 +20,16 @@
 //' @return A data frame containing the estimated SGD volume.
 //' @export 
 // [[Rcpp::export]]
-Rcpp::DataFrame estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize)
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize)
 {
     Model model(inputData, calibratableParams, constParams);
     model.calc_recharge();
     model.calc_sgd(windowSize);
-    return model.get_sgd_output();
+    Rcpp::List output = Rcpp::List::create(Rcpp::Named("results") = model.get_sgd_output(),
+                                           Rcpp::Named("parameters") = model.get_all_params_list(),
+                                           Rcpp::Named("input") = model.get_inputData(),
+                                           Rcpp::Named("runoff") = model.get_Qsurf()
+                                           );
+    output.attr("class") = Rcpp::CharacterVector::create("SGD_ESTIMATION_DF");
+    return output;
 }

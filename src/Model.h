@@ -165,7 +165,5 @@ public:
     Rcpp::DataFrame get_sgd_output();
 };
 
-Rcpp::DataFrame estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize);
-Rcpp::DataFrame estimate_sgd_fixed_hxn(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, 
-                                       const Rcpp::List& constParams, int windowSize, const double hn, const double xn);
+Rcpp::List estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize);
 #endif // MODEL_H
