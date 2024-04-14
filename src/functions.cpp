@@ -26,6 +26,7 @@ Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& cali
     Model model(inputData, calibratableParams, constParams, warmUp);
     model.calc_recharge();
     model.calc_sgd(windowSize);
+    model.get_sgd_output();
     Rcpp::List output = Rcpp::List::create(Rcpp::Named("results") = model.get_sgd_output(),
                                            Rcpp::Named("parameters") = model.get_all_params_list(),
                                            Rcpp::Named("input") = model.get_inputData(),

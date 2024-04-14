@@ -18,7 +18,6 @@ Model::Model(Rcpp::DataFrame inputData,
 void Model::initializeVector()
 {
     // Initialize the vectors with NA values
-    validIndices = Rcpp::Range(warmUp, simLength - 1);
     SW = Rcpp::NumericVector(simLength, NA_REAL);
     S = Rcpp::NumericVector(simLength, NA_REAL);
     Ia = Rcpp::NumericVector(simLength, NA_REAL);
@@ -84,6 +83,7 @@ void Model::initializeVector()
 void Model::calc_recharge()
 {
     initializeVector();
+    validIndices = Rcpp::Range(warmUp, simLength - 1);
     for (int i = 0; i < simLength; ++i)
     {
         update_head(i);
@@ -465,8 +465,10 @@ Rcpp::DataFrame Model::get_recharge_output()
 Rcpp::DataFrame Model::get_sgd_output()
 {
     Rcpp::NumericVector t_temp = inputData["t"];
+    t_temp = t_temp[validIndices];
+    t_temp = t_temp - warmUp;
     return Rcpp::DataFrame::create(
-        Rcpp::Named("t") = t_temp[validIndices],
+        Rcpp::Named("t") = t_temp,
         Rcpp::Named("wl") = H2O3_AQ[validIndices],
         Rcpp::Named("SGD") = SGD[validIndices],
         Rcpp::Named("xn") = xn[validIndices],
@@ -481,7 +483,15 @@ Rcpp::List Model::get_all_params_list()
 }
 Rcpp::DataFrame Model::get_inputData()
 {
-    return inputData[validIndices];
+    Rcpp::NumericVector t_temp = inputData["t"];
+    Rcpp::NumericVector R_temp = inputData["R"];
+    Rcpp::NumericVector E0_temp = inputData["E0"];
+    Rcpp::NumericVector Pump_temp = inputData["Pumping"];
+    return Rcpp::DataFrame::create(
+        Rcpp::Named("t") = t_temp[validIndices],
+        Rcpp::Named("R") = R_temp[validIndices],
+        Rcpp::Named("E0") = E0_temp[validIndices],
+        Rcpp::Named("Pumping") = Pump_temp[validIndices]);
 }
 
 // RCPP_EXPOSED_CLASS(Model);
