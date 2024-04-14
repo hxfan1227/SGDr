@@ -20,7 +20,7 @@
 //' @return A data frame containing the estimated SGD volume.
 //' @export 
 // [[Rcpp::export]]
-Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize)
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize = 120)
 {
     Model model(inputData, calibratableParams, constParams);
     model.calc_recharge();
