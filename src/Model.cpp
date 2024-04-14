@@ -466,7 +466,6 @@ Rcpp::DataFrame Model::get_sgd_output()
 {
     Rcpp::NumericVector t_temp = inputData["t"];
     t_temp = t_temp[validIndices];
-    t_temp = t_temp - warmUp;
     return Rcpp::DataFrame::create(
         Rcpp::Named("t") = t_temp,
         Rcpp::Named("wl") = H2O3_AQ[validIndices],
