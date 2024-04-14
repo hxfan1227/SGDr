@@ -35,9 +35,11 @@ plot(x, y, ...)
 
 \item{base_date}{A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.}
 
-\item{type}{A character string indicating the type of plot. Can be one of 'pred', 'obs', 'comp'.}
+\item{type}{A character string indicating the type of plot. Can be one of 'pred', 'obs', 'comp', 'input'.}
 
 \item{obs_x}{A character string indicating the column name of the date in the observed data.}
+
+\item{obs_y}{A character string indicating the column name of the groundwater level in the observed data.}
 
 \item{xbreaks}{An integer indicating the number of breaks on the x-axis.}
 
@@ -48,6 +50,10 @@ plot(x, y, ...)
 \item{coeff}{A numeric indicating the shrink coefficient of the precipitation.}
 
 \item{names}{A character vector of the variable names to plot.}
+
+\item{colors}{A named character vector of the colors to use}
+
+\item{color_labels}{A named character vector of the labels for the colors.}
 
 \item{labels}{A character vector of the variable labels to plot.}
 }
