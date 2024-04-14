@@ -6,10 +6,13 @@ Date: 2024-03-12
 Description: Estimate SGD using 1-D bucket model and Strack (1976) analytical solution.
 License: GPL (>= 2)
 Imports: 
+    data.table,
     dplyr,
+    glue,
     hydroGOF,
     jsonlite,
     methods,
+    patchwork,
     pracma,
     Rcpp (>= 1.0.12),
     scales,

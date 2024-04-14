@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // estimate_sgd
-Rcpp::DataFrame estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize);
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize);
 RcppExport SEXP _SGDr_estimate_sgd(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP windowSizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
