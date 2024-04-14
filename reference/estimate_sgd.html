@@ -51,7 +51,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_sgd</span><span class="op">(</span><span class="va">inputData</span>, <span class="va">calibratableParams</span>, <span class="va">constParams</span>, windowSize <span class="op">=</span> <span class="fl">120L</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_sgd</span><span class="op">(</span></span>
+<span>  <span class="va">inputData</span>,</span>
+<span>  <span class="va">calibratableParams</span>,</span>
+<span>  <span class="va">constParams</span>,</span>
+<span>  windowSize <span class="op">=</span> <span class="fl">120L</span>,</span>
+<span>  warmUp <span class="op">=</span> <span class="fl">1500L</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,7 +82,7 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame containing the estimated SGD volume.</p>
+<p>A SGD_ESTIMATION_DF class.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -88,7 +94,8 @@
 <li><p><code>H2O_SB2</code> is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.</p></li>
 </ul></li>
 <li><p><code>calibratableParams</code> should be a list of calibratable parameters. It's recommended to use <code><a href="json_to_paramter_list.html">json_to_paramter_list</a></code> to create this list.</p></li>
-<li><p><code>windowSize</code> should be a list of constant parameters. It's recommended to use <code><a href="json_to_paramter_list.html">json_to_paramter_list</a></code> to create this list.</p></li>
+<li><p><code>windowSize</code> A integer indicating the period you want to average the recharge.</p></li>
+<li><p><code>warmUp</code> A integer indicating the number of days to warm up the model.</p></li>
 </ul></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
