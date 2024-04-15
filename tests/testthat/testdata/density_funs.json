@@ -1,0 +1,36 @@
+{
+  "bucket1": {
+    "layer": ["-"],
+    "z": ["sdnorm"],
+    "rho_b": ["sdnorm"],
+    "mc": ["sdnorm"],
+    "rho_s": ["sdnorm"],
+    "Ksat": ["sdlnorm"],
+    "n": ["sdnorm"],
+    "Y": ["sdnorm"]
+  },
+  "bucket2": {
+    "layer": ["-"],
+    "z": ["sdnorm"],
+    "rho_b": ["sdnorm"],
+    "mc": ["sdnorm"],
+    "rho_s": ["sdnorm"],
+    "Ksat": ["sdlnorm"],
+    "n": ["sdnorm"],
+    "Z": ["sdnorm"]
+  },
+  "curveNumber": {
+    "CN2": ["sdnorm"],
+    "PIa": ["sdnorm"]
+  },
+  "aquifer": {
+    "delta": ["sdlnorm"],
+    "rho_s": ["sdnorm"],
+    "rho_f": ["sdnorm"],
+    "K": ["sdlnorm"],
+    "z0": ["sdnorm"],
+    "Sy": ["sdlnorm"],
+    "xT": ["sdnorm"],
+    "dxT": ["sdnorm"]
+  }
+}
