@@ -1,11 +1,12 @@
-#' @import jsonlite scales dplyr tidyr data.table ggplot2 patchwork
+#' @import jsonlite scales dplyr tidyr ggplot2 patchwork
 #' @importFrom lubridate ymd date
 #' @importFrom glue glue
+#' @importFrom data.table setDT melt
 
 NULL 
+#'  Convert a JSON file to a list of parameters
 #' @name json_to_paramter_list
 #' @aliases json_to_paramter_list
-#' @title Convert a JSON file to a list of parameters
 #' @rdname json_to_paramter_list
 #' @description This function converts a JSON file to a list of parameters.
 #' @param json_file A JSON file containing the parameters
@@ -16,10 +17,10 @@ json_to_paramter_list <- function(json_file) {
     invisible(as.relistable(jsonlite::fromJSON(json_file)))
 }
 
-NULL 
+
+#' Convert a vector of parameters to a list of parameters (useful for calibrating parameters)
 #' @name paramter_vec_to_list
 #' @aliases paramter_vec_to_list
-#' @title Convert a vector of parameters to a list of parameters (useful for calibrating parameters)
 #' @rdname paramter_vec_to_list
 #' @description This function converts a vector of parameters to a list of parameters.
 #' @param parameter_vec A vector of parameters
@@ -32,30 +33,17 @@ paramter_vec_to_list <- function(parameter_vec, prameter_skeleton) {
 }
 
 
-NULL
-#' @title Print the SGD estimation results.
-#' @rdname print
-#' @export
-
-print <- function(x, ...) {
-    UseMethod("print")
-}
-
-#' @rdname print
+#' Print the SGD estimation results.
+#' @rdname print.SGD_ESTIMATION_DF
 #' @param x An object of class \code{SGD_ESTIMATION_DF}. Created by \code{\link{estimate_sgd}}.
+#' @param ... other arguments not used by this method
 #' @export
 print.SGD_ESTIMATION_DF <- function(x, ...) {
     summary(x, ...)
 }
 
-NULL 
-#' @title Summary the SGD estimation results.
-#' @rdname summary
-#' @export
-summary <- function(object, ...) {
-    UseMethod("summary")
-}
 
+#' Summary the SGD estimation results.
 #' @rdname summary
 #' @param object An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param base_date A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.
@@ -76,18 +64,12 @@ summary.SGD_ESTIMATION_DF <- function(object, base_date, ...) {
 }
 
 NULL 
-#' @title Plot the SGD estimation results
-#' @rdname plot
-#' @export
-plot <- function(x, y, ...) {
-  UseMethod("plot")
-}
-
-#' @rdname plot
+#' Plot the SGD estimation results
+#' @rdname plot.SGD_ESTIMATION_DF
 #' @param x An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param y A data.frame of daily observed groundwater level data. See Details.
 #' @param base_date A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.
-#' @param type A character string indicating the type of plot. Can be one of 'pred', 'obs', 'comp', 'input'.
+#' @param type A character string indicating the type of plot. Can be one of 'pred', 'comp', 'input'.
 #' @param obs_x A character string indicating the column name of the date in the observed data.
 #' @param obs_y A character string indicating the column name of the groundwater level in the observed data.
 #' @param xbreaks An integer indicating the number of breaks on the x-axis.
@@ -98,11 +80,13 @@ plot <- function(x, y, ...) {
 #' @param coeff A numeric indicating the shrink coefficient of the precipitation.
 #' @param colors A named character vector of the colors to use
 #' @param color_labels A named character vector of the labels for the colors.
+#' @param ... Additional arguments passed to the plot function. (currently not implemented)
+#' @return Invisibly returns the original estimated results.
 #' @export
 plot.SGD_ESTIMATION_DF <- function(x, y, 
                                    vars = c('wl', 'SGD', 'Wrechg'), 
                                    base_date, 
-                                   type = c('pred', 'obs', 'comp', 'input'),
+                                   type = c('pred', 'comp', 'input'),
                                    obs_x = 'date',
                                    obs_y = 'wl',
                                    xbreaks = 10,
@@ -174,7 +158,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
     plot_df <- plot_df %>% 
       rename('est' = 'wl')
     obs_df <- obs_df %>%
-      rename('obs' = obs_y)
+      rename('obs' = all_of(obs_y))
     scatter_df <- merge(plot_df[, .(date, est)], obs_df, by = c('date' = obs_x))
     p2 <- ggplot(scatter_df, aes(x = obs, y = est)) +
       geom_point(size = 1.2) +
@@ -231,5 +215,6 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
             axis.line.y.right = element_line(color = colors['precp']), 
             axis.text.y.right = element_text(color = colors['precp']))
   }
-  p
+  print(p)
+  invisible(x)
 }
