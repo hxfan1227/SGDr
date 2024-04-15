@@ -25,19 +25,28 @@
     <loc>https://hxfan1227.github.io/SGDr/reference/estimate_sgd.html</loc>
   </url>
   <url>
+    <loc>https://hxfan1227.github.io/SGDr/reference/estimate_sgd_from_pars.html</loc>
+  </url>
+  <url>
     <loc>https://hxfan1227.github.io/SGDr/reference/index.html</loc>
   </url>
   <url>
     <loc>https://hxfan1227.github.io/SGDr/reference/json_to_paramter_list.html</loc>
   </url>
   <url>
+    <loc>https://hxfan1227.github.io/SGDr/reference/parameter_list_to_vector.html</loc>
+  </url>
+  <url>
     <loc>https://hxfan1227.github.io/SGDr/reference/paramter_vec_to_list.html</loc>
   </url>
   <url>
-    <loc>https://hxfan1227.github.io/SGDr/reference/plot.html</loc>
+    <loc>https://hxfan1227.github.io/SGDr/reference/plot.SGD_ESTIMATION_DF.html</loc>
   </url>
   <url>
-    <loc>https://hxfan1227.github.io/SGDr/reference/print.html</loc>
+    <loc>https://hxfan1227.github.io/SGDr/reference/prepare_warm_up.html</loc>
+  </url>
+  <url>
+    <loc>https://hxfan1227.github.io/SGDr/reference/print.SGD_ESTIMATION_DF.html</loc>
   </url>
   <url>
     <loc>https://hxfan1227.github.io/SGDr/reference/summary.html</loc>
