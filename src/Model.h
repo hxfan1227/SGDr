@@ -168,4 +168,6 @@ public:
 };
 
 Rcpp::List estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize, int warmUp);
+Rcpp::DataFrame rbind(Rcpp::DataFrame x, Rcpp::DataFrame y);
+Rcpp::DataFrame prepare_warm_up(const Rcpp::DataFrame& data, int length);
 #endif // MODEL_H

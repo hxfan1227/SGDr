@@ -21,6 +21,7 @@ Useful links:
 Authors:
 \itemize{
   \item Adrian Werner \email{adrian.werner@flinders.edu.au} (\href{https://orcid.org/0000-0002-1190-1301}{ORCID}) [contributor]
+  \item Silvia Cristina Solórzano-Rivas \email{cristina.solorzano@flinders.edu.au} (\href{https://orcid.org/0000-0003-4436-5813}{ORCID}) [contributor]
 }
 
 }

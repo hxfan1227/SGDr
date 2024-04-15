@@ -23,6 +23,7 @@
 // [[Rcpp::export]]
 Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize = 120, int warmUp = 1500)
 {
+    Rcpp::DataFrame data = prepare_warm_up(inputData, warmUp);
     Model model(inputData, calibratableParams, constParams, warmUp);
     model.calc_recharge();
     model.calc_sgd(windowSize);
@@ -35,3 +36,29 @@ Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& cali
     output.attr("class") = Rcpp::CharacterVector::create("SGD_ESTIMATION_DF");
     return output;
 }
+
+//' Prepare the warm-up data
+//' @rdname prepare_warm_up
+//' @param data A data.frame containing the input data for the model.
+//' @param length An integer indicating the length of the warm-up period (days).
+//' @return A data.frame containing the input data for the model with the warm-up period.
+//' @export
+// [[Rcpp::export]]
+
+Rcpp::DataFrame prepare_warm_up(const Rcpp::DataFrame& data, int length)
+{
+    if (length > data.nrows()) {
+        Rcpp::stop("n is greater than the number of rows in the DataFrame");
+    }
+    Rcpp::DataFrame warmUpData = Rcpp::head(data, length);
+    return rbind(data, warmUpData);
+}
+
+
+Rcpp::DataFrame rbind(Rcpp::DataFrame x, Rcpp::DataFrame y) 
+{
+    Rcpp::Environment pkgEnv = Rcpp::Environment::namespace_env("base");
+    Rcpp::Function rbind_r = pkgEnv["rbind"];
+    return Rcpp::as<Rcpp::DataFrame>(rbind_r(x, y));
+}
+

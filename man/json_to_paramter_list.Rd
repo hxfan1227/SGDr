@@ -2,9 +2,10 @@
 % Please edit documentation in R/helper_funs.R
 \name{json_to_paramter_list}
 \alias{json_to_paramter_list}
+\alias{json_to_parameter_list}
 \title{Convert a JSON file to a list of parameters}
 \usage{
-json_to_paramter_list(json_file)
+json_to_parameter_list(json_file)
 }
 \arguments{
 \item{json_file}{A JSON file containing the parameters}

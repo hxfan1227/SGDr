@@ -24,3 +24,13 @@ estimate_sgd <- function(inputData, calibratableParams, constParams, windowSize 
     .Call(`_SGDr_estimate_sgd`, inputData, calibratableParams, constParams, windowSize, warmUp)
 }
 
+#' Prepare the warm-up data
+#' @rdname prepare_warm_up
+#' @param data A data.frame containing the input data for the model.
+#' @param length An integer indicating the length of the warm-up period (days).
+#' @return A data.frame containing the input data for the model with the warm-up period.
+#' @export
+prepare_warm_up <- function(data, length) {
+    .Call(`_SGDr_prepare_warm_up`, data, length)
+}
+

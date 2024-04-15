@@ -13,7 +13,7 @@ NULL
 #' @return A list of parameters (invisible)
 #' @export
 
-json_to_paramter_list <- function(json_file) {
+json_to_parameter_list <- function(json_file) {
     invisible(as.relistable(jsonlite::fromJSON(json_file)))
 }
 
@@ -28,8 +28,23 @@ json_to_paramter_list <- function(json_file) {
 #' @return A list of parameters (invisible)
 #' @export
 
-paramter_vec_to_list <- function(parameter_vec, prameter_skeleton) {
+parameter_vec_to_list <- function(parameter_vec, prameter_skeleton) {
     invisible(relist(parameter_vec, skeleton = prameter_skeleton))
+}
+
+#' Convert a list of parameters to a vector of parameters
+#' @name parameter_list_to_vector
+#' @aliases parameter_list_to_vector
+#' @rdname parameter_list_to_vector
+#' @description This function converts a list of parameters to a vector of parameters.
+#' @param parameter_list A list of parameters
+#' @return A named vector of parameters
+#' @export
+
+parameter_list_to_vector <- function(parameter_list) {
+  params <- unlist(parameter_list) %>% as.vector()
+  names(params) <- names(unlist(parameter_list))
+  params
 }
 
 
@@ -218,3 +233,52 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
   print(p)
   invisible(x)
 }
+
+#' Prepare the warm-up data
+#' @rdname prepare_warm_up
+#' @param data A data.frame containing the input data for the model.
+#' @param length An integer indicating the length of the warm-up period (days).
+#' @return A data.frame containing the input data for the model with the warm-up period.
+#' @export
+
+prepare_warm_up <- function(data, length) {
+  if (length == 0) {
+    return(data)
+  }
+  bind_rows(data[1:length, ], data)
+}
+
+#' A wrapper function to call the model and return result for calibration.
+#' @rdname estimate_sgd_from_pars
+#' @param pars A numeric vector of parameters to calibrate
+#' @param parnames A character vector of names of the parameters
+#' @param parset A character vector of names of the to-be-calibrated parameters
+#' @param input A data.table of the input data
+#' @param warm_up A numeric value of the warm-up period
+#' @param default_pars A named numeric vector of the default parameters
+#' @param skeleton A named list of the parameter skeleton
+#' @param const_par_list A named list of the constant parameters
+#' @return A SGD_ESTIMATION_DF class
+#' @seealso [estimate_sgd()]
+#' @export
+
+estimate_sgd_from_pars <- function(pars, 
+                                   parnames = c(params_to_calibrate, 'nw'),
+                                   parset = params_to_calibrate, 
+                                   input = test_data, 
+                                   warm_up = 1500, 
+                                   default_pars = preferred_params, 
+                                   skeleton = params_skeleton, 
+                                   const_par_list = const_params_list) {
+  names(pars) <- parnames
+  data <- prepare_warm_up(input, warm_up)
+  current_pars = default_pars
+  current_pars[parset] = pars[parset]
+  current_pars_list <- parameter_vec_to_list(current_pars, prameter_skeleton = skeleton)
+  if ('nw' %in% names(pars)) {
+    nw = pars['nw']
+    return(estimate_sgd(inputData = data, calibratableParams = current_pars_list, constParams = const_par_list, windowSize = nw, warmUp = warm_up))
+  } 
+  return(estimate_sgd(inputData = data, calibratableParams = current_pars_list, constParams = const_par_list, warmUp = warm_up))
+}
+
