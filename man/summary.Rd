@@ -10,6 +10,8 @@
 \item{object}{An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.}
 
 \item{base_date}{A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.}
+
+\item{...}{other arguments not used by this method}
 }
 \description{
 Summary the SGD estimation results.

@@ -8,9 +8,11 @@ License: GPL (>= 2)
 Imports: 
     data.table,
     dplyr,
+    ggplot2,
     glue,
     hydroGOF,
     jsonlite,
+    lubridate,
     methods,
     patchwork,
     pracma,

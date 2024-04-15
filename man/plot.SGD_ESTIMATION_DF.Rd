@@ -30,6 +30,8 @@
 
 \item{y}{A data.frame of daily observed groundwater level data. See Details.}
 
+\item{vars}{A character vector of the variables to plot. Can be 'all' or a subset of 'wl', 'SGD', 'hn', 'xn', 'Wrechg', 'WrechgAve'.}
+
 \item{base_date}{A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.}
 
 \item{type}{A character string indicating the type of plot. Can be one of 'pred', 'comp', 'input'.}

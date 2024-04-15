@@ -20,6 +20,8 @@ estimate_sgd(
 \item{constParams}{A list of constant parameters.}
 
 \item{windowSize}{A integer indicating the period you want to average the recharge.}
+
+\item{warmUp}{A integer indicating the number of days to warm up the model.}
 }
 \value{
 A SGD_ESTIMATION_DF class.

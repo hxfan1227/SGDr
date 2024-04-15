@@ -62,6 +62,7 @@ print.SGD_ESTIMATION_DF <- function(x, ...) {
 #' @rdname summary
 #' @param object An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param base_date A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.
+#' @param ... other arguments not used by this method
 #' @export
 summary.SGD_ESTIMATION_DF <- function(object, base_date, ...) {
   cat("SGD Estimation Summary\n")
@@ -83,6 +84,7 @@ NULL
 #' @rdname plot.SGD_ESTIMATION_DF
 #' @param x An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param y A data.frame of daily observed groundwater level data. See Details.
+#' @param vars A character vector of the variables to plot. Can be 'all' or a subset of 'wl', 'SGD', 'hn', 'xn', 'Wrechg', 'WrechgAve'.
 #' @param base_date A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.
 #' @param type A character string indicating the type of plot. Can be one of 'pred', 'comp', 'input'.
 #' @param obs_x A character string indicating the column name of the date in the observed data.

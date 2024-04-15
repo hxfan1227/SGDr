@@ -6,6 +6,7 @@
 //' @param calibratableParams A list of calibratable parameters.
 //' @param constParams A list of constant parameters.
 //' @param windowSize A integer indicating the period you want to average the recharge.
+//' @param warmUp A integer indicating the number of days to warm up the model.
 //' @description Estimate the SGD volume based on Strack (1976) analytical solution.
 //' @details Estimate the SGD volume based on Strack (1976) analytical solution.
 //' * The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, Pumping, GWL, H2O_SB1, H2O_SB2).
