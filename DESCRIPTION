@@ -30,7 +30,7 @@ Authors@R: c(
     person("Hongxiang", "Fan", , "hxfan@niglas.ac.cn", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7626-1344")),
     person("Adrian", "Werner", , "adrian.werner@flinders.edu.au", role = c("aut", "ctb"),
-           comment = c(ORCID = "0000-0002-1190-1301"))
+           comment = c(ORCID = "0000-0002-1190-1301")),
+    person("Silvia Cristina", "Solórzano-Rivas", , "cristina.solorzano@flinders.edu.au", role = c("aut", "ctb"),
+           comment = c(ORCID = "0000-0003-4436-5813"))
   )
-Depends: 
-    tidyverse
