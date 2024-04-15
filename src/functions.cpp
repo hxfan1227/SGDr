@@ -24,7 +24,7 @@
 Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize = 120, int warmUp = 1500)
 {
     Rcpp::DataFrame data = prepare_warm_up(inputData, warmUp);
-    Model model(inputData, calibratableParams, constParams, warmUp);
+    Model model(data, calibratableParams, constParams, warmUp);
     model.calc_recharge();
     model.calc_sgd(windowSize);
     model.get_sgd_output();
@@ -50,15 +50,44 @@ Rcpp::DataFrame prepare_warm_up(const Rcpp::DataFrame& data, int length)
     if (length > data.nrows()) {
         Rcpp::stop("n is greater than the number of rows in the DataFrame");
     }
-    Rcpp::DataFrame warmUpData = Rcpp::head(data, length);
-    return rbind(data, warmUpData);
-}
-
-
-Rcpp::DataFrame rbind(Rcpp::DataFrame x, Rcpp::DataFrame y) 
-{
-    Rcpp::Environment pkgEnv = Rcpp::Environment::namespace_env("base");
-    Rcpp::Function rbind_r = pkgEnv["rbind"];
-    return Rcpp::as<Rcpp::DataFrame>(rbind_r(x, y));
+    int total_rows = length + data.nrows();
+    Rcpp::CharacterVector col_names = data.names();
+    Rcpp::List new_cols(data.size());
+    for (int i = 0; i < data.size(); i++) {
+        // 取出当前列
+        switch (TYPEOF(data[i])) {
+        case INTSXP: {
+            Rcpp::IntegerVector col = data[i];
+            Rcpp::IntegerVector new_col(total_rows);
+            std::copy(col.begin(), col.begin() + length, new_col.begin());
+            std::copy(col.begin(), col.end(), new_col.begin() + length);
+            new_cols[i] = new_col;
+            break;
+        }
+        case REALSXP: {
+            Rcpp::NumericVector col = data[i];
+            Rcpp::NumericVector new_col(total_rows);
+            std::copy(col.begin(), col.begin() + length, new_col.begin());
+            std::copy(col.begin(), col.end(), new_col.begin() + length);
+            new_cols[i] = new_col;
+            break;
+        }
+        case STRSXP: {
+            Rcpp::CharacterVector col = data[i];
+            Rcpp::CharacterVector new_col(total_rows);
+            std::copy(col.begin(), col.begin() + length, new_col.begin());
+            std::copy(col.begin(), col.end(), new_col.begin() + length);
+            new_cols[i] = new_col;
+            break;
+        }
+        default:
+            Rcpp::stop("Unsupported column type");
+        }
+    }
+    Rcpp::DataFrame combined = Rcpp::DataFrame::create(new_cols, Rcpp::Named("stringsAsFactors") = false);
+    combined.attr("names") = col_names;
+    combined.attr("class") = "data.frame";
+    combined.attr("row.names") = Rcpp::seq(1, total_rows);
+    return combined;
 }
 

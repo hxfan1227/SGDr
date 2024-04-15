@@ -74,14 +74,14 @@ test_that("estimate_sgd_from_pars() returns same reults as estimate_sgd()", {
   calibratableParams <- parameter_list_to_vector(calibratableParamsList)
   constParamsList <- json_to_parameter_list(test_path('testdata', 'consts.json'))
   parNames <- names(calibratableParams)[which(!(names(calibratableParams) %in% c('bucket1.layer', 'bucket2.layer')))]
-  x <- estimate_sgd(inputData, calibratableParamsList, constParamsList, warmUp = 0)
+  x <- estimate_sgd(inputData, calibratableParamsList, constParamsList, warmUp = 1500)
   y <- estimate_sgd_from_pars(pars = calibratableParams[parNames],
                               input = inputData,
                               const_par_list = constParamsList,
                               parset = parNames,
                               default_pars = calibratableParams,
                               skeleton = calibratableParamsList, 
-                              parnames = parNames, warm_up = 0)
+                              parnames = parNames, warm_up = 1500)
   expect_equal(x, y)
 })
 
