@@ -162,7 +162,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       geom_point(data = obs_df, aes(x = .data[[obs_x]], y = .data[[obs_y]], color = 'obs'), size = 1.2, show.legend = F) +
       scale_y_continuous(name = parse(text = "GWL~(m~AHD)"),
                          expand = c(0, 0),
-                         limits = ifelse(is.null(args$gwl_range), c(0, NA), args$gwl_range),
+                         limits = args$gwl_range,
                          breaks = scales::pretty_breaks(ybreaks)) +
       scale_x_date(name = NULL, breaks = scales::pretty_breaks(n = xbreaks), expand = c(0, 0)) +
       scale_color_manual(name = NULL, values = colors, labels = color_labels) +
