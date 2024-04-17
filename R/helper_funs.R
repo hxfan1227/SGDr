@@ -183,9 +183,11 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       geom_abline(intercept = 0, slope = 1, linetype = 2) +
       scale_x_continuous(name = parse(text = "Observed~GWL~(m~AHD)"),
                          expand = c(0, 0),
+                         limits = args$gwl_range,
                          breaks = scales::pretty_breaks(ybreaks)) +
       scale_y_continuous(name = parse(text = "Estimated~GWL~(m~AHD)"),
                          expand = c(0, 0),
+                         limits = args$gwl_range,
                          breaks = scales::pretty_breaks(ybreaks)) +
       theme_bw(base_size = 12, base_family = 'serif')
     p3 <- scatter_df %>% 
@@ -195,6 +197,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       scale_y_continuous(name = 'Cumulative probability (-)')+
       scale_x_continuous(name = parse(text = "GWL~(m~AHD)"),
                          expand = c(0, 0),
+                         limits = args$gwl_range,
                          breaks = scales::pretty_breaks(ybreaks)) +
       scale_color_manual(name = NULL, values = colors, labels = color_labels) +
       guides(color = guide_legend(nrow = 1), fill =guide_legend(nrow = 1)) +
