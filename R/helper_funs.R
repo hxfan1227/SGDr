@@ -257,6 +257,7 @@ estimate_sgd_from_pars <- function(pars,
                                    yearlyPumping,
                                    pumpingDf,
                                    ...) {
+  args <- list(...)
   if(length(pars) != length(parnames)) {
     stop('The length of the parameters and the parameter names should be the same.')
   }
@@ -264,8 +265,8 @@ estimate_sgd_from_pars <- function(pars,
     stop('A named parameter vector is supplied, but the names do not match the parnames.')
   }
   names(pars) <- parnames
-  current_pars = calibratableParams
-  if (any(!parset %in% names(calibratableParams))) {
+  current_pars = parameter_list_to_vector(args$calibratableParams)
+  if (any(!parset %in% names(current_pars))) {
     stop('The parset should be a subset of the names of the calibratable parameters.')
   }
   current_pars[parset] = pars[parset]
@@ -279,7 +280,8 @@ estimate_sgd_from_pars <- function(pars,
   if ('pumping' %in% names(pars)) {
     inputDf <- change_unknown_pumping(pars['pumping'], inputDf, yearlyPumping, pumpingDf)
   }
-  return(estimate_sgd(inputData = inputDf,  windowSize = nw, ...))
+  return(estimate_sgd(inputData = inputDf,  windowSize = nw, calibratableParams = current_pars_list, 
+                      constParams = args$constParams, warmUp = args$warmUp))
 }
 
 #' A function to change the unknown pumping rate to a preferred value.
