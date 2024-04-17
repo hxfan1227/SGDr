@@ -9,14 +9,14 @@ change_unknown_pumping(x, input_df, yearly_df, pumping_df)
 \arguments{
 \item{x}{A numeric value of the preferred pumping rate}
 
-\item{input_df}{A data.table of the input data}
+\item{input_df}{A data.frame of the input data. See \link{estimate_sgd} for details.}
 
-\item{yearly_df}{A data.table of the yearly data}
+\item{yearly_df}{A data.frame of the yearly pumping data. (2 columns: year, pumping)}
 
-\item{pumping_df}{A data.table of the pumping data}
+\item{pumping_df}{A data.frame of the pumping data}
 }
 \value{
-A data.table of the input data with the preferred pumping rate
+A data.frame of the input data with the preferred pumping rate
 }
 \description{
 A function to change the unknown pumping rate to a preferred value.
