@@ -55,11 +55,11 @@
 <span>  <span class="va">pars</span>,</span>
 <span>  parnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">params_to_calibrate</span>, <span class="st">"nw"</span><span class="op">)</span>,</span>
 <span>  parset <span class="op">=</span> <span class="va">params_to_calibrate</span>,</span>
-<span>  input <span class="op">=</span> <span class="va">test_data</span>,</span>
-<span>  warm_up <span class="op">=</span> <span class="fl">1500</span>,</span>
-<span>  default_pars <span class="op">=</span> <span class="va">preferred_params</span>,</span>
-<span>  skeleton <span class="op">=</span> <span class="va">params_skeleton</span>,</span>
-<span>  const_par_list <span class="op">=</span> <span class="va">const_params_list</span></span>
+<span>  <span class="va">skeleton</span>,</span>
+<span>  <span class="va">inputDf</span>,</span>
+<span>  <span class="va">yearlyPumping</span>,</span>
+<span>  <span class="va">pumpingDf</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -77,6 +77,10 @@
 <dd><p>A character vector of names of the to-be-calibrated parameters</p></dd>
 
 
+<dt>skeleton</dt>
+<dd><p>A named list of the parameter skeleton</p></dd>
+
+
 <dt>input</dt>
 <dd><p>A data.table of the input data</p></dd>
 
@@ -87,10 +91,6 @@
 
 <dt>default_pars</dt>
 <dd><p>A named numeric vector of the default parameters</p></dd>
-
-
-<dt>skeleton</dt>
-<dd><p>A named list of the parameter skeleton</p></dd>
 
 
 <dt>const_par_list</dt>

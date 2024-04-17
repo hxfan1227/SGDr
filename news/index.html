@@ -46,7 +46,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="sgdr-development-version">SGDr (development version)<a class="anchor" aria-label="anchor" href="#sgdr-development-version"></a></h2>
-<ul><li><p>The warm up period is now available for the model, implemeted in <code>C++</code>.</p></li>
+<ul><li><p>The unknown pumping rate is now available for calibration. (Still not a general purpose function, just for case study)</p></li>
+<li><p>The window size is now available for calibration.</p></li>
+<li><p>The warm up period is now available for the model, implemented in <code>C++</code>.</p></li>
 <li><p>The package is now using S3 method for <code>SGD_ESTIMATION_DF</code> class.</p></li>
 <li><p><code>plot</code>, <code>print</code> and <code>summary</code> methods are available for the <code>SGD_ESTIMATION_DF</code> class.</p></li>
 <li><p>The package has been totally re-constructed using OOP. Now we have 2 classes which are <code>Model</code> and <code>Parameters</code>, respectively. We have achieved same results and efficiency when applying these changes. However the extensibility is much larger.</p></li>
