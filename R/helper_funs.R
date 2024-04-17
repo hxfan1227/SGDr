@@ -1,7 +1,6 @@
-#' @import jsonlite scales dplyr tidyr ggplot2 patchwork
-#' @importFrom lubridate ymd date
+#' @import jsonlite scales dplyr tidyr ggplot2 patchwork data.table
+#' @importFrom lubridate ymd date days_in_month
 #' @importFrom glue glue
-#' @importFrom data.table setDT melt
 
 NULL 
 #'  Convert a JSON file to a list of parameters
@@ -253,19 +252,52 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
 estimate_sgd_from_pars <- function(pars, 
                                    parnames = c(params_to_calibrate, 'nw'),
                                    parset = params_to_calibrate, 
-                                   input = test_data, 
-                                   warm_up = 1500, 
-                                   default_pars = preferred_params, 
-                                   skeleton = params_skeleton, 
-                                   const_par_list = const_params_list) {
+                                   skeleton,
+                                   inputDf,
+                                   yearlyPumping,
+                                   pumpingDf,
+                                   ...) {
+  if(length(pars) != length(parnames)) {
+    stop('The length of the parameters and the parameter names should be the same.')
+  }
+  if (!is.null(names(pars)) & !all(parnames == names(pars))) {
+    stop('A named parameter vector is supplied, but the names do not match the parnames.')
+  }
   names(pars) <- parnames
-  current_pars = default_pars
+  current_pars = calibratableParams
+  if (any(!parset %in% names(calibratableParams))) {
+    stop('The parset should be a subset of the names of the calibratable parameters.')
+  }
   current_pars[parset] = pars[parset]
   current_pars_list <- parameter_vec_to_list(current_pars, prameter_skeleton = skeleton)
+  # additional 'calibratable' parameter nw (i.e., window size for averaging recharge)
+  default_args <- formals(estimate_sgd)
+  nw = default_args$windowSize
   if ('nw' %in% names(pars)) {
     nw = pars['nw']
-    return(estimate_sgd(inputData = input, calibratableParams = current_pars_list, constParams = const_par_list, windowSize = nw, warmUp = warm_up))
   } 
-  return(estimate_sgd(inputData = input, calibratableParams = current_pars_list, constParams = const_par_list, warmUp = warm_up))
+  if ('pumping' %in% names(pars)) {
+    inputDf <- change_unknown_pumping(pars['pumping'], inputDf, yearlyPumping, pumpingDf)
+  }
+  return(estimate_sgd(inputData = inputDf,  windowSize = nw, ...))
 }
 
+#' A function to change the unknown pumping rate to a preferred value.
+#' @rdname change_unknown_pumping
+#' @param x A numeric value of the preferred pumping rate
+#' @param input_df A data.frame of the input data. See \link{estimate_sgd} for details.
+#' @param yearly_df A data.frame of the yearly pumping data. (2 columns: year, pumping)
+#' @param pumping_df A data.frame of the pumping data
+#' @return A data.frame of the input data with the preferred pumping rate
+#' @export
+change_unknown_pumping <- function(x, input_df, yearly_df, pumping_df) {
+  input_data <- setDT(copy(input_df))
+  yearly_pumping_data <- setDT(copy(yearly_df))
+  pumping_data <- setDT(copy(pumping_df))
+  yearly_pumping_data[year <= 1985, pumping := x]
+  pumping_data <- pumping_data[yearly_pumping_data, pumping := i.pumping, on = .(year)]
+  pumping_data[, daily_pumping := pumping * percent * 1000 / days_in_month(date)]
+  input_data[pumping_data, Pumping := i.daily_pumping, on = .(t)]
+  setDF(input_data)
+  return(input_data)
+}
