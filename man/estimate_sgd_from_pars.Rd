@@ -8,11 +8,11 @@ estimate_sgd_from_pars(
   pars,
   parnames = c(params_to_calibrate, "nw"),
   parset = params_to_calibrate,
-  input = test_data,
-  warm_up = 1500,
-  default_pars = preferred_params,
-  skeleton = params_skeleton,
-  const_par_list = const_params_list
+  skeleton,
+  inputDf,
+  yearlyPumping,
+  pumpingDf,
+  ...
 )
 }
 \arguments{
@@ -22,13 +22,13 @@ estimate_sgd_from_pars(
 
 \item{parset}{A character vector of names of the to-be-calibrated parameters}
 
+\item{skeleton}{A named list of the parameter skeleton}
+
 \item{input}{A data.table of the input data}
 
 \item{warm_up}{A numeric value of the warm-up period}
 
 \item{default_pars}{A named numeric vector of the default parameters}
-
-\item{skeleton}{A named list of the parameter skeleton}
 
 \item{const_par_list}{A named list of the constant parameters}
 }
