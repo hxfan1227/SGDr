@@ -1,6 +1,10 @@
 # SGDr (development version)
 
-* The warm up period is now available for the model, implemeted in `C++`.
+* The unknown pumping rate is now available for calibration. (Still not a general purpose function, just for case study)
+
+* The window size is now available for calibration.
+
+* The warm up period is now available for the model, implemented in `C++`.
 
 * The package is now using S3 method for `SGD_ESTIMATION_DF` class.
 
