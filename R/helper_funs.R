@@ -96,6 +96,7 @@ NULL
 #' @param coeff A numeric indicating the shrink coefficient of the precipitation.
 #' @param colors A named character vector of the colors to use
 #' @param color_labels A named character vector of the labels for the colors.
+#' @param .plot A logical indicating whether to return the plot as a `ggplot` object.
 #' @param ... Additional arguments passed to the plot function. (currently not implemented)
 #' @return Invisibly returns the original estimated results.
 #' @export
@@ -119,6 +120,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
                                               'x[n]~(m)',
                                               'w[recharge]~(mm)',
                                               'w[recharge[ave]]~(mm)'),
+                                   .plot = FALSE,
                                    ...) {
   args <- list(...)
   results <- x$results
@@ -237,6 +239,9 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
             axis.text.y.right = element_text(color = colors['precp']))
   }
   print(p)
+  if (.plot) {
+    return(p)
+  }
   invisible(x)
 }
 

@@ -22,6 +22,7 @@
     est = "Estimated GWL"),
   labels = c("WL~(m~AHD)", "SGD~(m^3/d)", "h[n]~(m~AHD)", "x[n]~(m)", "w[recharge]~(mm)",
     "w[recharge[ave]]~(mm)"),
+  .plot = FALSE,
   ...
 )
 }
@@ -55,6 +56,8 @@
 \item{color_labels}{A named character vector of the labels for the colors.}
 
 \item{labels}{A character vector of the variable labels to plot.}
+
+\item{.plot}{A logical indicating whether to return the plot as a \code{ggplot} object.}
 
 \item{...}{Additional arguments passed to the plot function. (currently not implemented)}
 }
