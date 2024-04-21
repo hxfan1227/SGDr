@@ -18,7 +18,8 @@ Imports:
     pracma,
     Rcpp (>= 1.0.12),
     scales,
-    tidyr
+    tidyr,
+    tune
 LinkingTo: Rcpp
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
