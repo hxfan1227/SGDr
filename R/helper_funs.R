@@ -210,7 +210,8 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
             legend.position = 'top')
     p <- p1 / (p2 + p3) +
       patchwork::plot_layout(guides = 'collect') &
-      theme(legend.position = 'top')
+      theme(legend.position = 'top', 
+            axis.text = element_text(color = 'black'))
   }
   
   if (type == 'input') {
@@ -238,10 +239,10 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
             axis.line.y.right = element_line(color = colors['precp']), 
             axis.text.y.right = element_text(color = colors['precp']))
   }
-  print(p)
   if (.plot) {
     return(p)
   }
+  print(p)
   invisible(x)
 }
 
