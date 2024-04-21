@@ -1,6 +1,8 @@
 #' @import jsonlite scales dplyr tidyr ggplot2 patchwork data.table
 #' @importFrom lubridate ymd date days_in_month
 #' @importFrom glue glue
+#' @importFrom scales pretty_breaks label_number cut_si
+#' @importFrom tune coord_obs_pred
 
 NULL 
 #'  Convert a JSON file to a list of parameters
