@@ -191,7 +191,8 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
                          expand = c(0, 0),
                          limits = args$gwl_range,
                          breaks = scales::pretty_breaks(ybreaks)) +
-      theme_bw(base_size = 12, base_family = 'serif')
+      theme_bw(base_size = 12, base_family = 'serif') +
+      tune::coord_obs_pred()
     p3 <- scatter_df %>% 
       pivot_longer(cols = c('obs', 'est')) %>%
       ggplot(aes(x = value, color = name)) + 
@@ -212,6 +213,9 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       patchwork::plot_layout(guides = 'collect') &
       theme(legend.position = 'top', 
             axis.text = element_text(color = 'black'))
+    if(.plot) {
+      return(list(p1, p2, p3))
+    }
   }
   
   if (type == 'input') {
