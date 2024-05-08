@@ -132,7 +132,7 @@ test_that('change_unknown_pumping() works', {
   monthly_pumping_df <- read.csv(test_path('testdata', 'monthly_pumping_data.csv')) %>% 
     setDT()
   pumping_data <- data.table(date = seq(ymd(19670101), by = '1 day', length.out = length(inputData$t)))
-  pumping_data[, ':='(year = year(date), month = month(date))]
+  pumping_data[, ':='(year = lubridate::year(date), month = lubridate::month(date))]
   pumping_data <- pumping_data[monthly_pumping_df,  percent := i.percent, on = .(month)]
   pumping_data <- pumping_data[yearly_pumping_df, on = .(year)]
   pumping_data[, daily_pumping := pumping * percent * 1000 / lubridate::days_in_month(date)]

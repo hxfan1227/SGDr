@@ -6,8 +6,8 @@
 \usage{
 estimate_sgd_from_pars(
   pars,
-  parnames = c(params_to_calibrate, "nw"),
-  parset = params_to_calibrate,
+  parnames,
+  parset,
   skeleton,
   inputDf,
   yearlyPumping,
@@ -16,21 +16,21 @@ estimate_sgd_from_pars(
 )
 }
 \arguments{
-\item{pars}{A numeric vector of parameters to calibrate}
+\item{pars}{A numeric vector of parameters to calibrate.}
 
-\item{parnames}{A character vector of names of the parameters}
+\item{parnames}{A character vector of names of the parameters.}
 
-\item{parset}{A character vector of names of the to-be-calibrated parameters}
+\item{parset}{A character vector of names of the to-be-calibrated parameters.}
 
-\item{skeleton}{A named list of the parameter skeleton}
+\item{skeleton}{A named list of the parameter skeleton.}
 
-\item{input}{A data.table of the input data}
+\item{inputDf}{A data.frame of the input data. See \link{estimate_sgd} for details.}
 
-\item{warm_up}{A numeric value of the warm-up period}
+\item{yearlyPumping}{A data.frame of the yearly pumping data. (2 columns: year, pumping)}
 
-\item{default_pars}{A named numeric vector of the default parameters}
+\item{pumpingDf}{A data.frame of the pumping data.}
 
-\item{const_par_list}{A named list of the constant parameters}
+\item{...}{Additional arguments passed to the model function}
 }
 \value{
 A SGD_ESTIMATION_DF class
@@ -39,5 +39,5 @@ A SGD_ESTIMATION_DF class
 A wrapper function to call the model and return result for calibration.
 }
 \seealso{
-\code{\link[=estimate_sgd]{estimate_sgd()}}
+\code{\link{estimate_sgd}}
 }

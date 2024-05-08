@@ -1,8 +1,11 @@
-#' @import jsonlite scales dplyr tidyr ggplot2 patchwork data.table
-#' @importFrom lubridate ymd date days_in_month
+#' @import jsonlite scales dplyr tidyr ggplot2 patchwork
+#' @importFrom lubridate ymd date days_in_month year month
 #' @importFrom glue glue
 #' @importFrom scales pretty_breaks label_number cut_si
 #' @importFrom tune coord_obs_pred
+#' @importFrom data.table setDT setDF := data.table copy
+#' @importFrom stats median
+#' @importFrom utils as.relistable relist 
 
 NULL 
 #'  Convert a JSON file to a list of parameters
@@ -66,7 +69,7 @@ print.SGD_ESTIMATION_DF <- function(x, ...) {
 #' @param ... other arguments not used by this method
 #' @export
 summary.SGD_ESTIMATION_DF <- function(object, base_date, ...) {
-  cat("SGD Estimation Summary\n")
+  cat("\nSGD Estimation Summary\n")
   if (missing(base_date)) {
     warning("No base date available. Please provide the base date to calculate the simulation period. \n")
     cat("Simulation length: ", NROW(object$results), 'days\n')
@@ -124,6 +127,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
                                               'w[recharge[ave]]~(mm)'),
                                    .plot = FALSE,
                                    ...) {
+  value = wl = est = obs = name = R = Pumping = variable = NULL # to avoid warnings  
   args <- list(...)
   results <- x$results
   if (all(vars == 'all')) {
@@ -133,7 +137,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
   type = match.arg(type)
   if (type == 'pred') {
     plot_df <- data.table::setDT(results)
-    plot_df[, date := ymd(base_date) + t - 1]
+    plot_df[, date := lubridate::ymd(base_date) + t - 1]
     plot_df[, t := NULL]
     plot_df <- data.table::melt(plot_df, id.vars = 'date', measure.vars = vars)
     plot_df[, variable := factor(variable, levels = names, labels = labels)]
@@ -181,7 +185,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       rename('est' = 'wl')
     obs_df <- obs_df %>%
       rename('obs' = all_of(obs_y))
-    scatter_df <- merge(plot_df[, .(date, est)], obs_df, by = c('date' = obs_x))
+    scatter_df <- merge(plot_df[, list(date, est)], obs_df, by = c('date' = obs_x))
     p2 <- ggplot(scatter_df, aes(x = obs, y = est)) +
       geom_point(size = 1.2) +
       geom_abline(intercept = 0, slope = 1, linetype = 2) +
@@ -227,7 +231,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       geom_segment(aes(x = date, y = maxRange, yend = maxRange - R/coeff, xend = date, color = 'precp'), linewidth = 0.5) +
       geom_line(aes(x = date, y = Pumping, color = 'pumping'), linewidth = 0.5) +
       scale_y_continuous(name = parse(text = "Pumping~(m^3/d)"),
-                         limit = c(0, maxRange),
+                         limits = c(0, maxRange),
                          expand = c(0, 0),
                          breaks = scales::pretty_breaks(ybreaks),
                          sec.axis = sec_axis(~ (maxRange - .) * coeff,
@@ -254,21 +258,21 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
 
 #' A wrapper function to call the model and return result for calibration.
 #' @rdname estimate_sgd_from_pars
-#' @param pars A numeric vector of parameters to calibrate
-#' @param parnames A character vector of names of the parameters
-#' @param parset A character vector of names of the to-be-calibrated parameters
-#' @param input A data.table of the input data
-#' @param warm_up A numeric value of the warm-up period
-#' @param default_pars A named numeric vector of the default parameters
-#' @param skeleton A named list of the parameter skeleton
-#' @param const_par_list A named list of the constant parameters
+#' @param pars A numeric vector of parameters to calibrate.
+#' @param parnames A character vector of names of the parameters.
+#' @param parset A character vector of names of the to-be-calibrated parameters.
+#' @param skeleton A named list of the parameter skeleton.
+#' @param inputDf A data.frame of the input data. See \link{estimate_sgd} for details.
+#' @param yearlyPumping A data.frame of the yearly pumping data. (2 columns: year, pumping)
+#' @param pumpingDf A data.frame of the pumping data.
+#' @param ... Additional arguments passed to the model function
 #' @return A SGD_ESTIMATION_DF class
-#' @seealso [estimate_sgd()]
+#' @seealso \code{\link{estimate_sgd}}
 #' @export
 
 estimate_sgd_from_pars <- function(pars, 
-                                   parnames = c(params_to_calibrate, 'nw'),
-                                   parset = params_to_calibrate, 
+                                   parnames,
+                                   parset, 
                                    skeleton,
                                    inputDf,
                                    yearlyPumping,
@@ -310,13 +314,14 @@ estimate_sgd_from_pars <- function(pars,
 #' @return A data.frame of the input data with the preferred pumping rate
 #' @export
 change_unknown_pumping <- function(x, input_df, yearly_df, pumping_df) {
+  pumping = i.pumping = daily_pumping = Pumping = i.daily_pumping = NULL # to avoid warnings
   input_data <- setDT(copy(input_df))
   yearly_pumping_data <- setDT(copy(yearly_df))
   pumping_data <- setDT(copy(pumping_df))
   yearly_pumping_data[year <= 1985, pumping := x]
-  pumping_data <- pumping_data[yearly_pumping_data, pumping := i.pumping, on = .(year)]
-  pumping_data[, daily_pumping := pumping * percent * 1000 / days_in_month(date)]
-  input_data[pumping_data, Pumping := i.daily_pumping, on = .(t)]
+  pumping_data <- pumping_data[yearly_pumping_data, pumping := i.pumping, on = list(year)]
+  pumping_data[, daily_pumping := pumping * percent * 1000 / lubridate::days_in_month(date)]
+  input_data[pumping_data, Pumping := i.daily_pumping, on = list(t)]
   setDF(input_data)
   return(input_data)
 }
