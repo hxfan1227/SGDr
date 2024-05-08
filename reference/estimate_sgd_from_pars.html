@@ -53,8 +53,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_sgd_from_pars</span><span class="op">(</span></span>
 <span>  <span class="va">pars</span>,</span>
-<span>  parnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">params_to_calibrate</span>, <span class="st">"nw"</span><span class="op">)</span>,</span>
-<span>  parset <span class="op">=</span> <span class="va">params_to_calibrate</span>,</span>
+<span>  <span class="va">parnames</span>,</span>
+<span>  <span class="va">parset</span>,</span>
 <span>  <span class="va">skeleton</span>,</span>
 <span>  <span class="va">inputDf</span>,</span>
 <span>  <span class="va">yearlyPumping</span>,</span>
@@ -66,35 +66,35 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>pars</dt>
-<dd><p>A numeric vector of parameters to calibrate</p></dd>
+<dd><p>A numeric vector of parameters to calibrate.</p></dd>
 
 
 <dt>parnames</dt>
-<dd><p>A character vector of names of the parameters</p></dd>
+<dd><p>A character vector of names of the parameters.</p></dd>
 
 
 <dt>parset</dt>
-<dd><p>A character vector of names of the to-be-calibrated parameters</p></dd>
+<dd><p>A character vector of names of the to-be-calibrated parameters.</p></dd>
 
 
 <dt>skeleton</dt>
-<dd><p>A named list of the parameter skeleton</p></dd>
+<dd><p>A named list of the parameter skeleton.</p></dd>
 
 
-<dt>input</dt>
-<dd><p>A data.table of the input data</p></dd>
+<dt>inputDf</dt>
+<dd><p>A data.frame of the input data. See <a href="estimate_sgd.html">estimate_sgd</a> for details.</p></dd>
 
 
-<dt>warm_up</dt>
-<dd><p>A numeric value of the warm-up period</p></dd>
+<dt>yearlyPumping</dt>
+<dd><p>A data.frame of the yearly pumping data. (2 columns: year, pumping)</p></dd>
 
 
-<dt>default_pars</dt>
-<dd><p>A named numeric vector of the default parameters</p></dd>
+<dt>pumpingDf</dt>
+<dd><p>A data.frame of the pumping data.</p></dd>
 
 
-<dt>const_par_list</dt>
-<dd><p>A named list of the constant parameters</p></dd>
+<dt>...</dt>
+<dd><p>Additional arguments passed to the model function</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -105,7 +105,7 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="estimate_sgd.html">estimate_sgd()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="estimate_sgd.html">estimate_sgd</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
