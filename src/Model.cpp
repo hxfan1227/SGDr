@@ -80,11 +80,77 @@ void Model::initializeVector()
     FWLdrop = Rcpp::NumericVector(simLength, NA_REAL);     // change in water level in the bucket
 }
 
-void Model::calc_recharge()
+void Model::reset_initial_conditions(int warmUp)
+{
+    H2O_SB1[0] = H2O_SB1[warmUp - 1];
+    H2O_SB2[0] = H2O_SB2[warmUp - 1];
+    GWL[0] = H2O3_AQ[warmUp - 1];
+    SW[0] = SW[warmUp - 1];
+    S[0] = S[warmUp - 1];
+    Ia[0] = Ia[warmUp - 1];
+    CN[0] = CN[warmUp - 1];
+    Qsurf[0] = Qsurf[warmUp - 1];
+    MC_SB1[0] = MC_SB1[warmUp - 1];
+    DoS_SB1[0] = DoS_SB1[warmUp - 1];
+    finf_SB1[0] = finf_SB1[warmUp - 1];
+    finfla_SB1[0] = finfla_SB1[warmUp - 1];
+    H2O1_SB1[0] = H2O1_SB1[warmUp - 1];
+    IntercH2O[0] = IntercH2O[warmUp - 1];
+    CanopyH2O[0] = CanopyH2O[warmUp - 1];
+    E0_Int[0] = E0_Int[warmUp - 1];
+    YE[0] = YE[warmUp - 1];
+    E[0] = E[warmUp - 1];
+    H2O2_SB1[0] = H2O2_SB1[warmUp - 1];
+    QSE[0] = QSE[warmUp - 1];
+    SWexcess[0] = SWexcess[warmUp - 1];
+    Kunsat[0] = Kunsat[warmUp - 1];
+    Kunsat2[0] = Kunsat2[warmUp - 1];
+    TT[0] = TT[warmUp - 1];
+    TT2[0] = TT2[warmUp - 1];
+    Wdperc[0] = Wdperc[warmUp - 1];
+    Wperc[0] = Wperc[warmUp - 1];
+    Wperc2[0] = Wperc2[warmUp - 1];
+    H2O3_SB1[0] = H2O3_SB1[warmUp - 1];
+    H2O3_SB2[0] = H2O3_SB2[warmUp - 1];
+    MC_SB2[0] = MC_SB2[warmUp - 1];
+    DoS_SB2[0] = DoS_SB2[warmUp - 1];
+    H2O1_SB2[0] = H2O1_SB2[warmUp - 1];
+    YE2[0] = YE2[warmUp - 1];
+    Edd[0] = Edd[warmUp - 1];
+    H2O2_SB2[0] = H2O2_SB2[warmUp - 1];
+    Sw[0] = Sw[warmUp - 1];
+    Sw2[0] = Sw2[warmUp - 1];
+    SWexcess2[0] = SWexcess2[warmUp - 1];
+    Wrechg[0] = Wrechg[warmUp - 1];
+    H2O1_AQ[0] = H2O1_AQ[warmUp - 1];
+    WrechgAve[0] = WrechgAve[warmUp - 1];
+    H2O2_AQ[0] = H2O2_AQ[warmUp - 1];
+    H2O3_AQ[0] = H2O3_AQ[warmUp - 1];
+    SGD1[0] = SGD1[warmUp - 1];
+    SGD2[0] = SGD2[warmUp - 1];
+    xn[0] = xn[warmUp - 1];
+    xn1[0] = xn1[warmUp - 1];
+    xn2[0] = xn2[warmUp - 1];
+    hn[0] = hn[warmUp - 1];
+    hn1[0] = hn1[warmUp - 1];
+    hn2[0] = hn2[warmUp - 1];
+    M1[0] = M1[warmUp - 1];
+    M2[0] = M2[warmUp - 1];
+    xT1[0] = xT1[warmUp - 1];
+    xT2[0] = xT2[warmUp - 1];
+    SGD[0] = SGD[warmUp - 1];
+    SGDdrop[0] = SGDdrop[warmUp - 1];
+    PumpingDrop[0] = PumpingDrop[warmUp - 1];
+    dxT[0] = dxT[warmUp - 1];
+    xT3[0] = xT3[warmUp - 1];
+    SWvol[0] = SWvol[warmUp - 1];
+    FWLdrop[0] = FWLdrop[warmUp - 1];    
+}
+
+void Model::calc_recharge(int simLen)
 {
     initializeVector();
-    validIndices = Rcpp::Range(warmUp, simLength - 1);
-    for (int i = 0; i < simLength; ++i)
+    for (int i = 0; i < simLen; ++i)
     {
         update_head(i);
         // curve number
@@ -98,10 +164,28 @@ void Model::calc_recharge()
     }
 }
 
-void Model::calc_sgd(int windowSize)
+void Model::run(int windowSize, int warmUp)
+{
+    if (warmUp >= 1)
+    {
+        calc_recharge(warmUp);
+        calc_sgd(warmUp, windowSize);
+        // Reset the model initial conditions
+        reset_initial_conditions(warmUp);
+        calc_recharge(simLength);
+        calc_sgd(simLength, windowSize);
+    }
+    else
+    {
+        calc_recharge(simLength);
+        calc_sgd(simLength, windowSize);	
+    }	
+}
+
+void Model::calc_sgd(int simLen, int windowSize)
 {
     WrechgAve = moving_average(Wrechg, windowSize);
-    for (int i = 0; i < simLength; ++i)
+    for (int i = 0; i < simLen; ++i)
     {
         update_gwl(i);
         calc_sgds(i);
@@ -378,102 +462,102 @@ void Model::update_parameters(const Rcpp::List &newCalibratableParams, const Rcp
 }
 
 // Getters
-Rcpp::NumericVector Model::get_SW() { return SW[validIndices]; }
-Rcpp::NumericVector Model::get_S() { return S[validIndices]; }
-Rcpp::NumericVector Model::get_Ia() { return Ia[validIndices]; }
-Rcpp::NumericVector Model::get_CN() { return CN[validIndices]; }
-Rcpp::NumericVector Model::get_Qsurf() { return Qsurf[validIndices]; }
-Rcpp::NumericVector Model::get_MC_SB1() { return MC_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_DoS_SB1() { return DoS_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_finf_SB1() { return finf_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_finfla_SB1() { return finfla_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_H2O1_SB1() { return H2O1_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_IntercH2O() { return IntercH2O[validIndices]; }
-Rcpp::NumericVector Model::get_CanopyH2O() { return CanopyH2O[validIndices]; }
-Rcpp::NumericVector Model::get_E0_Int() { return E0_Int[validIndices]; }
-Rcpp::NumericVector Model::get_YE() { return YE[validIndices]; }
-Rcpp::NumericVector Model::get_E() { return E[validIndices]; }
-Rcpp::NumericVector Model::get_H2O2_SB1() { return H2O2_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_QSE() { return QSE[validIndices]; }
-Rcpp::NumericVector Model::get_SWexcess() { return SWexcess[validIndices]; }
-Rcpp::NumericVector Model::get_Kunsat() { return Kunsat[validIndices]; }
-Rcpp::NumericVector Model::get_Kunsat2() { return Kunsat2[validIndices]; }
-Rcpp::NumericVector Model::get_TT() { return TT[validIndices]; }
-Rcpp::NumericVector Model::get_TT2() { return TT2[validIndices]; }
-Rcpp::NumericVector Model::get_Wdperc() { return Wdperc[validIndices]; }
-Rcpp::NumericVector Model::get_Wperc() { return Wperc[validIndices]; }
-Rcpp::NumericVector Model::get_Wperc2() { return Wperc2[validIndices]; }
-Rcpp::NumericVector Model::get_H2O3_SB1() { return H2O3_SB1[validIndices]; }
-Rcpp::NumericVector Model::get_H2O3_SB2() { return H2O3_SB2[validIndices]; }
-Rcpp::NumericVector Model::get_MC_SB2() { return MC_SB2[validIndices]; }
-Rcpp::NumericVector Model::get_DoS_SB2() { return DoS_SB2[validIndices]; }
-Rcpp::NumericVector Model::get_H2O1_SB2() { return H2O1_SB2[validIndices]; }
-Rcpp::NumericVector Model::get_YE2() { return YE2[validIndices]; }
-Rcpp::NumericVector Model::get_Edd() { return Edd[validIndices]; }
-Rcpp::NumericVector Model::get_H2O2_SB2() { return H2O2_SB2[validIndices]; }
-Rcpp::NumericVector Model::get_Sw() { return Sw[validIndices]; }
-Rcpp::NumericVector Model::get_Sw2() { return Sw2[validIndices]; }
-Rcpp::NumericVector Model::get_SWexcess2() { return SWexcess2[validIndices]; }
-Rcpp::NumericVector Model::get_Wrechg() { return Wrechg[validIndices]; }
-Rcpp::NumericVector Model::get_H2O1_AQ() { return H2O1_AQ[validIndices]; }
-Rcpp::NumericVector Model::get_WrechgAve() { return WrechgAve[validIndices]; }
-Rcpp::NumericVector Model::get_H2O2_AQ() { return H2O2_AQ[validIndices]; }
-Rcpp::NumericVector Model::get_H2O3_AQ() { return H2O3_AQ[validIndices]; }
-Rcpp::NumericVector Model::get_SGD1() { return SGD1[validIndices]; }
-Rcpp::NumericVector Model::get_SGD2() { return SGD2[validIndices]; }
-Rcpp::NumericVector Model::get_xn() { return xn[validIndices]; }
-Rcpp::NumericVector Model::get_xn1() { return xn1[validIndices]; }
-Rcpp::NumericVector Model::get_xn2() { return xn2[validIndices]; }
-Rcpp::NumericVector Model::get_hn() { return hn[validIndices]; }
-Rcpp::NumericVector Model::get_hn1() { return hn1[validIndices]; }
-Rcpp::NumericVector Model::get_hn2() { return hn2[validIndices]; }
-Rcpp::NumericVector Model::get_M1() { return M1[validIndices]; }
-Rcpp::NumericVector Model::get_M2() { return M2[validIndices]; }
-Rcpp::NumericVector Model::get_xT1() { return xT1[validIndices]; }
-Rcpp::NumericVector Model::get_xT2() { return xT2[validIndices]; }
-Rcpp::NumericVector Model::get_SGD() { return SGD[validIndices]; }
-Rcpp::NumericVector Model::get_SGDdrop() { return SGDdrop[validIndices]; }
-Rcpp::NumericVector Model::get_PumpingDrop() { return PumpingDrop[validIndices]; }
-Rcpp::NumericVector Model::get_dxT() { return dxT[validIndices]; }
-Rcpp::NumericVector Model::get_xT3() { return xT3[validIndices]; }
-Rcpp::NumericVector Model::get_SWvol() { return SWvol[validIndices]; }
-Rcpp::NumericVector Model::get_FWLdrop() { return FWLdrop[validIndices]; }
+Rcpp::NumericVector Model::get_SW() { return SW; }
+Rcpp::NumericVector Model::get_S() { return S; }
+Rcpp::NumericVector Model::get_Ia() { return Ia; }
+Rcpp::NumericVector Model::get_CN() { return CN; }
+Rcpp::NumericVector Model::get_Qsurf() { return Qsurf; }
+Rcpp::NumericVector Model::get_MC_SB1() { return MC_SB1; }
+Rcpp::NumericVector Model::get_DoS_SB1() { return DoS_SB1; }
+Rcpp::NumericVector Model::get_finf_SB1() { return finf_SB1; }
+Rcpp::NumericVector Model::get_finfla_SB1() { return finfla_SB1; }
+Rcpp::NumericVector Model::get_H2O1_SB1() { return H2O1_SB1; }
+Rcpp::NumericVector Model::get_IntercH2O() { return IntercH2O; }
+Rcpp::NumericVector Model::get_CanopyH2O() { return CanopyH2O; }
+Rcpp::NumericVector Model::get_E0_Int() { return E0_Int; }
+Rcpp::NumericVector Model::get_YE() { return YE; }
+Rcpp::NumericVector Model::get_E() { return E; }
+Rcpp::NumericVector Model::get_H2O2_SB1() { return H2O2_SB1; }
+Rcpp::NumericVector Model::get_QSE() { return QSE; }
+Rcpp::NumericVector Model::get_SWexcess() { return SWexcess; }
+Rcpp::NumericVector Model::get_Kunsat() { return Kunsat; }
+Rcpp::NumericVector Model::get_Kunsat2() { return Kunsat2; }
+Rcpp::NumericVector Model::get_TT() { return TT; }
+Rcpp::NumericVector Model::get_TT2() { return TT2; }
+Rcpp::NumericVector Model::get_Wdperc() { return Wdperc; }
+Rcpp::NumericVector Model::get_Wperc() { return Wperc; }
+Rcpp::NumericVector Model::get_Wperc2() { return Wperc2; }
+Rcpp::NumericVector Model::get_H2O3_SB1() { return H2O3_SB1; }
+Rcpp::NumericVector Model::get_H2O3_SB2() { return H2O3_SB2; }
+Rcpp::NumericVector Model::get_MC_SB2() { return MC_SB2; }
+Rcpp::NumericVector Model::get_DoS_SB2() { return DoS_SB2; }
+Rcpp::NumericVector Model::get_H2O1_SB2() { return H2O1_SB2; }
+Rcpp::NumericVector Model::get_YE2() { return YE2; }
+Rcpp::NumericVector Model::get_Edd() { return Edd; }
+Rcpp::NumericVector Model::get_H2O2_SB2() { return H2O2_SB2; }
+Rcpp::NumericVector Model::get_Sw() { return Sw; }
+Rcpp::NumericVector Model::get_Sw2() { return Sw2; }
+Rcpp::NumericVector Model::get_SWexcess2() { return SWexcess2; }
+Rcpp::NumericVector Model::get_Wrechg() { return Wrechg; }
+Rcpp::NumericVector Model::get_H2O1_AQ() { return H2O1_AQ; }
+Rcpp::NumericVector Model::get_WrechgAve() { return WrechgAve; }
+Rcpp::NumericVector Model::get_H2O2_AQ() { return H2O2_AQ; }
+Rcpp::NumericVector Model::get_H2O3_AQ() { return H2O3_AQ; }
+Rcpp::NumericVector Model::get_SGD1() { return SGD1; }
+Rcpp::NumericVector Model::get_SGD2() { return SGD2; }
+Rcpp::NumericVector Model::get_xn() { return xn; }
+Rcpp::NumericVector Model::get_xn1() { return xn1; }
+Rcpp::NumericVector Model::get_xn2() { return xn2; }
+Rcpp::NumericVector Model::get_hn() { return hn; }
+Rcpp::NumericVector Model::get_hn1() { return hn1; }
+Rcpp::NumericVector Model::get_hn2() { return hn2; }
+Rcpp::NumericVector Model::get_M1() { return M1; }
+Rcpp::NumericVector Model::get_M2() { return M2; }
+Rcpp::NumericVector Model::get_xT1() { return xT1; }
+Rcpp::NumericVector Model::get_xT2() { return xT2; }
+Rcpp::NumericVector Model::get_SGD() { return SGD; }
+Rcpp::NumericVector Model::get_SGDdrop() { return SGDdrop; }
+Rcpp::NumericVector Model::get_PumpingDrop() { return PumpingDrop; }
+Rcpp::NumericVector Model::get_dxT() { return dxT; }
+Rcpp::NumericVector Model::get_xT3() { return xT3; }
+Rcpp::NumericVector Model::get_SWvol() { return SWvol; }
+Rcpp::NumericVector Model::get_FWLdrop() { return FWLdrop; }
 Rcpp::DataFrame Model::get_recharge_output()
 {
     return Rcpp::DataFrame::create(
-        Rcpp::Named("H2O3_SB1") = H2O3_SB1[validIndices],
-        Rcpp::Named("H2O3_SB2") = H2O3_SB2[validIndices],
-        Rcpp::Named("Wperc2") = Wperc2[validIndices],
+        Rcpp::Named("H2O3_SB1") = H2O3_SB1,
+        Rcpp::Named("H2O3_SB2") = H2O3_SB2,
+        Rcpp::Named("Wperc2") = Wperc2,
         // Wrechg
-        Rcpp::Named("Wrechg") = Wrechg[validIndices],
+        Rcpp::Named("Wrechg") = Wrechg,
         // SW
-        Rcpp::Named("SW") = SW[validIndices],
+        Rcpp::Named("SW") = SW,
         // S
-        Rcpp::Named("S") = S[validIndices],
+        Rcpp::Named("S") = S,
         // Ia
-        Rcpp::Named("Ia") = Ia[validIndices],
+        Rcpp::Named("Ia") = Ia,
         // CN
-        Rcpp::Named("CN") = CN[validIndices],
+        Rcpp::Named("CN") = CN,
         // Qsurf
-        Rcpp::Named("Qsurf") = Qsurf[validIndices],
+        Rcpp::Named("Qsurf") = Qsurf,
         // finf_SB1
-        Rcpp::Named("finf_SB1") = finf_SB1[validIndices],
+        Rcpp::Named("finf_SB1") = finf_SB1,
         // finfla_SB1
-        Rcpp::Named("finfla_SB1") = finfla_SB1[validIndices]);
+        Rcpp::Named("finfla_SB1") = finfla_SB1);
 }
 
 Rcpp::DataFrame Model::get_sgd_output()
 {
     Rcpp::NumericVector t_temp = inputData["t"];
-    t_temp = t_temp[validIndices];
+    t_temp = t_temp;
     return Rcpp::DataFrame::create(
         Rcpp::Named("t") = t_temp,
-        Rcpp::Named("wl") = H2O3_AQ[validIndices],
-        Rcpp::Named("SGD") = SGD[validIndices],
-        Rcpp::Named("xn") = xn[validIndices],
-        Rcpp::Named("hn") = hn[validIndices],
-        Rcpp::Named("Wrechg") = Wrechg[validIndices],
-        Rcpp::Named("WrechgAve") = WrechgAve[validIndices]);
+        Rcpp::Named("wl") = H2O3_AQ,
+        Rcpp::Named("SGD") = SGD,
+        Rcpp::Named("xn") = xn,
+        Rcpp::Named("hn") = hn,
+        Rcpp::Named("Wrechg") = Wrechg,
+        Rcpp::Named("WrechgAve") = WrechgAve);
 }
 
 Rcpp::List Model::get_all_params_list()
@@ -487,10 +571,10 @@ Rcpp::DataFrame Model::get_inputData()
     Rcpp::NumericVector E0_temp = inputData["E0"];
     Rcpp::NumericVector Pump_temp = inputData["Pumping"];
     return Rcpp::DataFrame::create(
-        Rcpp::Named("t") = t_temp[validIndices],
-        Rcpp::Named("R") = R_temp[validIndices],
-        Rcpp::Named("E0") = E0_temp[validIndices],
-        Rcpp::Named("Pumping") = Pump_temp[validIndices]);
+        Rcpp::Named("t") = t_temp,
+        Rcpp::Named("R") = R_temp,
+        Rcpp::Named("E0") = E0_temp,
+        Rcpp::Named("Pumping") = Pump_temp);
 }
 
 // RCPP_EXPOSED_CLASS(Model);

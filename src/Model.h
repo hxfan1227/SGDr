@@ -82,13 +82,15 @@ public:
     Model(Rcpp::DataFrame  inputData, 
           const Rcpp::List &calibratableParams,
           const Rcpp::List &constParams, int warmUp = 0);
-    void calc_recharge();
+    void reset_initial_conditions(int warmUp);
+    void run(int windowSize, int warmUp);
+    void calc_recharge(int simLen);
     void update_head(int i);
     void calc_cn_runoff(int i);
     void calc_bucket1_h2o(int i);
     void calc_bucket2_h2o(int i);
     void calc_aquifer_recharge(int i);
-    void calc_sgd(int windowSize);
+    void calc_sgd(int simLen, int windowSize);
     void update_gwl(int i);
     void calc_sgds(int i);
     void update_aq_head(int i);
