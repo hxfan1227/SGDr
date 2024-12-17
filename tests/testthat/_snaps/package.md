@@ -1,6 +1,6 @@
 # estimate_sgd() checks parameters
 
-    n is greater than the number of rows in the DataFrame
+    Object was created without names.
 
 ---
 
