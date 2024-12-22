@@ -1,3 +1,5 @@
+library(testthat)
+library(devtools)
 test_that("all input data have been coerced to correct type", {
   expect_s3_class(json_to_parameter_list(test_path('testdata', 'preferred.json')), 'list')
   expect_s3_class(json_to_parameter_list(test_path('testdata', 'consts.json')), 'list')
