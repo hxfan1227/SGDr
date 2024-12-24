@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   articles/1_introduction: 1_introduction.html
-last_built: 2024-12-21T03:32Z
+last_built: 2024-12-24T03:40Z
 urls:
   reference: https://hxfan1227.github.io/SGDr/reference
   article: https://hxfan1227.github.io/SGDr/articles
