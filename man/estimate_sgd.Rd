@@ -8,8 +8,8 @@ estimate_sgd(
   inputData,
   calibratableParams,
   constParams,
-  windowSize = 120L,
-  warmUp = 1500L
+  nw = 120L,
+  warmp = 1500L
 )
 }
 \arguments{
@@ -32,11 +32,11 @@ Estimate the SGD volume based on Strack (1976) analytical solution.
 \details{
 Estimate the SGD volume based on Strack (1976) analytical solution.
 \itemize{
-\item The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, Pumping, GWL, H2O_SB1, H2O_SB2).
+\item The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, q1, GWL, H2O_SB1, H2O_SB2).
 \itemize{
 \item \code{R} is a numeric vector of the daily precipitation (mm).
 \item \code{E0} is a numeric vector of the daily potential evapotranspiration (mm).
-\item \code{Pumping} is a numeric vector of the daily pumping rate (m3/d).
+\item \code{q1} is a numeric vector of the daily pumping rate (m3/d).
 \item \code{GWL} is a numeric vector of the initial groundwater level (mm), Only the first value is used as the initial value for the SB1.
 \item \code{H2O_SB1} is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.
 \item \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.

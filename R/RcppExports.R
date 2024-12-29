@@ -9,10 +9,10 @@
 #' @param warmUp A integer indicating the number of days to warm up the model.
 #' @description Estimate the SGD volume based on Strack (1976) analytical solution.
 #' @details Estimate the SGD volume based on Strack (1976) analytical solution.
-#' * The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, Pumping, GWL, H2O_SB1, H2O_SB2).
+#' * The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, q1, GWL, H2O_SB1, H2O_SB2).
 #'   * \code{R} is a numeric vector of the daily precipitation (mm).
 #'   * \code{E0} is a numeric vector of the daily potential evapotranspiration (mm).
-#'   * \code{Pumping} is a numeric vector of the daily pumping rate (m3/d).
+#'   * \code{q1} is a numeric vector of the daily pumping rate (m3/d).
 #'   * \code{GWL} is a numeric vector of the initial groundwater level (mm), Only the first value is used as the initial value for the SB1.
 #'   * \code{H2O_SB1} is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.
 #'   * \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
@@ -21,8 +21,8 @@
 #' * \code{warmUp} A integer indicating the number of days to warm up the model.
 #' @return A SGD_ESTIMATION_DF class.
 #' @export 
-estimate_sgd <- function(inputData, calibratableParams, constParams, windowSize = 120L, warmUp = 1500L) {
-    .Call(`_SGDr_estimate_sgd`, inputData, calibratableParams, constParams, windowSize, warmUp)
+estimate_sgd <- function(inputData, calibratableParams, constParams, nw = 120L, warmp = 1500L) {
+    .Call(`_SGDr_estimate_sgd`, inputData, calibratableParams, constParams, nw, warmp)
 }
 
 #' Prepare the warm-up data
