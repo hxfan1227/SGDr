@@ -46,8 +46,8 @@
 <span>  <span class="va">inputData</span>,</span>
 <span>  <span class="va">calibratableParams</span>,</span>
 <span>  <span class="va">constParams</span>,</span>
-<span>  windowSize <span class="op">=</span> <span class="fl">120L</span>,</span>
-<span>  warmUp <span class="op">=</span> <span class="fl">1500L</span></span>
+<span>  nw <span class="op">=</span> <span class="fl">120L</span>,</span>
+<span>  warmp <span class="op">=</span> <span class="fl">1500L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -81,9 +81,9 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Estimate the SGD volume based on Strack (1976) analytical solution.</p><ul><li><p>The <code>inputData</code> should be a data.frame containing the required columns for the model (R, E0, Pumping, GWL, H2O_SB1, H2O_SB2).</p><ul><li><p><code>R</code> is a numeric vector of the daily precipitation (mm).</p></li>
+    <p>Estimate the SGD volume based on Strack (1976) analytical solution.</p><ul><li><p>The <code>inputData</code> should be a data.frame containing the required columns for the model (R, E0, q1, GWL, H2O_SB1, H2O_SB2).</p><ul><li><p><code>R</code> is a numeric vector of the daily precipitation (mm).</p></li>
 <li><p><code>E0</code> is a numeric vector of the daily potential evapotranspiration (mm).</p></li>
-<li><p><code>Pumping</code> is a numeric vector of the daily pumping rate (m3/d).</p></li>
+<li><p><code>q1</code> is a numeric vector of the daily pumping rate (m3/d).</p></li>
 <li><p><code>GWL</code> is a numeric vector of the initial groundwater level (mm), Only the first value is used as the initial value for the SB1.</p></li>
 <li><p><code>H2O_SB1</code> is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.</p></li>
 <li><p><code>H2O_SB2</code> is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.</p></li>
