@@ -11,17 +11,17 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // estimate_sgd
-Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int windowSize, int warmUp);
-RcppExport SEXP _SGDr_estimate_sgd(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP windowSizeSEXP, SEXP warmUpSEXP) {
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int nw, int warmup);
+RcppExport SEXP _SGDr_estimate_sgd(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP nwSEXP, SEXP warmupSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type inputData(inputDataSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type calibratableParams(calibratableParamsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type constParams(constParamsSEXP);
-    Rcpp::traits::input_parameter< int >::type windowSize(windowSizeSEXP);
-    Rcpp::traits::input_parameter< int >::type warmUp(warmUpSEXP);
-    rcpp_result_gen = Rcpp::wrap(estimate_sgd(inputData, calibratableParams, constParams, windowSize, warmUp));
+    Rcpp::traits::input_parameter< int >::type nw(nwSEXP);
+    Rcpp::traits::input_parameter< int >::type warmup(warmupSEXP);
+    rcpp_result_gen = Rcpp::wrap(estimate_sgd(inputData, calibratableParams, constParams, nw, warmup));
     return rcpp_result_gen;
 END_RCPP
 }
