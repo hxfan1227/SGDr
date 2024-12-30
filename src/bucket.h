@@ -50,7 +50,7 @@ private:
 
 public:
     // constructor
-    Bucket(Rcpp::List bucketParams, Rcpp::List Params);
+    Bucket(Rcpp::List bucket_pars, Rcpp::List const_pars);
     // initialize the bucket based on the simulation length and initial soil moisture content
     void initialize(int sim_length, double init_phi);
     // calculate the amount of water held in the soil profile at the end of the day
@@ -155,8 +155,8 @@ public:
     // double get_TTperc();
     // double get_AWClyr();
     void reset(int warmup);
-    Rcpp::List get_all_params_list();
-    Rcpp::List get_calibratable_params_list();
+    Rcpp::List all_pars();
+    Rcpp::List cali_pars();
 };
 
 #endif // BUCKET_H

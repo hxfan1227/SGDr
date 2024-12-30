@@ -8,48 +8,55 @@ double Bucket::interp1(Rcpp::NumericVector x, Rcpp::NumericVector y, double xi)
     return Rcpp::as<double>(interp1_r(x, y, xi));
 }
 
-Bucket::Bucket(Rcpp::List bucketParams, Rcpp::List Params)
+Bucket::Bucket(Rcpp::List bucket_pars, Rcpp::List const_pars)
 {
-    if (!bucketParams.containsElementNamed("layer"))
+    if (!bucket_pars.containsElementNamed("layer"))
     {
         Rcpp::stop("Bucket parameter layer not found");
     }
-    layer_ = Rcpp::as<int>(bucketParams["layer"]);
-    if (!bucketParams.containsElementNamed("z"))
+    layer_ = Rcpp::as<int>(bucket_pars["layer"]);
+
+    if (!bucket_pars.containsElementNamed("z"))
     {
         Rcpp::stop("Bucket parameter z not found");
     }
-    z_ = Rcpp::as<double>(bucketParams["z"]);
-    if (!bucketParams.containsElementNamed("rho_b"))
+    z_ = Rcpp::as<double>(bucket_pars["z"]);
+
+    if (!bucket_pars.containsElementNamed("rho_b"))
     {
         Rcpp::stop("Bucket parameter rho_b not found");
     }
-    rho_b_ = Rcpp::as<double>(bucketParams["rho_b"]);
-    if (!bucketParams.containsElementNamed("mc"))
+    rho_b_ = Rcpp::as<double>(bucket_pars["rho_b"]);
+
+    if (!bucket_pars.containsElementNamed("m"))
     {
-        Rcpp::stop("Bucket parameter mc not found");
+        Rcpp::stop("Bucket parameter m not found");
     }
-    m_ = Rcpp::as<double>(bucketParams["mc"]);
-    if (!bucketParams.containsElementNamed("rho_s"))
+    m_ = Rcpp::as<double>(bucket_pars["m"]);
+    
+    if (!bucket_pars.containsElementNamed("rho_p"))
     {
-        Rcpp::stop("Bucket parameter rho_s not found");
+        Rcpp::stop("Bucket parameter rho_p not found");
     }
-    rho_p_ = Rcpp::as<double>(bucketParams["rho_s"]);
-    if (!bucketParams.containsElementNamed("Ksat"))
+    rho_p_ = Rcpp::as<double>(bucket_pars["rho_p"]);
+
+    if (!bucket_pars.containsElementNamed("Ks"))
     {
-        Rcpp::stop("Bucket parameter Ksat not found");
+        Rcpp::stop("Bucket parameter Ks not found");
     }
-    Ks_ = Rcpp::as<double>(bucketParams["Ksat"]);
-    if (!bucketParams.containsElementNamed("n"))
+    Ks_ = Rcpp::as<double>(bucket_pars["Ks"]);
+
+    if (!bucket_pars.containsElementNamed("n"))
     {
         Rcpp::stop("Bucket parameter n not found");
     }
-    n_ = Rcpp::as<double>(bucketParams["n"]);
-    if (!bucketParams.containsElementNamed("Y"))
+    n_ = Rcpp::as<double>(bucket_pars["n"]);
+
+    if (!bucket_pars.containsElementNamed("pE"))
     {
         if (layer_ == 1)
         {
-            Rcpp::stop("Bucket parameter Y not found");
+            Rcpp::stop("Bucket parameter pE not found");
         }
         else
         {
@@ -58,13 +65,13 @@ Bucket::Bucket(Rcpp::List bucketParams, Rcpp::List Params)
     }
     else
     {
-        pE_ = Rcpp::as<double>(bucketParams["Y"]);
+        pE_ = Rcpp::as<double>(bucket_pars["pE"]);
     }
-    if (!bucketParams.containsElementNamed("Z"))
+    if (!bucket_pars.containsElementNamed("pZ"))
     {
         if (layer_ > 1)
         {
-            Rcpp::stop("Bucket parameter Z not found");
+            Rcpp::stop("Bucket parameter pZ not found");
         }
         else
         {
@@ -73,9 +80,9 @@ Bucket::Bucket(Rcpp::List bucketParams, Rcpp::List Params)
     }
     else
     {
-        pZ_ = Rcpp::as<double>(bucketParams["Z"]);
+        pZ_ = Rcpp::as<double>(bucket_pars["pZ"]);
     }
-    calculate_bucket_params(Params);
+    calculate_bucket_params(const_pars);
 }
 
 void Bucket::initialize(int sim_length, double init_phi)
@@ -191,9 +198,7 @@ double Bucket::Ks() { return Ks_; }
 double Bucket::theta_s() { return theta_s_; }
 double Bucket::pE() { return pE_; }
 double Bucket::pZ() { return pZ_; }
-// double Bucket::get_Ksatmd() { return Ksatmd; }
-// double Bucket::get_TTperc() { return TTperc; }
-// double Bucket::get_AWClyr() { return AWClyr; }
+
 void Bucket::reset(int warmup)
 {
     phi_[0] = phi_[warmup - 1];
@@ -213,58 +218,52 @@ void Bucket::reset(int warmup)
     P_[0] = P_[warmup - 1];
 }
 
-Rcpp::List Bucket::get_all_params_list()
+Rcpp::List Bucket::all_pars()
 {
     return Rcpp::List::create(Rcpp::Named("layer") = layer_,
                               Rcpp::Named("z") = z_,
                               Rcpp::Named("rho_b") = rho_b_,
-                              Rcpp::Named("mc") = m_,
-                              Rcpp::Named("rho_s") = rho_p_,
-                              Rcpp::Named("SAT") = phi_s_,
+                              Rcpp::Named("m") = m_,
+                              Rcpp::Named("rho_p") = rho_p_,
+                              Rcpp::Named("phi_s") = phi_s_,
                               Rcpp::Named("n") = n_,
-                              Rcpp::Named("WPmm") = phi_w_,
-                              Rcpp::Named("WP") = theta_w_,
-                              Rcpp::Named("FC") = theta_f_,
-                              Rcpp::Named("FCmm") = phi_f_,
-                              Rcpp::Named("Swres") = theta_r_,
-                              Rcpp::Named("Ksat") = Ks_,
-                              Rcpp::Named("phi_soil") = theta_s_,
-                              Rcpp::Named("Y") = pE_,
-                              Rcpp::Named("Z") = pZ_
-                              //   Rcpp::Named("Ksatmd") = Ksatmd,
-                              //   Rcpp::Named("TTperc") = TTperc,
-                              //   Rcpp::Named("AWClyr") = AWClyr
+                              Rcpp::Named("phi_w") = phi_w_,
+                              Rcpp::Named("theta_w") = theta_w_,
+                              Rcpp::Named("theta_f") = theta_f_,
+                              Rcpp::Named("phi_f") = phi_f_,
+                              Rcpp::Named("theta_r") = theta_r_,
+                              Rcpp::Named("Ks") = Ks_,
+                              Rcpp::Named("theta_s") = theta_s_,
+                              Rcpp::Named("pE") = pE_,
+                              Rcpp::Named("pZ") = pZ_
     );
 }
 
-void Bucket::calculate_bucket_params(Rcpp::List Params)
+void Bucket::calculate_bucket_params(Rcpp::List pars)
 {
-    if (!Params.containsElementNamed("waterContent"))
+    if (!pars.containsElementNamed("WC"))
     {
-        Rcpp::stop(" parameter waterContent not found");
+        Rcpp::stop(" parameter WC not found");
     }
-    Rcpp::List waterContent = Rcpp::as<Rcpp::List>(Params["waterContent"]);
+    Rcpp::List WC = Rcpp::as<Rcpp::List>(pars["WC"]);
     theta_s_ = 1 - rho_b_ / rho_p_;
     phi_s_ = theta_s_ * z_;
     theta_w_ = 0.4 * ((m_ * rho_b_) / 100);
     phi_w_ = theta_w_ * z_;
     theta_r_ = phi_w_ / phi_s_;
-    theta_f_ = interp1(waterContent["ClayContent"], waterContent["FC"], m_);
+    theta_f_ = interp1(WC["ClayContent"], WC["FC"], m_);
     phi_f_ = theta_f_ * z_;
-    // AWClyr = theta_f_ - theta_w_;
-    // Ksatmd = Ks_ / 1000 * 24;
-    // TTperc = (phi_s_ - phi_f_) / Ks_;
 }
 
-Rcpp::List Bucket::get_calibratable_params_list()
+Rcpp::List Bucket::cali_pars()
 {
     return Rcpp::List::create(Rcpp::Named("layer") = layer_,
                               Rcpp::Named("z") = z_,
                               Rcpp::Named("rho_b") = rho_b_,
-                              Rcpp::Named("mc") = m_,
-                              Rcpp::Named("rho_s") = rho_p_,
-                              Rcpp::Named("Ksat") = Ks_,
+                              Rcpp::Named("m") = m_,
+                              Rcpp::Named("rho_p") = rho_p_,
+                              Rcpp::Named("Ks") = Ks_,
                               Rcpp::Named("n") = n_,
-                              Rcpp::Named("Y") = pE_,
-                              Rcpp::Named("Z") = pZ_);
+                              Rcpp::Named("pE") = pE_,
+                              Rcpp::Named("pZ") = pZ_);
 }

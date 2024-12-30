@@ -8,11 +8,11 @@ private:
     Parameters parameters;
     int simLength;
     int warmUp;
-    Bucket &bucket1 = parameters.get_bucket1();
-    Bucket &bucket2 = parameters.get_bucket2();
-    CurveNumber &cn = parameters.get_curveNumber();
-    Aquifer &aquifer = parameters.get_aquifer();
-    ConstParameter &constpar = parameters.get_constParameter();
+    Bucket &bucket1 = parameters.bucket1();
+    Bucket &bucket2 = parameters.bucket2();
+    CurveNumber &cn = parameters.cn();
+    Aquifer &aquifer = parameters.aquifer();
+    ConstParameter &constpar = parameters.constpar();
     Rcpp::NumericVector R;       // precipitation (mm)
     Rcpp::NumericVector E0;      // potential evapotranspiration (mm)
     Rcpp::NumericVector q1; // pumping rate (m3/day)
@@ -27,13 +27,14 @@ public:
           const Rcpp::List &constParams, int warmUp = 0);
     void calc(int nw, int period);
     void run(int windowSize, int warmUp);
-    Rcpp::List estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &calibratableParams, const Rcpp::List &constParams, int windowSize, int warmUp);
     Rcpp::DataFrame get_recharge_output();
-    Rcpp::DataFrame get_sgd_output();
-    Rcpp::List get_all_params_list();
-    Rcpp::DataFrame get_inputData();
-    Rcpp::NumericVector get_Qsurf();
+    Rcpp::DataFrame q0();
+    Rcpp::List pars();
+    Rcpp::DataFrame input();
+    Rcpp::NumericVector Q();
 
 };
+
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int nw, int warmup);
 
 #endif // MODEL_H

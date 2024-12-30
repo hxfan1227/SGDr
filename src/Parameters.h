@@ -9,23 +9,23 @@
 class Parameters
 {
 private:
-    Bucket bucket1;
-    Bucket bucket2;
-    CurveNumber curveNumber;
-    Aquifer aquifer;
-    ConstParameter constParameter;
+    Bucket bucket1_;
+    Bucket bucket2_;
+    CurveNumber cn_;
+    Aquifer aquifer_;
+    ConstParameter constpar_;
 
 public:
-    Parameters(Rcpp::List calibratableParams, Rcpp::List constParams);
-    Bucket &get_bucket1();
-    Bucket &get_bucket2();
-    CurveNumber &get_curveNumber();
-    Aquifer &get_aquifer();
-    ConstParameter &get_constParameter();
-    Rcpp::List get_calibratable_params_list();
-    Rcpp::List get_const_params_list();
-    Rcpp::List get_all_params_list();
-    void update(const Rcpp::List &newCalibratableParams, const Rcpp::List &newConstParams);
+    Parameters(Rcpp::List cali_pars, Rcpp::List const_pars);
+    Bucket &bucket1();
+    Bucket &bucket2();
+    CurveNumber &cn();
+    Aquifer &aquifer();
+    ConstParameter &constpar();
+    Rcpp::List cali_pars();
+    Rcpp::List const_pars();
+    Rcpp::List all_pars();
+    void update(const Rcpp::List &new_cali_pars, const Rcpp::List &new_const_pars);
 };
 
 #endif // Parameters_H

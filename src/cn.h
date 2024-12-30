@@ -68,8 +68,8 @@ public:
     // second shape coefficient [-]
     double w2();
     void reset(int warmup);
-    Rcpp::List get_all_params_list();
-    Rcpp::List get_calibratable_params_list();
+    Rcpp::List all_pars();
+    Rcpp::List cali_pars();
 };
 
 #endif // CURVENUMBER_H

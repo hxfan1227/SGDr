@@ -8,11 +8,13 @@ CurveNumber::CurveNumber(const Rcpp::List cnParams, Bucket &SB1, Bucket &SB2)
         Rcpp::stop("Curve number parameter CN2 not found");
     }
     CN2_ = Rcpp::as<double>(cnParams["CN2"]);
-    if (!cnParams.containsElementNamed("PIa"))
+
+    if (!cnParams.containsElementNamed("pF"))
     {
-        Rcpp::stop("Curve number parameter PIa not found");
+        Rcpp::stop("Curve number parameter pF not found");
     }
-    pF_ = Rcpp::as<double>(cnParams["PIa"]);
+    pF_ = Rcpp::as<double>(cnParams["pF"]);
+
     CN1_ = CN2_ - 20 * (100 - CN2_) / (100 - CN2_ + exp(2.533 - 0.0636 * (100 - CN2_)));
     CN3_ = CN2_ * exp(0.00673 * (100 - CN2_));
     Smax_ = 25.4 * ((1000 / CN1_) - 10);
@@ -67,11 +69,11 @@ void CurveNumber::reset(int warmup)
     Q_[0] = Q_[warmup - 1];
 }
 
-Rcpp::List CurveNumber::get_all_params_list()
+Rcpp::List CurveNumber::all_pars()
 {
 
     return Rcpp::List::create(Rcpp::Named("CN2") = CN2_,
-                              Rcpp::Named("PIa") = pF_,
+                              Rcpp::Named("pF") = pF_,
                               Rcpp::Named("CN1") = CN1_,
                               Rcpp::Named("CN3") = CN3_,
                               Rcpp::Named("Smax") = Smax_,
@@ -80,8 +82,8 @@ Rcpp::List CurveNumber::get_all_params_list()
                               Rcpp::Named("w2") = w2_);
 }
 
-Rcpp::List CurveNumber::get_calibratable_params_list()
+Rcpp::List CurveNumber::cali_pars()
 {
     return Rcpp::List::create(Rcpp::Named("CN2") = CN2_,
-                              Rcpp::Named("PIa") = pF_);
+                              Rcpp::Named("pF") = pF_);
 }

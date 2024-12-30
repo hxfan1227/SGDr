@@ -1,43 +1,43 @@
 #include "constpar.h"
 
-ConstParameter::ConstParameter(Rcpp::List constParams)
+ConstParameter::ConstParameter(Rcpp::List pars)
 {
-    if (!constParams.containsElementNamed("x"))
+    if (!pars.containsElementNamed("x"))
     {
         Rcpp::stop("Const parameter x not found");
     }
-    x = Rcpp::as<double>(constParams["x"]);
-    if (!constParams.containsElementNamed("W"))
+    x_ = Rcpp::as<double>(pars["x"]);
+    if (!pars.containsElementNamed("W"))
     {
         Rcpp::stop("Const parameter W not found");
     }
-    W = Rcpp::as<double>(constParams["W"]);
-    if (!constParams.containsElementNamed("Area"))
+    W_ = Rcpp::as<double>(pars["W"]);
+    if (!pars.containsElementNamed("A"))
     {
-        Rcpp::stop("Const parameter Area not found");
+        Rcpp::stop("Const parameter A not found");
     }
-    Area = Rcpp::as<double>(constParams["Area"]);
-    if (!constParams.containsElementNamed("L"))
+    A_ = Rcpp::as<double>(pars["A"]);
+    if (!pars.containsElementNamed("L"))
     {
         Rcpp::stop("Const parameter L not found");
     }
-    L = Rcpp::as<double>(constParams["L"]);
-    if (!constParams.containsElementNamed("waterContent"))
+    L_ = Rcpp::as<double>(pars["L"]);
+    if (!pars.containsElementNamed("WC"))
     {
-        Rcpp::stop("Const parameter waterContent not found");
+        Rcpp::stop("Const parameter WC not found");
     }
-    waterContent = Rcpp::as<Rcpp::List>(constParams["waterContent"]);
+    WC_ = Rcpp::as<Rcpp::List>(pars["WC"]);
 }
 
-double ConstParameter::get_x() { return x; }
-double ConstParameter::get_W() { return W; }
-double ConstParameter::get_Area() { return Area; }
-double ConstParameter::get_L() { return L; }
-Rcpp::List ConstParameter::get_all_params_list()
+double ConstParameter::x() { return x_; }
+double ConstParameter::W() { return W_; }
+double ConstParameter::A() { return A_; }
+double ConstParameter::L() { return L_; }
+Rcpp::List ConstParameter::const_pars()
 {
-    return Rcpp::List::create(Rcpp::Named("x") = x,
-                              Rcpp::Named("W") = W,
-                              Rcpp::Named("Area") = Area,
-                              Rcpp::Named("L") = L,
-                              Rcpp::Named("waterContent") = waterContent);
+    return Rcpp::List::create(Rcpp::Named("x") = x_,
+                              Rcpp::Named("W") = W_,
+                              Rcpp::Named("Area") = A_,
+                              Rcpp::Named("L") = L_,
+                              Rcpp::Named("WC") = WC_);
 }

@@ -8,10 +8,10 @@ Model::Model(Rcpp::DataFrame inputData,
                                                           warmUp(warmUp),
                                                           R(Rcpp::as<Rcpp::NumericVector>(inputData["R"])),
                                                           E0(Rcpp::as<Rcpp::NumericVector>(inputData["E0"])),
-                                                          q1(Rcpp::as<Rcpp::NumericVector>(inputData["Pumping"])),
-                                                          hf(Rcpp::as<Rcpp::NumericVector>(inputData["GWL"])),
-                                                          phi1(Rcpp::as<Rcpp::NumericVector>(inputData["H2O_SB1"])),
-                                                          phi2(Rcpp::as<Rcpp::NumericVector>(inputData["H2O_SB2"]))
+                                                          q1(Rcpp::as<Rcpp::NumericVector>(inputData["q1"])),
+                                                          hf(Rcpp::as<Rcpp::NumericVector>(inputData["hf"])),
+                                                          phi1(Rcpp::as<Rcpp::NumericVector>(inputData["phi1"])),
+                                                          phi2(Rcpp::as<Rcpp::NumericVector>(inputData["phi2"]))
 
 {
 }
@@ -59,13 +59,13 @@ void Model::run(int nw, int warmup)
 Rcpp::DataFrame Model::get_recharge_output()
 {
     return Rcpp::DataFrame::create(
-        Rcpp::Named("H2O3_SB1") = bucket1._phi(),
-        Rcpp::Named("H2O3_SB2") = bucket2._phi(),
-        Rcpp::Named("Wperc2") = bucket2.P(),
+        Rcpp::Named("phi1") = bucket1._phi(),
+        Rcpp::Named("phi2") = bucket2._phi(),
+        Rcpp::Named("P") = bucket2.P(),
         // Wrechg
-        Rcpp::Named("Wrechg") = aquifer.Wnet(),
+        Rcpp::Named("Wnet") = aquifer.Wnet(),
         // SW
-        Rcpp::Named("SW") = cn.Phi(),
+        Rcpp::Named("Phi") = cn.Phi(),
         // S
         Rcpp::Named("S") = cn.S(),
         // Ia
@@ -73,48 +73,43 @@ Rcpp::DataFrame Model::get_recharge_output()
         // CN
         Rcpp::Named("CN") = cn.CN(),
         // Qsurf
-        Rcpp::Named("Qsurf") = cn.Q(),
+        Rcpp::Named("Q") = cn.Q(),
         // finf_SB1
-        Rcpp::Named("finf_SB1") = bucket1.F(),
+        Rcpp::Named("F") = bucket1.F(),
         // finfla_SB1
-        Rcpp::Named("finfla_SB1") = bucket1.FI());
+        Rcpp::Named("FI") = bucket1.FI());
 }
 
-Rcpp::NumericVector Model::get_Qsurf()
+Rcpp::NumericVector Model::Q()
 {
     return cn.Q();
 }
 
-
-Rcpp::DataFrame Model::get_sgd_output()
+Rcpp::DataFrame Model::q0()
 {
     Rcpp::NumericVector t_temp = inputData["t"];
     t_temp = t_temp;
     return Rcpp::DataFrame::create(
         Rcpp::Named("t") = t_temp,
-        Rcpp::Named("wl") = aquifer._hf(),
-        Rcpp::Named("SGD") = aquifer.q0(),
+        Rcpp::Named("hf") = aquifer._hf(),
+        Rcpp::Named("q0") = aquifer.q0(),
         Rcpp::Named("xn") = aquifer.xn(),
         Rcpp::Named("hn") = aquifer.hn(),
-        Rcpp::Named("Wrechg") = aquifer.Wnet(),
-        Rcpp::Named("WrechgAve") = aquifer._Wnet());
+        Rcpp::Named("Wnet") = aquifer.Wnet(),
+        Rcpp::Named("_Wnet") = aquifer._Wnet());
 }
 
-Rcpp::List Model::get_all_params_list()
+Rcpp::List Model::pars()
 {
-    return parameters.get_all_params_list();
+    return parameters.all_pars();
 }
-Rcpp::DataFrame Model::get_inputData()
+Rcpp::DataFrame Model::input()
 {
-    Rcpp::NumericVector t_temp = inputData["t"];
-    Rcpp::NumericVector R_temp = inputData["R"];
-    Rcpp::NumericVector E0_temp = inputData["E0"];
-    Rcpp::NumericVector Pump_temp = inputData["Pumping"];
     return Rcpp::DataFrame::create(
-        Rcpp::Named("t") = t_temp,
-        Rcpp::Named("R") = R_temp,
-        Rcpp::Named("E0") = E0_temp,
-        Rcpp::Named("Pumping") = Pump_temp);
+        Rcpp::Named("t") = inputData["t"],
+        Rcpp::Named("R") = inputData["R"],
+        Rcpp::Named("E0") = inputData["E0"],
+        Rcpp::Named("q1") = inputData["q1"]);
 }
 
 // RCPP_EXPOSED_CLASS(Model);

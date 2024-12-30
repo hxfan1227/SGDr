@@ -76,11 +76,11 @@ summary.SGD_ESTIMATION_DF <- function(object, base_date, ...) {
   } else {
     cat(glue("Simlation period: {date(ymd(base_date))} - {date(ymd(base_date) + days(NROW(object$results) - 1))}"), "\n")
   }
-  cat("Estimated SGD Volume: ", mean(object$results$SGD, na.rm = T), "m3/d\n")
-  cat("Estimated Recharge: ", mean(object$results$Wrechg, na.rm = T), "mm/d\n")
-  cat("Estimated Runoff: ", mean(object$runoff, na.rm = T), "mm/d\n")
-  cat("Median hn:", median(object$results$hn, na.rm = T), "m\n")
-  cat("Median xn:", median(object$results$xn, na.rm = T), "m\n")
+  cat("Estimated SFGD (q0): ", round(mean(object$results$q0, na.rm = T), 2), "m2/d\n")
+  cat("Estimated Recharge (Wnet): ", round(mean(object$results$Wnet, na.rm = T), 2), "mm/d\n")
+  cat("Estimated Runoff (Q): ", round(mean(object$runoff, na.rm = T), 2), "mm/d\n")
+  cat("Median hn:", round(median(object$results$hn, na.rm = T), 2), "m\n")
+  cat("Median xn:", round(median(object$results$xn, na.rm = T), 2), "m\n")
 }
 
 NULL 
@@ -106,25 +106,25 @@ NULL
 #' @return Invisibly returns the original estimated results.
 #' @export
 plot.SGD_ESTIMATION_DF <- function(x, y, 
-                                   vars = c('wl', 'SGD', 'Wrechg'), 
+                                   vars = c('hf', 'q0', 'Wnet'), 
                                    base_date, 
                                    type = c('pred', 'comp', 'input'),
                                    obs_x = 'date',
-                                   obs_y = 'wl',
+                                   obs_y = 'hf',
                                    xbreaks = 10,
                                    ybreaks = 5,
                                    maxRange = 600,
                                    coeff = 0.3,
-                                   names = c('wl', 'SGD', 'hn', 'xn', 'Wrechg', 'WrechgAve'),
-                                   colors = c('obs' = 'red', 'precp' = 'blue' , 'pumping' = 'green', 'est' = 'blue'),
+                                   names = c('hf', 'q0', 'hn', 'xn', 'Wnet', '_Wnet'),
+                                   colors = c('obs' = 'red', 'precp' = 'blue' , 'q1' = 'green', 'est' = 'blue'),
                                    color_labels = c('obs' = 'Observed GWL', 'precp' = 'Precipitation', 
-                                                    'pumping' = 'Pumping', 'est' = 'Estimated GWL'),
-                                   labels = c('WL~(m~AHD)',
-                                              'SGD~(m^3/d)',
+                                                    'q1' = 'q1', 'est' = 'Estimated GWL'),
+                                   labels = c('GWL~(m~AHD)',
+                                              'q[0]~(m^3/d)',
                                               'h[n]~(m~AHD)',
                                               'x[n]~(m)',
-                                              'w[recharge]~(mm)',
-                                              'w[recharge[ave]]~(mm)'),
+                                              'W[net]~(mm)',
+                                              'bar(W[net])~(mm)'),
                                    .plot = FALSE,
                                    ...) {
   value = wl = est = obs = name = R = Pumping = variable = NULL # to avoid warnings  
@@ -165,8 +165,8 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
     plot_df[, date := ymd(base_date) + t - 1]
     plot_df[, t := NULL]
     p1 <- ggplot() +
-      geom_line(data = plot_df, aes(x = date, y = wl, color = 'est'), linewidth = 0.8, show.legend = F) +
-      geom_point(data = plot_df[date %in% obs_df[[obs_x]]], aes(x = date, y = wl, color = 'est'), size = 1.2, show.legend = F) +
+      geom_line(data = plot_df, aes(x = date, y = hf, color = 'est'), linewidth = 0.8, show.legend = F) +
+      geom_point(data = plot_df[date %in% obs_df[[obs_x]]], aes(x = date, y = hf, color = 'est'), size = 1.2, show.legend = F) +
       geom_point(data = obs_df, aes(x = .data[[obs_x]], y = .data[[obs_y]], color = 'obs'), size = 1.2, show.legend = F) +
       scale_y_continuous(name = parse(text = "GWL~(m~AHD)"),
                          expand = c(0, 0),
@@ -182,7 +182,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
             legend.position = 'top')
     # scatter plot
     plot_df <- plot_df %>% 
-      rename('est' = 'wl')
+      rename('est' = 'hf')
     obs_df <- obs_df %>%
       rename('obs' = all_of(obs_y))
     scatter_df <- merge(plot_df[, list(date, est)], obs_df, by = c('date' = obs_x))
@@ -229,8 +229,8 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
     plot_df[, date := ymd(base_date) + t - 1]
     p <- ggplot(plot_df) +
       geom_segment(aes(x = date, y = maxRange, yend = maxRange - R/coeff, xend = date, color = 'precp'), linewidth = 0.5) +
-      geom_line(aes(x = date, y = Pumping, color = 'pumping'), linewidth = 0.5) +
-      scale_y_continuous(name = parse(text = "Pumping~(m^3/d)"),
+      geom_line(aes(x = date, y = q1, color = 'q1'), linewidth = 0.5) +
+      scale_y_continuous(name = parse(text = "q[1]~(m^3/d)"),
                          limits = c(0, maxRange),
                          expand = c(0, 0),
                          breaks = scales::pretty_breaks(ybreaks),
@@ -294,15 +294,15 @@ estimate_sgd_from_pars <- function(pars,
   current_pars_list <- parameter_vec_to_list(current_pars, prameter_skeleton = skeleton)
   # additional 'calibratable' parameter nw (i.e., window size for averaging recharge)
   default_args <- formals(estimate_sgd)
-  nw = default_args$windowSize
+  nw = default_args$nw
   if ('nw' %in% names(pars)) {
     nw = pars['nw']
   } 
   if ('pumping' %in% names(pars)) {
     inputDf <- change_unknown_pumping(pars['pumping'], inputDf, yearlyPumping, pumpingDf)
   }
-  return(estimate_sgd(inputData = inputDf,  windowSize = nw, calibratableParams = current_pars_list, 
-                      constParams = args$constParams, warmUp = args$warmUp))
+  return(estimate_sgd(inputData = inputDf,  nw = nw, calibratableParams = current_pars_list, 
+                      constParams = args$constParams, warmup = args$warmup))
 }
 
 #' A function to change the unknown pumping rate to a preferred value.
@@ -314,14 +314,14 @@ estimate_sgd_from_pars <- function(pars,
 #' @return A data.frame of the input data with the preferred pumping rate
 #' @export
 change_unknown_pumping <- function(x, input_df, yearly_df, pumping_df) {
-  pumping = i.pumping = daily_pumping = Pumping = i.daily_pumping = NULL # to avoid warnings
+  i.q1 = daily_q1 = q1 = i.daily_q1 = NULL # to avoid warnings
   input_data <- setDT(copy(input_df))
   yearly_pumping_data <- setDT(copy(yearly_df))
   pumping_data <- setDT(copy(pumping_df))
-  yearly_pumping_data[year <= 1985, pumping := x]
-  pumping_data <- pumping_data[yearly_pumping_data, pumping := i.pumping, on = list(year)]
-  pumping_data[, daily_pumping := pumping * percent * 1000 / lubridate::days_in_month(date)]
-  input_data[pumping_data, Pumping := i.daily_pumping, on = list(t)]
+  yearly_pumping_data[year <= 1985, q1 := x]
+  pumping_data <- pumping_data[yearly_pumping_data, q1 := i.q1, on = list(year)]
+  pumping_data[, daily_q1 := q1 * percent * 1000 / lubridate::days_in_month(date)]
+  input_data[pumping_data, q1 := i.q1, on = list(t)]
   setDF(input_data)
   return(input_data)
 }

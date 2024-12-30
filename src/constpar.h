@@ -6,18 +6,18 @@
 class ConstParameter
 {
 private:
-    double x;
-    double W;
-    double Area;
-    double L;
-    Rcpp::List waterContent;
+    double x_; // distance to representative well [m]
+    double W_; // shoreline width of region [m]
+    double A_; // area of the region [m2]
+    double L_; // length to the inland boundary
+    Rcpp::List WC_; // water content table based on the SWAT manual.
 
 public:
-    ConstParameter(Rcpp::List Params);
-    double get_x();
-    double get_W();
-    double get_Area();
-    double get_L();
-    Rcpp::List get_all_params_list();
+    ConstParameter(Rcpp::List pars);
+    double x();
+    double W();
+    double A();
+    double L();
+    Rcpp::List const_pars();
 };
 #endif // ConstParameter_H

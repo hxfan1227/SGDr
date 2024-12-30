@@ -59,49 +59,58 @@ void Aquifer::reset(int warmup)
 
 Aquifer::Aquifer(const Rcpp::List aquiferParams)
 {
-    if (!aquiferParams.containsElementNamed("delta"))
+    if (!aquiferParams.containsElementNamed("Td"))
     {
-        Rcpp::stop("Aquifer parameter delta not found");
+        Rcpp::stop("Aquifer parameter Td not found");
     }
-    Td_ = Rcpp::as<double>(aquiferParams["delta"]);
+    Td_ = Rcpp::as<double>(aquiferParams["Td"]);
+
     if (!aquiferParams.containsElementNamed("rho_s"))
     {
         Rcpp::stop("Aquifer parameter rho_s not found");
     }
     rho_s_ = Rcpp::as<double>(aquiferParams["rho_s"]);
+
     if (!aquiferParams.containsElementNamed("rho_f"))
     {
         Rcpp::stop("Aquifer parameter rho_f not found");
     }
     rho_f_ = Rcpp::as<double>(aquiferParams["rho_f"]);
-    if (!aquiferParams.containsElementNamed("K"))
+
+    if (!aquiferParams.containsElementNamed("Ka"))
     {
-        Rcpp::stop("Aquifer parameter K not found");
+        Rcpp::stop("Aquifer parameter Ka not found");
     }
-    Ka_ = Rcpp::as<double>(aquiferParams["K"]);
+    Ka_ = Rcpp::as<double>(aquiferParams["Ka"]);
+
     if (!aquiferParams.containsElementNamed("z0"))
     {
         Rcpp::stop("Aquifer parameter z0 not found");
     }
     z0_ = Rcpp::as<double>(aquiferParams["z0"]);
+    
     if (!aquiferParams.containsElementNamed("Sy"))
     {
         Rcpp::stop("Aquifer parameter Sy not found");
     }
     Sy_ = Rcpp::as<double>(aquiferParams["Sy"]);
-    if (!aquiferParams.containsElementNamed("xT"))
+
+    if (!aquiferParams.containsElementNamed("XT"))
     {
-        Rcpp::stop("Aquifer parameter xT not found");
+        Rcpp::stop("Aquifer parameter XT not found");
     }
-    XT_ = Rcpp::as<double>(aquiferParams["xT"]);
-    if (!aquiferParams.containsElementNamed("dxT"))
+    XT_ = Rcpp::as<double>(aquiferParams["XT"]);
+
+    if (!aquiferParams.containsElementNamed("dxT_max"))
     {
-        Rcpp::stop("Aquifer parameter dxT not found");
+        Rcpp::stop("Aquifer parameter dxT_max not found");
     }
-    dxT_max_ = Rcpp::as<double>(aquiferParams["dxT"]);
+    dxT_max_ = Rcpp::as<double>(aquiferParams["dxT_max"]);
+
     a_ = (rho_s_ - rho_f_) / rho_f_;
     he_ = z0_ * rho_s_ / rho_f_ - z0_;
 }
+
 double Aquifer::Td() { return Td_; }
 double Aquifer::rho_s() { return rho_s_; }
 double Aquifer::rho_f() { return rho_f_; }
@@ -121,13 +130,13 @@ double Aquifer::q0(int i) { return q0_[i]; }
 
 double Aquifer::__q01(int i, ConstParameter &constpar)
 {
-    q01_[i] = ((Ka_ / 2 / constpar.get_x() * rho_s_ / (rho_s_ - rho_f_) * std::pow(hf_[i], 2)) + (_Wnet_[i] / 1000) * constpar.get_x() / 2);
+    q01_[i] = ((Ka_ / 2 / constpar.x() * rho_s_ / (rho_s_ - rho_f_) * std::pow(hf_[i], 2)) + (_Wnet_[i] / 1000) * constpar.x() / 2);
     return q01_[i];
 }
 
 double Aquifer::__q02(int i, ConstParameter &constpar)
 {
-    q02_[i] = (Ka_ * ((std::pow((hf_[i] + z0_), 2) - rho_s_ / rho_f_ * std::pow(z0_, 2))) + (_Wnet_[i] / 1000) * std::pow(constpar.get_x(), 2)) / 2 / constpar.get_x();
+    q02_[i] = (Ka_ * ((std::pow((hf_[i] + z0_), 2) - rho_s_ / rho_f_ * std::pow(z0_, 2))) + (_Wnet_[i] / 1000) * std::pow(constpar.x(), 2)) / 2 / constpar.x();
     return q02_[i];
 }
 
@@ -237,28 +246,28 @@ double Aquifer::dh2(int i) { return dh2_[i]; }
 double Aquifer::dxT(int i) { return dxT_[i]; }
 double Aquifer::_XT(int i) { return _XT_[i]; }
 
-Rcpp::List Aquifer::get_all_params_list()
+Rcpp::List Aquifer::all_pars()
 {
-    return Rcpp::List::create(Rcpp::Named("delta") = Td_,
+    return Rcpp::List::create(Rcpp::Named("Td") = Td_,
                               Rcpp::Named("rho_s") = rho_s_,
                               Rcpp::Named("rho_f") = rho_f_,
-                              Rcpp::Named("K") = Ka_,
+                              Rcpp::Named("Ka") = Ka_,
                               Rcpp::Named("z0") = z0_,
                               Rcpp::Named("Sy") = Sy_,
                               Rcpp::Named("a") = a_,
                               Rcpp::Named("he") = he_,
-                              Rcpp::Named("xT") = XT_,
-                              Rcpp::Named("dxT") = dxT_max_);
+                              Rcpp::Named("XT") = XT_,
+                              Rcpp::Named("dxT_max") = dxT_max_);
 }
 
-Rcpp::List Aquifer::get_calibratable_params_list()
+Rcpp::List Aquifer::cali_pars()
 {
-    return Rcpp::List::create(Rcpp::Named("delta") = Td_,
-                              Rcpp::Named("K") = Ka_,
+    return Rcpp::List::create(Rcpp::Named("Td") = Td_,
+                              Rcpp::Named("Ka") = Ka_,
                               Rcpp::Named("z0") = z0_,
                               Rcpp::Named("Sy") = Sy_,
-                              Rcpp::Named("xT") = XT_,
-                              Rcpp::Named("dxT") = dxT_max_);
+                              Rcpp::Named("XT") = XT_,
+                              Rcpp::Named("dxT_max") = dxT_max_);
 }
 
 void Aquifer::calc_recharge(int i, Bucket &bucket)
@@ -360,7 +369,7 @@ void Aquifer::calc_sfgd(int i, ConstParameter &constpar, Rcpp::NumericVector &q1
         }
         else
         {
-            if (constpar.get_W() <= xT2_[i])
+            if (constpar.W() <= xT2_[i])
             {
                 q0_[i] = q01_[i];
                 xn_[i] = xn1_[i];
@@ -368,7 +377,7 @@ void Aquifer::calc_sfgd(int i, ConstParameter &constpar, Rcpp::NumericVector &q1
             }
             else
             {
-                if (constpar.get_x() > xT2_[i])
+                if (constpar.x() > xT2_[i])
                 {
                     q0_[i] = q02_[i];
                     xn_[i] = xn2_[i];
@@ -385,8 +394,8 @@ void Aquifer::calc_sfgd(int i, ConstParameter &constpar, Rcpp::NumericVector &q1
     }
     // update heads
     _hf_[i] = hf_[i] + Wnet_[i] / 1000 / Sy_;
-    dh0_[i] = q0_[i] * constpar.get_W() / constpar.get_Area() * 1000 / Sy_;
-    dh1_[i] = q1[i] / constpar.get_Area() * 1000 / Sy_;
+    dh0_[i] = q0_[i] * constpar.W() / constpar.A() * 1000 / Sy_;
+    dh1_[i] = q1[i] / constpar.A() * 1000 / Sy_;
     _hf_[i] = _hf_[i] - dh0_[i] / 1000 - dh1_[i] / 1000;
     if (i == 0)
     {
@@ -413,7 +422,7 @@ void Aquifer::calc_sfgd(int i, ConstParameter &constpar, Rcpp::NumericVector &q1
         _XT_[i] = _XT_[i - 1] + dxT_[i];
     }
     V_[i] = Sy_ * z0_ * _XT_[i] / 3;
-    dh2_[i] = i == 0 ? 0 : (V_[i - 1] - V_[i]) * constpar.get_W() / constpar.get_Area() * 1000;
+    dh2_[i] = i == 0 ? 0 : (V_[i - 1] - V_[i]) * constpar.W() / constpar.A() * 1000;
     _hf_[i] = i == 0 ? _hf_[i] : _hf_[i] - dh2_[i] / 1000;
 }
 

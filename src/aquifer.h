@@ -130,8 +130,8 @@ public:
     void calc_sfgd(int sim_length, ConstParameter &constpar, Rcpp::NumericVector &q1);
     // reset the aquifer object
     void reset(int warmup);
-    Rcpp::List get_all_params_list();
-    Rcpp::List get_calibratable_params_list();
+    Rcpp::List all_pars();
+    Rcpp::List cali_pars();
     //[timeseries] recharge entering the aquifer bucket [mm H2O] 
     Rcpp::NumericVector Wnet(); 
     //[timeseries] average recharge [mm H2O] over period nw [d]
