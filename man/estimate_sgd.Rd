@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{estimate_sgd}
 \alias{estimate_sgd}
-\title{Estimate the SGD volume.}
+\title{Estimate the SFGD (q0) \link{m2/d}.}
 \usage{
 estimate_sgd(
   inputData,
   calibratableParams,
   constParams,
   nw = 120L,
-  warmp = 1500L
+  warmup = 1500L
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ estimate_sgd(
 
 \item{constParams}{A list of constant parameters.}
 
-\item{windowSize}{A integer indicating the period you want to average the recharge.}
+\item{nw}{A integer indicating the period you want to average the recharge.}
 
-\item{warmUp}{A integer indicating the number of days to warm up the model.}
+\item{warmup}{A integer indicating the number of days to warm up the model.}
 }
 \value{
 A SGD_ESTIMATION_DF class.
@@ -42,7 +42,7 @@ Estimate the SGD volume based on Strack (1976) analytical solution.
 \item \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
 }
 \item \code{calibratableParams} should be a list of calibratable parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
-\item \code{windowSize} A integer indicating the period you want to average the recharge.
-\item \code{warmUp} A integer indicating the number of days to warm up the model.
+\item \code{nw} A integer indicating the period you want to average the recharge.
+\item \code{warmup} A integer indicating the number of days to warm up the model.
 }
 }

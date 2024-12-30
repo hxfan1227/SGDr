@@ -11,8 +11,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // estimate_sgd
-Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int nw, int warmp);
-RcppExport SEXP _SGDr_estimate_sgd(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP nwSEXP, SEXP warmpSEXP) {
+Rcpp::List estimate_sgd(const Rcpp::DataFrame& inputData, const Rcpp::List& calibratableParams, const Rcpp::List& constParams, int nw, int warmup);
+RcppExport SEXP _SGDr_estimate_sgd(SEXP inputDataSEXP, SEXP calibratableParamsSEXP, SEXP constParamsSEXP, SEXP nwSEXP, SEXP warmupSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,8 +20,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List& >::type calibratableParams(calibratableParamsSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type constParams(constParamsSEXP);
     Rcpp::traits::input_parameter< int >::type nw(nwSEXP);
-    Rcpp::traits::input_parameter< int >::type warmp(warmpSEXP);
-    rcpp_result_gen = Rcpp::wrap(estimate_sgd(inputData, calibratableParams, constParams, nw, warmp));
+    Rcpp::traits::input_parameter< int >::type warmup(warmupSEXP);
+    rcpp_result_gen = Rcpp::wrap(estimate_sgd(inputData, calibratableParams, constParams, nw, warmup));
     return rcpp_result_gen;
 END_RCPP
 }
