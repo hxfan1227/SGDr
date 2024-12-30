@@ -117,8 +117,8 @@ double Aquifer::rho_f() { return rho_f_; }
 double Aquifer::Ka() { return Ka_; }
 double Aquifer::z0() { return z0_; }
 double Aquifer::Sy() { return Sy_; }
-double Aquifer::get_a() { return a_; }
-double Aquifer::get_he() { return he_; }
+double Aquifer::a() { return a_; }
+double Aquifer::he() { return he_; }
 double Aquifer::XT() { return XT_; }
 double Aquifer::dxT_max() { return dxT_max_; }
 

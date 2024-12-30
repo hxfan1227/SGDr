@@ -88,7 +88,7 @@ public:
     // actual percolation from soil bucket i to the underlying bucket limited to field capacity and available space of the underlying bucket [mm H2O]
     double P(int i);
 
-    //[timeseries] amount of water held in the soil profile at the end of the day [mm H2O]
+    //[timeseries] amount of water held in the soil profile at the beginning of the day [mm H2O]
     Rcpp::NumericVector phi();
     //[timeseries] amount of water held in the soil profile at the end of the day [mm H2O]
     Rcpp::NumericVector _phi();
@@ -151,9 +151,6 @@ public:
     double pE();
     // percentage of capacity between field capacity and saturation that is available for percolation [%]
     double pZ();
-    // double get_Ksatmd();
-    // double get_TTperc();
-    // double get_AWClyr();
     void reset(int warmup);
     Rcpp::List all_pars();
     Rcpp::List cali_pars();

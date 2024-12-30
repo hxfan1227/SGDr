@@ -59,24 +59,27 @@ void Model::run(int nw, int warmup)
 Rcpp::DataFrame Model::get_recharge_output()
 {
     return Rcpp::DataFrame::create(
-        Rcpp::Named("phi1") = bucket1._phi(),
-        Rcpp::Named("phi2") = bucket2._phi(),
+        // [timeseries] amount of water held in the soil profile at the begining of the day [mm H2O]
+        Rcpp::Named("phi1") = bucket1.phi(),
+        // [timeseries] amount of water held in the soil profile at the beginning of the day [mm H2O]
+        Rcpp::Named("phi2") = bucket2.phi(),
+        // [timeseries] actual percolation from soil bucket i to the underlying bucket limited to field capacity and available space of the underlying bucket [mm H2O]
         Rcpp::Named("P") = bucket2.P(),
-        // Wrechg
+        // [timeseries] recharge entering the aquifer bucket [mm H2O]
         Rcpp::Named("Wnet") = aquifer.Wnet(),
-        // SW
+        // [timeseries] amount of water held in the soil (summing the soil water amounts in soil buckets 1 and 2) excluding the water held in the soil profile at wilting point [mm H2O]
         Rcpp::Named("Phi") = cn.Phi(),
-        // S
+        // [timeseries] retention parameter [mm H2O]
         Rcpp::Named("S") = cn.S(),
-        // Ia
+        // [timeseries] initial abstraction that includes surface storage, interception and infiltration prior to runoff [mm H2O]
         Rcpp::Named("Ia") = cn.Ia(),
-        // CN
+        // [timeseries] curve number [-]
         Rcpp::Named("CN") = cn.CN(),
-        // Qsurf
+        // [timeseries] runoff [mm H2O]
         Rcpp::Named("Q") = cn.Q(),
-        // finf_SB1
+        // [timeseries] infiltration without considering the pre-runoff infiltration [mm H2O]
         Rcpp::Named("F") = bucket1.F(),
-        // finfla_SB1
+        // [timeseries] pre-runoff infiltration [mm H2O]
         Rcpp::Named("FI") = bucket1.FI());
 }
 
@@ -91,7 +94,7 @@ Rcpp::DataFrame Model::q0()
     t_temp = t_temp;
     return Rcpp::DataFrame::create(
         Rcpp::Named("t") = t_temp,
-        Rcpp::Named("hf") = aquifer._hf(),
+        Rcpp::Named("hf") = aquifer.hf(),
         Rcpp::Named("q0") = aquifer.q0(),
         Rcpp::Named("xn") = aquifer.xn(),
         Rcpp::Named("hn") = aquifer.hn(),

@@ -89,9 +89,9 @@ public:
     // specific yield [-]
     double Sy();
     // dimensionless density difference between freshwater and seawater [-]
-    double get_a();
+    double a();
     // equivalent freshwater head at aquifer base [m AHD]
-    double get_he();
+    double he();
     // initial seawater wedge toe location [m]
     double XT();
     // maximum seawater wedge toe migration rate [m/d]
@@ -127,7 +127,7 @@ public:
     // update the aquifer object
     void update(int i);
     // calculate SFGD depending on the location of the saltwater wedge [m2/d]
-    void calc_sfgd(int sim_length, ConstParameter &constpar, Rcpp::NumericVector &q1);
+    void calc_sfgd(int sim_length, ConstParameter &constpar, Rcpp::NumericVector &Vp);
     // reset the aquifer object
     void reset(int warmup);
     Rcpp::List all_pars();
