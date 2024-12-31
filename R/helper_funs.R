@@ -321,7 +321,7 @@ change_unknown_pumping <- function(x, input_df, yearly_df, pumping_df) {
   yearly_pumping_data[year <= 1985, q1 := x]
   pumping_data <- pumping_data[yearly_pumping_data, q1 := i.q1, on = list(year)]
   pumping_data[, daily_q1 := q1 * percent * 1000 / lubridate::days_in_month(date)]
-  input_data[pumping_data, q1 := i.q1, on = list(t)]
+  input_data[pumping_data, q1 := daily_q1, on = list(t)]
   setDF(input_data)
   return(input_data)
 }
