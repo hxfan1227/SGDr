@@ -1,3 +1,17 @@
+# SGDr 1.0
+
+## Major changes
+
+* First public release of `SGDr`
+
+* Re-constructed in Rcpp, with major modifications made to each class.
+
+* 3 more classes added (i.e., `CurveNumber` for Curver Number method, `Bucket` for the soil layer and `Aquifer` for the aquifer layer)
+
+## Minor changes
+
+* slight modification made to the `plot` method.
+
 # SGDr (development version)
 
 * The unknown pumping rate is now available for calibration. (Still not a general purpose function, just for case study)
