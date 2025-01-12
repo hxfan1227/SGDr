@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of SGDr is to ...
+Submarine fresh groundwater discharge (SFGD) is a critical pathway for nutrient transport to marine ecosystems, yet its quantification is often hindered by sparse and infrequent data in coastal zones. `SGDr` presents a parsimonious methodology for estimating SFGD in data-sparse settings by integrating simple modelling techniques to characterize coastal aquifer water fluxes. It combines a soil water balance model with a lumped-parameter representation of the aquifer, incorporating the freshwater-seawater interface. Its simplicity enables rapid calibration and uncertainty analysis, supporting land-use decisions and field investigations.
 
 ## Installation
 
