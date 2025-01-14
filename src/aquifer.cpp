@@ -421,7 +421,7 @@ void Aquifer::calc_sfgd(int i, ConstParameter &constpar, Rcpp::NumericVector &q1
         }
         _XT_[i] = _XT_[i - 1] + dxT_[i];
     }
-    V_[i] = Sy_ * z0_ * _XT_[i] / 3;
+    V_[i] = Sy_ * z0_ * _XT_[i] * (1 - M_PI_4); // approximated assuming the interface is elliptical (a*b - pi*a*b)
     dh2_[i] = i == 0 ? 0 : (V_[i - 1] - V_[i]) * constpar.W() / constpar.A() * 1000;
     _hf_[i] = i == 0 ? _hf_[i] : _hf_[i] - dh2_[i] / 1000;
 }
