@@ -1,9 +1,12 @@
 #ifndef AQIFER_H
 #define AQIFER_H
-
+#define _USE_MATH_DEFINES
+ 
+#include <cmath>
 #include "bucket.h"
 #include "constpar.h"
 #include <Rcpp.h>
+
 
 class Aquifer
 {
