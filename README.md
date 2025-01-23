@@ -136,4 +136,4 @@ plot(results, y = obs_data, base_date = '19670101', type = 'comp')
 
 A GUI made in shiny is also available:
 
-<img src="./vignettes/articles/gui.gif" width="100%" />
+<img src="man/figures/gui.gif" width="100%" />
