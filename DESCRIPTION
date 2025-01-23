@@ -15,9 +15,15 @@ Imports:
     lubridate,
     methods,
     patchwork,
+    plotly,
     pracma,
+    purrr,
     Rcpp (>= 1.0.12),
     scales,
+    shiny,
+    shiny.fluent,
+    shinycssloaders,
+    shinyFiles,
     tidyr,
     tune
 LinkingTo: Rcpp
