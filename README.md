@@ -32,33 +32,108 @@ devtools::install_github("hxfan1227/SGDr")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+To calculate the SFGD using `estimate_sgd()`, the input data required
+includes:
+
+- Daily precipitation (R \[mm\])
+- Evapotranspiration (E0 \[mm\])
+- Pumping rate (q1 \[m3/d\])
+- Initial groundwater table (hf \[mm\])
+- Initial water table in the two soil *buckets*. (phi1, phi2 \[mm\])
+
+Below is an example of the input file:
 
 ``` r
 library(SGDr)
-## basic example code
+test_data <- read.csv(SGDr_example('test_data.csv'))
+head(test_data)
+#>   t R  E0 phi1 phi2  hf       q1
+#> 1 1 0 4.2   25  100 1.5 205.3388
+#> 2 2 0 4.7    0    0 0.0 205.3388
+#> 3 3 0 5.2    0    0 0.0 205.3388
+#> 4 4 0 6.0    0    0 0.0 205.3388
+#> 5 5 0 7.9    0    0 0.0 205.3388
+#> 6 6 0 5.0    0    0 0.0 205.3388
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+The parameters are stored using
+[JSON](https://www.json.org/json-en.html) format (`.json`). Two types of
+parameter JSON files are required:
+
+- Calibratable Parameters JSON File: Contains parameters that are
+  adjustable or subject to calibration during model optimization.
+- Constant Parameters JSON File: Contains fixed parameters that remain
+  unchanged throughout the model run.
+
+Use `json_to_parameter_list` to convert JSON files into list:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+
+cali_pars <- json_to_parameter_list(SGDr_example('preferred.json'))
+cnst_pars <- json_to_parameter_list(SGDr_example('consts.json'))
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+The SFGD can then be calculated as:
 
-You can also embed plots, for example:
+``` r
+results <- estimate_sgd(test_data, cali_pars, cnst_pars, 120, 1500)
+results
+#> 
+#> SGD Estimation Summary
+#> Warning in summary.SGD_ESTIMATION_DF(x, ...): No base date available. Please provide the base date to calculate the simulation period.
+#> Simulation length:  19884 days
+#> Estimated SFGD (q0):  1.16 m2/d
+#> Estimated Recharge (Wnet):  0.19 mm/d
+#> Estimated Runoff (Q):  0.38 mm/d
+#> Median hn: 1.73 m
+#> Median xn: 8539.46 m
+# use summary
+summary(results, base_date = '19670101')
+#> 
+#> SGD Estimation Summary
+#> Simlation period: 1967-01-01 - 2021-06-09 
+#> Estimated SFGD (q0):  1.16 m2/d
+#> Estimated Recharge (Wnet):  0.19 mm/d
+#> Estimated Runoff (Q):  0.38 mm/d
+#> Median hn: 1.73 m
+#> Median xn: 8539.46 m
+# use print 
+print(results, base_date = '19670101')
+#> 
+#> SGD Estimation Summary
+#> Simlation period: 1967-01-01 - 2021-06-09 
+#> Estimated SFGD (q0):  1.16 m2/d
+#> Estimated Recharge (Wnet):  0.19 mm/d
+#> Estimated Runoff (Q):  0.38 mm/d
+#> Median hn: 1.73 m
+#> Median xn: 8539.46 m
+```
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+The estimated results can be visualized with `plot`:
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+``` r
+# visualize the prediction results
+plot(results, base_date = '19670101')
+```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+
+``` r
+# visualize the input data
+plot(results, base_date = '19670101', type = 'input')
+```
+
+<img src="man/figures/README-unnamed-chunk-7-2.png" width="100%" />
+
+``` r
+# compare with the observed groundwater table
+library(data.table)
+obs_data <- data.table::fread(SGDr_example('obs_data.csv'))
+plot(results, y = obs_data, base_date = '19670101', type = 'comp')
+```
+
+<img src="man/figures/README-unnamed-chunk-7-3.png" width="100%" />
+
+A GUI made in shiny is also available:
+
+<img src="./vignettes/articles/gui.gif" width="100%" />
