@@ -26,6 +26,7 @@ Imports:
     shinycssloaders,
     shinyFiles,
     shinyjs,
+    tictoc,
     tidyr,
     tune
 LinkingTo: Rcpp
