@@ -45,7 +45,7 @@ test_that("print() warns if no base_date is available", {
 test_that("plot() returns correct object type", {
   inputData <- read.csv(test_path('testdata', 'test_data.csv'))
   obsData <- read.csv(test_path('testdata', 'obs_data.csv')) %>% 
-    mutate(date = ymd(obs_date)) %>%
+    mutate(date = ymd(date)) %>%
       select(date, hf) %>%
       distinct(date, .keep_all = T) %>%
       filter(hf <= 2)
@@ -60,7 +60,7 @@ test_that("plot() returns correct object type", {
 test_that("plot() throws error when no base_date is available", {
   inputData <- read.csv(test_path('testdata', 'test_data.csv'))
   obsData <- read.csv(test_path('testdata', 'obs_data.csv')) %>% 
-    mutate(date = ymd(obs_date)) %>%
+    mutate(date = ymd(date)) %>%
       select(date, hf) %>%
       distinct(date, .keep_all = T) %>%
       filter(hf <= 2)
