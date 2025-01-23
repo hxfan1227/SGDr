@@ -2,6 +2,7 @@
 #' @import shinyjs
 #' @import shinyFiles
 #' @import plotly
+#' @import tictoc
 #' @importFrom glue glue
 #' @importFrom shinycssloaders hideSpinner showSpinner withSpinner
 #' @importFrom shiny.fluent DatePicker.shinyInput
