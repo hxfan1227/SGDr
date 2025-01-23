@@ -8,6 +8,7 @@ License: GPL (>= 2)
 Imports: 
     data.table,
     dplyr,
+    DT,
     ggplot2,
     glue,
     hydroGOF,
