@@ -92,6 +92,6 @@ plot(results, y = obs_data, base_date = '19670101', type = 'comp')
 A GUI made in shiny is also available:
 
 ```{r, echo=FALSE}
-knitr::include_graphics('./vignettes/articles/gui.gif')
+knitr::include_graphics('man/figures/gui.gif')
 ```
 
