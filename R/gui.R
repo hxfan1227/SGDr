@@ -1,4 +1,5 @@
 #' @import shiny
+#' @import shinyjs
 #' @import shinyFiles
 #' @import plotly
 #' @importFrom glue glue
