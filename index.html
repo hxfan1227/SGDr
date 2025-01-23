@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">SGDr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,24 +68,86 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>To calculate the SFGD using <code><a href="reference/estimate_sgd.html">estimate_sgd()</a></code>, the input data required includes:</p>
+<ul>
+<li>Daily precipitation (R [mm])</li>
+<li>Evapotranspiration (E0 [mm])</li>
+<li>Pumping rate (q1 [m3/d])</li>
+<li>Initial groundwater table (hf [mm])</li>
+<li>Initial water table in the two soil <em>buckets</em>. (phi1, phi2 [mm])</li>
+</ul>
+<p>Below is an example of the input file:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://hxfan1227.github.io/SGDr/">SGDr</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
+<span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="reference/SGDr_example.html">SGDr_example</a></span><span class="op">(</span><span class="st">'test_data.csv'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   t R  E0 phi1 phi2  hf       q1</span></span>
+<span><span class="co">#&gt; 1 1 0 4.2   25  100 1.5 205.3388</span></span>
+<span><span class="co">#&gt; 2 2 0 4.7    0    0 0.0 205.3388</span></span>
+<span><span class="co">#&gt; 3 3 0 5.2    0    0 0.0 205.3388</span></span>
+<span><span class="co">#&gt; 4 4 0 6.0    0    0 0.0 205.3388</span></span>
+<span><span class="co">#&gt; 5 5 0 7.9    0    0 0.0 205.3388</span></span>
+<span><span class="co">#&gt; 6 6 0 5.0    0    0 0.0 205.3388</span></span></code></pre></div>
+<p>The parameters are stored using <a href="https://www.json.org/json-en.html" class="external-link">JSON</a> format (<code>.json</code>). Two types of parameter JSON files are required:</p>
+<ul>
+<li>Calibratable Parameters JSON File: Contains parameters that are adjustable or subject to calibration during model optimization.</li>
+<li>Constant Parameters JSON File: Contains fixed parameters that remain unchanged throughout the model run.</li>
+</ul>
+<p>Use <code>json_to_parameter_list</code> to convert JSON files into list:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      speed           dist       </span></span>
-<span><span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span></span>
-<span><span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span></span>
-<span><span class="co">#&gt;  Median :15.0   Median : 36.00  </span></span>
-<span><span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span></span>
-<span><span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code><a href="https://devtools.r-lib.org/reference/build_rmd.html" class="external-link">devtools::build_readme()</a></code> is handy for this.</p>
-<p>You can also embed plots, for example:</p>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
+<code class="sourceCode R"><span></span>
+<span><span class="va">cali_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/json_to_paramter_list.html">json_to_parameter_list</a></span><span class="op">(</span><span class="fu"><a href="reference/SGDr_example.html">SGDr_example</a></span><span class="op">(</span><span class="st">'preferred.json'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cnst_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/json_to_paramter_list.html">json_to_parameter_list</a></span><span class="op">(</span><span class="fu"><a href="reference/SGDr_example.html">SGDr_example</a></span><span class="op">(</span><span class="st">'consts.json'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The SFGD can then be calculated as:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_sgd.html">estimate_sgd</a></span><span class="op">(</span><span class="va">test_data</span>, <span class="va">cali_pars</span>, <span class="va">cnst_pars</span>, <span class="fl">120</span>, <span class="fl">1500</span><span class="op">)</span></span>
+<span><span class="va">results</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SGD Estimation Summary</span></span>
+<span><span class="co">#&gt; Warning in summary.SGD_ESTIMATION_DF(x, ...): No base date available. Please provide the base date to calculate the simulation period.</span></span>
+<span><span class="co">#&gt; Simulation length:  19884 days</span></span>
+<span><span class="co">#&gt; Estimated SFGD (q0):  1.16 m2/d</span></span>
+<span><span class="co">#&gt; Estimated Recharge (Wnet):  0.19 mm/d</span></span>
+<span><span class="co">#&gt; Estimated Runoff (Q):  0.38 mm/d</span></span>
+<span><span class="co">#&gt; Median hn: 1.73 m</span></span>
+<span><span class="co">#&gt; Median xn: 8539.46 m</span></span>
+<span><span class="co"># use summary</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span>, base_date <span class="op">=</span> <span class="st">'19670101'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SGD Estimation Summary</span></span>
+<span><span class="co">#&gt; Simlation period: 1967-01-01 - 2021-06-09 </span></span>
+<span><span class="co">#&gt; Estimated SFGD (q0):  1.16 m2/d</span></span>
+<span><span class="co">#&gt; Estimated Recharge (Wnet):  0.19 mm/d</span></span>
+<span><span class="co">#&gt; Estimated Runoff (Q):  0.38 mm/d</span></span>
+<span><span class="co">#&gt; Median hn: 1.73 m</span></span>
+<span><span class="co">#&gt; Median xn: 8539.46 m</span></span>
+<span><span class="co"># use print </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span>, base_date <span class="op">=</span> <span class="st">'19670101'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SGD Estimation Summary</span></span>
+<span><span class="co">#&gt; Simlation period: 1967-01-01 - 2021-06-09 </span></span>
+<span><span class="co">#&gt; Estimated SFGD (q0):  1.16 m2/d</span></span>
+<span><span class="co">#&gt; Estimated Recharge (Wnet):  0.19 mm/d</span></span>
+<span><span class="co">#&gt; Estimated Runoff (Q):  0.38 mm/d</span></span>
+<span><span class="co">#&gt; Median hn: 1.73 m</span></span>
+<span><span class="co">#&gt; Median xn: 8539.46 m</span></span></code></pre></div>
+<p>The estimated results can be visualized with <code>plot</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># visualize the prediction results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, base_date <span class="op">=</span> <span class="st">'19670101'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># visualize the input data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, base_date <span class="op">=</span> <span class="st">'19670101'</span>, type <span class="op">=</span> <span class="st">'input'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-2.png" width="100%"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># compare with the observed groundwater table</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="va">obs_data</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">fread</a></span><span class="op">(</span><span class="fu"><a href="reference/SGDr_example.html">SGDr_example</a></span><span class="op">(</span><span class="st">'obs_data.csv'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, y <span class="op">=</span> <span class="va">obs_data</span>, base_date <span class="op">=</span> <span class="st">'19670101'</span>, type <span class="op">=</span> <span class="st">'comp'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-3.png" width="100%"></p>
+<p>A GUI made in shiny is also available:</p>
+<p><img src="./articles/articles/gui.gif" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
