@@ -4,7 +4,7 @@
 
 * GUI for SFGD calculator is added.
 
-*`SGDr_example()` makes it easy to access example files bundled with `SGDr`.
+* `SGDr_example()` makes it easy to access example files bundled with `SGDr`.
 
 # SGDr 1.0
 
