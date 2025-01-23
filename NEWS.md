@@ -1,5 +1,9 @@
 # SGDr 1.1.0
 
+## Major changes
+
+* GUI for SFGD calculator is added.
+
 # SGDr 1.0
 
 ## Major changes
