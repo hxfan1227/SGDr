@@ -1,3 +1,5 @@
+# SGDr 1.1.0
+
 # SGDr 1.0
 
 ## Major changes

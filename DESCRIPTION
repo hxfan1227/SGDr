@@ -1,7 +1,7 @@
 Package: SGDr
 Type: Package
 Title: Submarine Groundwater Discharge (SGD) calculation in R
-Version: 1.0.0.9000
+Version: 1.1.0
 Date: 2024-03-12
 Description: Estimate SGD using 1-D bucket model and Strack (1976) analytical solution.
 License: GPL (>= 2)
