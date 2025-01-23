@@ -25,32 +25,73 @@ Submarine fresh groundwater discharge (SFGD) is a critical pathway for nutrient 
 
 You can install the development version of SGDr from [GitHub](https://github.com/) with:
 
-``` r
+``` {r, eval = F}
 # install.packages("devtools")
 devtools::install_github("hxfan1227/SGDr")
 ```
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(SGDr)
+```
+
+
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+To calculate the SFGD using `estimate_sgd()`, the input data required includes:
 
-```{r example}
+* Daily precipitation (R [mm])
+* Evapotranspiration (E0 [mm])
+* Pumping rate (q1 [m3/d])
+* Initial groundwater table (hf [mm]) 
+* Initial water table in the two soil *buckets*. (phi1, phi2 [mm])
+
+Below is an example of the input file:
+
+```{r, echo=TRUE}
 library(SGDr)
-## basic example code
+test_data <- read.csv(SGDr_example('test_data.csv'))
+head(test_data)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+The parameters are stored using [JSON](https://www.json.org/json-en.html) format (`.json`). Two types of parameter JSON files are required:
 
-```{r cars}
-summary(cars)
+* Calibratable Parameters JSON File: Contains parameters that are adjustable or subject to calibration during model optimization.
+* Constant Parameters JSON File: Contains fixed parameters that remain unchanged throughout the model run.
+
+Use `json_to_parameter_list` to convert JSON files into list:
+
+```{r}
+
+cali_pars <- json_to_parameter_list(SGDr_example('preferred.json'))
+cnst_pars <- json_to_parameter_list(SGDr_example('consts.json'))
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
+The SFGD can then be calculated as:
+```{r}
+results <- estimate_sgd(test_data, cali_pars, cnst_pars, 120, 1500)
+results
+# use summary
+summary(results, base_date = '19670101')
+# use print 
+print(results, base_date = '19670101')
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+The estimated results can be visualized with `plot`:
+
+```{r, fig.align='default', fig.dpi=300}
+# visualize the prediction results
+plot(results, base_date = '19670101')
+# visualize the input data
+plot(results, base_date = '19670101', type = 'input')
+# compare with the observed groundwater table
+library(data.table)
+obs_data <- data.table::fread(SGDr_example('obs_data.csv'))
+plot(results, y = obs_data, base_date = '19670101', type = 'comp')
+```
+
+A GUI made in shiny is also available:
+
+```{r, echo=FALSE}
+knitr::include_graphics('./vignettes/articles/gui.gif')
+```
+
