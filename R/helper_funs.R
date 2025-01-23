@@ -1,5 +1,5 @@
 #' @import jsonlite scales dplyr tidyr ggplot2 patchwork
-#' @importFrom lubridate ymd date days_in_month year month
+#' @importFrom lubridate ymd date days_in_month year month days
 #' @importFrom glue glue
 #' @importFrom scales pretty_breaks label_number cut_si
 #' @importFrom tune coord_obs_pred
@@ -145,8 +145,8 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       geom_line(linewidth = 0.8) +
       facet_wrap(~ variable, ncol = 1, strip.position = 'left',
                  labeller = label_parsed, scales = 'free_y') +
-      scale_y_continuous(breaks = scales::pretty_breaks(ybreaks),
-                         labels = scales::label_number(accuracy = 0.01, scale_cut = scales::cut_si(''))) +
+      scale_y_continuous(breaks = scales::extended_breaks(ybreaks),
+                         labels = scales::label_number(accuracy = 0.01)) +
       scale_x_date(name = NULL, breaks = scales::pretty_breaks(n = xbreaks)) +
       theme_bw(base_size = 12, base_family = 'serif') +
       theme(strip.placement = 'outside',
@@ -161,6 +161,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       stop('You must provide the observed data')
     }
     obs_df <- data.table::setDT(y)
+    obs_df[, (obs_x) := lapply(.SD, lubridate::ymd), .SDcols = obs_x]
     plot_df <- data.table::setDT(results)
     plot_df[, date := ymd(base_date) + t - 1]
     plot_df[, t := NULL]
@@ -171,7 +172,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       scale_y_continuous(name = parse(text = "GWL~(m~AHD)"),
                          expand = c(0, 0),
                          limits = args$gwl_range,
-                         breaks = scales::pretty_breaks(ybreaks)) +
+                         breaks = scales::extended_breaks(ybreaks)) +
       scale_x_date(name = NULL, breaks = scales::pretty_breaks(n = xbreaks), expand = c(0, 0)) +
       scale_color_manual(name = NULL, values = colors, labels = color_labels) +
       guides(color = guide_legend(nrow = 1), fill =guide_legend(nrow = 1)) +
@@ -207,7 +208,7 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
       scale_x_continuous(name = parse(text = "GWL~(m~AHD)"),
                          expand = c(0, 0),
                          limits = args$gwl_range,
-                         breaks = scales::pretty_breaks(ybreaks)) +
+                         breaks = scales::extended_breaks(ybreaks)) +
       scale_color_manual(name = NULL, values = colors, labels = color_labels) +
       guides(color = guide_legend(nrow = 1), fill =guide_legend(nrow = 1)) +
       theme_bw(base_size = 12, base_family = 'serif') +
