@@ -102,8 +102,8 @@ ui <- fluidPage(
                    column(width = 9, plotly::plotlyOutput("q0Plot"))
                  )
         ),
-        tabPanel("Results",
-                 DT::DTOutput("resultTable"))
+        # tabPanel("Results",
+        #          DT::DTOutput("resultTable"))
       ), width = 9)
   )
 )
