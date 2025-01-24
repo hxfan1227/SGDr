@@ -1,12 +1,13 @@
 #' @import shiny
-#' @import shinyjs
 #' @import shinyFiles
-#' @import plotly
-#' @import tictoc
+#' @import pracma
 #' @importFrom glue glue
 #' @importFrom shinycssloaders hideSpinner showSpinner withSpinner
 #' @importFrom shiny.fluent DatePicker.shinyInput
 #' @importFrom purrr walk
+#' @importFrom shinyjs useShinyjs alert
+#' @importFrom plotly plot_ly renderPlotly plotlyOutput plotlyProxy plotlyProxyInvoke add_lines add_bars subplot layout
+#' @importFrom utils capture.output read.csv
 
 withConsoleRedirect <- function(containerId, expr) {
   # Change type="output" to type="message" to catch stderr
@@ -93,12 +94,12 @@ ui <- fluidPage(
       tabsetPanel(
         tabPanel("Simulation Plots", 
                  fluidRow(
-                   column(width = 9, shinycssloaders::withSpinner(plotlyOutput("wlPlot"))),
+                   column(width = 9, shinycssloaders::withSpinner(plotly::plotlyOutput("wlPlot"))),
                    column(width = 3, tableOutput('wlMetrics'))
                  ),
                  fluidRow(
                    # column(width = 6, plotlyOutput("wrPlot")),
-                   column(width = 9, plotlyOutput("q0Plot"))
+                   column(width = 9, plotly::plotlyOutput("q0Plot"))
                  )
         ),
         tabPanel("Results",
@@ -131,15 +132,15 @@ server <- function(input, output, session) {
     withConsoleRedirect("log", {
       walk(inFile$datapath, ~ cat(glue('Finish reading {.x}'), '\n'))
     }) 
-    plotlyProxy("wlPlot", session) %>% 
-      plotlyProxyInvoke("addTraces", list(
+    plotly::plotlyProxy("wlPlot", session) %>% 
+      plotly::plotlyProxyInvoke("addTraces", list(
         x = vars$obs_data$date,
         y = vars$obs_data$hf,
         type = "scatter",
         mode = "markers",
         marker = list(color = "red"),
         name = "Observed GWL",
-        yaxis = "y3"   # Ensure it targets the second subplot's y-axis
+        yaxis = "y3"   # Ensure it targets the second plotly::subplot's y-axis
       ))
   })
   output$is_obs_uploaded <- reactive({
@@ -198,36 +199,36 @@ server <- function(input, output, session) {
     updateSliderInput(session, "curveNumber_pF", value = vars$cali_par$cn$pF)
     
     withConsoleRedirect("log", {
-      tictoc::tic(msg = 'SFGD estimation')
+      pracma::tic()
       vars$sgd_res <- estimate_sgd(vars$bound_data, vars$cali_par, vars$cnst_par, 
                                    nw = input$windowSize)
-      tictoc::toc()
+      pracma::toc()
       vars$sgd_res$results <- vars$sgd_res$results %>% 
         mutate(date = as.Date(input$start_date) - 1 + t)
     }) 
-    output$wlPlot <- renderPlotly({
-      p1 <- plot_ly(data = vars$bound_data) %>% 
-        add_bars(x = ~ date, y = ~ R, yaxis = 'y2', name = 'Precipitation', color = I('blue')) %>% 
-        add_lines(x = ~ date ,y = ~ q1, yaxis = 'y1', name = 'Pumping', color = I('green')) %>%
-        layout(barmode = 'group', 
+    output$wlPlot <- plotly::renderPlotly({
+      p1 <- plotly::plot_ly(data = vars$bound_data) %>% 
+        plotly::add_bars(x = ~ date, y = ~ R, yaxis = 'y2', name = 'Precipitation', color = I('blue')) %>% 
+        plotly::add_lines(x = ~ date ,y = ~ q1, yaxis = 'y1', name = 'Pumping', color = I('green')) %>%
+        plotly::layout(barmode = 'group', 
                xaxis = list(title = 'Date', autorange = T, automargin = T),
                yaxis = list(title = 'Pumping (m<sup>3</sup>/d)', side = "left", range = c(75, 600)),
                yaxis2 = list(title ='Precpitation (mm/d)', automargin = T,
                              overlaying = "y", autorange='reversed', side = "right"))
-      p2 <- plot_ly() %>% 
+      p2 <- plotly::plot_ly() %>% 
         # add_markers(data = obs_data, x = ~ date, y = ~ hf, yaxis = 'y1', name = 'Observed GWL', color = I('red')) %>%
-        add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ hf, yaxis = 'y1', name = 'Preferred GWL', color = I('grey')) %>% 
-        add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ hf, yaxis = 'y1', name = 'Current GWL', color = I('orange'))
+        plotly::add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ hf, yaxis = 'y1', name = 'Preferred GWL', color = I('grey')) %>% 
+        plotly::add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ hf, yaxis = 'y1', name = 'Current GWL', color = I('orange'))
       
-      subplot(p1, p2, nrows = 2, margin = 0.05, shareX = T, titleY = T) %>% 
-        layout(xaxis = list(title = '', autorange = T, automargin = T),
+      plotly::subplot(p1, p2, nrows = 2, margin = 0.05, shareX = T, titleY = T) %>% 
+        plotly::layout(xaxis = list(title = '', autorange = T, automargin = T),
                legend = list(y = 0.5, orientation = 'h', x = 0.45, bgcolor = 'rgba(255, 255, 255, 0.5)', 
                              xanchor = 'center', yanchor = 'bottom', yref = 'container'))
     })
-    output$q0Plot <- renderPlotly({
-      plot_ly() %>% 
-        add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ q0, yaxis = 'y1', name = 'Preferred SFGD', color = I('grey')) %>% 
-        add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ q0, yaxis = 'y1', name = 'Current SFGD', color = I('orange'))
+    output$q0Plot <- plotly::renderPlotly({
+      plotly::plot_ly() %>% 
+        plotly::add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ q0, yaxis = 'y1', name = 'Preferred SFGD', color = I('grey')) %>% 
+        plotly::add_lines(data = vars$sgd_res$results, x = ~ date, y = ~ q0, yaxis = 'y1', name = 'Current SFGD', color = I('orange'))
     })
   })
   
@@ -292,16 +293,16 @@ server <- function(input, output, session) {
   })
   
  
-  observe({plotlyProxy("wlPlot", session) %>%
-      plotlyProxyInvoke( "restyle", list(
+  observe({plotly::plotlyProxy("wlPlot", session) %>%
+      plotly::plotlyProxyInvoke( "restyle", list(
         y = list(modelResults()$hf),
         x = list(modelResults()$date)
       ), list(3)
       )
   })
   # 
-  observe({plotlyProxy("q0Plot", session) %>%
-      plotlyProxyInvoke( "restyle", list(
+  observe({plotly::plotlyProxy("q0Plot", session) %>%
+      plotly::plotlyProxyInvoke( "restyle", list(
         y = list(modelResults()$q0),
         x = list(modelResults()$date)
       ), list(1)

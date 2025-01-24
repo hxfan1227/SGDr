@@ -1,4 +1,4 @@
-#' @import jsonlite scales dplyr tidyr ggplot2 patchwork
+#' @import scales dplyr tidyr ggplot2 patchwork
 #' @importFrom lubridate ymd date days_in_month year month days
 #' @importFrom glue glue
 #' @importFrom scales pretty_breaks label_number cut_si
@@ -6,7 +6,7 @@
 #' @importFrom data.table setDT setDF := data.table copy
 #' @importFrom stats median
 #' @importFrom utils as.relistable relist 
-
+#' @importFrom jsonlite fromJSON
 NULL 
 #'  Convert a JSON file to a list of parameters
 #' @name json_to_paramter_list
@@ -88,7 +88,7 @@ NULL
 #' @rdname plot.SGD_ESTIMATION_DF
 #' @param x An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param y A data.frame of daily observed groundwater level data. See Details.
-#' @param vars A character vector of the variables to plot. Can be 'all' or a subset of 'wl', 'SGD', 'hn', 'xn', 'Wrechg', 'WrechgAve'.
+#' @param vars A character vector of the variables to plot. Can be 'all' or a subset of 'hf', 'q0', 'hn', 'xn', 'Wnet', '_Wnet'.
 #' @param base_date A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.
 #' @param type A character string indicating the type of plot. Can be one of 'pred', 'comp', 'input'.
 #' @param obs_x A character string indicating the column name of the date in the observed data.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{estimate_sgd}
 \alias{estimate_sgd}
-\title{Estimate the SFGD (q0) \link{m2/d}.}
+\title{Estimate the SFGD (q0 [m2/d]) .}
 \usage{
 estimate_sgd(
   inputData,
@@ -32,14 +32,14 @@ Estimate the SGD volume based on Strack (1976) analytical solution.
 \details{
 Estimate the SGD volume based on Strack (1976) analytical solution.
 \itemize{
-\item The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, q1, GWL, H2O_SB1, H2O_SB2).
+\item The \code{inputData} should be a data.frame containing the required columns for the model (R, E0, q1, hf, phi1, phi2).
 \itemize{
 \item \code{R} is a numeric vector of the daily precipitation (mm).
 \item \code{E0} is a numeric vector of the daily potential evapotranspiration (mm).
 \item \code{q1} is a numeric vector of the daily pumping rate (m3/d).
-\item \code{GWL} is a numeric vector of the initial groundwater level (mm), Only the first value is used as the initial value for the SB1.
-\item \code{H2O_SB1} is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.
-\item \code{H2O_SB2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
+\item \code{hf} is a numeric vector of the initial groundwater level (mm), Only the first value is used as the initial value for the SB1.
+\item \code{phi1} is a numeric vector of the initial water level in the first soil bucket (mm). Only the first value is used as the initial value for the SB1.
+\item \code{phi2} is a numeric vector of the inital water level in the second soil bucket (mm). Only the first value is used as the initial value for the SB2.
 }
 \item \code{calibratableParams} should be a list of calibratable parameters. It's recommended to use \code{\link{json_to_paramter_list}} to create this list.
 \item \code{nw} A integer indicating the period you want to average the recharge.
