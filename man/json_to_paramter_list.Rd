@@ -14,5 +14,7 @@ json_to_parameter_list(json_file)
 A list of parameters (invisible)
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function converts a JSON file to a list of parameters.
 }

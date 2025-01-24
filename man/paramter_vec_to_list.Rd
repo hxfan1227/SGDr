@@ -16,5 +16,7 @@ parameter_vec_to_list(parameter_vec, prameter_skeleton)
 A list of parameters (invisible)
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function converts a vector of parameters to a list of parameters.
 }

@@ -36,7 +36,7 @@ estimate_sgd_from_pars(
 A SGD_ESTIMATION_DF class
 }
 \description{
-A wrapper function to call the model and return result for calibration.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \seealso{
 \code{\link{estimate_sgd}}

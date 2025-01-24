@@ -14,5 +14,5 @@
 \item{...}{other arguments not used by this method}
 }
 \description{
-Summary the SGD estimation results.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

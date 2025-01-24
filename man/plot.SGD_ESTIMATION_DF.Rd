@@ -31,7 +31,7 @@
 
 \item{y}{A data.frame of daily observed groundwater level data. See Details.}
 
-\item{vars}{A character vector of the variables to plot. Can be 'all' or a subset of 'wl', 'SGD', 'hn', 'xn', 'Wrechg', 'WrechgAve'.}
+\item{vars}{A character vector of the variables to plot. Can be 'all' or a subset of 'hf', 'q0', 'hn', 'xn', 'Wnet', '_Wnet'.}
 
 \item{base_date}{A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.}
 
@@ -65,5 +65,5 @@
 Invisibly returns the original estimated results.
 }
 \description{
-Plot the SGD estimation results
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

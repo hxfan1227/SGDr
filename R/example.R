@@ -5,6 +5,8 @@ NULL
 #' directory. This function make them easy to access
 #'
 #' @param file Name of file. If `NULL`, the example files will be listed.
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @examples
 #' SGDr_example()
 #' SGDr_example("test_data.csv")

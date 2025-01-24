@@ -13,5 +13,7 @@ parameter_list_to_vector(parameter_list)
 A named vector of parameters
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 This function converts a list of parameters to a vector of parameters.
 }
