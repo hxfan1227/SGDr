@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SGDr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,35 +36,38 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="sgdr-110">SGDr 1.1.0<a class="anchor" aria-label="anchor" href="#sgdr-110"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.1" id="sgdr-011">SGDr 0.1.1<a class="anchor" aria-label="anchor" href="#sgdr-011"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-1-1-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-1-0"></a></h3>
-<ul><li><p>GUI for SFGD calculator is added.</p></li>
+<h3 id="major-changes-0-1-1">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-1-1"></a></h3>
+<ul><li><p>GUI for SFGD calculator is availble now.</p></li>
 <li><p><code><a href="../reference/SGDr_example.html">SGDr_example()</a></code> makes it easy to access example files bundled with <code>SGDr</code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-0-1-1">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-1-1"></a></h3>
+<ul><li>Fix typos in the documents</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0" id="sgdr-10">SGDr 1.0<a class="anchor" aria-label="anchor" href="#sgdr-10"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="sgdr-010">SGDr 0.1.0<a class="anchor" aria-label="anchor" href="#sgdr-010"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-1-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-0"></a></h3>
+<h3 id="major-changes-0-1-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-1-0"></a></h3>
 <ul><li><p>First public release of <code>SGDr</code></p></li>
-<li><p>Re-constructed in Rcpp, with major modifications made to each class.</p></li>
-<li><p>3 more classes added (i.e., <code>CurveNumber</code> for Curver Number method, <code>Bucket</code> for the soil layer and <code>Aquifer</code> for the aquifer layer)</p></li>
+<li><p>Restructured in Rcpp, with major modifications made to each class.</p></li>
+<li><p>3 more classes have been added (i.e., <code>CurveNumber</code> for Curve Number method, <code>Bucket</code> for the soil layer and <code>Aquifer</code> for the aquifer layer)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-changes-1-0">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-1-0"></a></h3>
+<h3 id="minor-changes-0-1-0">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-1-0"></a></h3>
 <ul><li>slight modification made to the <code>plot</code> method.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="sgdr-development-version">SGDr (development version)<a class="anchor" aria-label="anchor" href="#sgdr-development-version"></a></h2>
-<ul><li><p>The unknown pumping rate is now available for calibration. (Still not a general purpose function, just for case study)</p></li>
+<ul><li><p>The unknown pumping rate is now available for calibration. (not a general purpose function, just for case study)</p></li>
 <li><p>The window size is now available for calibration.</p></li>
 <li><p>The warm up period is now available for the model, implemented in <code>C++</code>.</p></li>
-<li><p>The package is now using S3 method for <code>SGD_ESTIMATION_DF</code> class.</p></li>
 <li><p><code>plot</code>, <code>print</code> and <code>summary</code> methods are available for the <code>SGD_ESTIMATION_DF</code> class.</p></li>
-<li><p>The package has been totally re-constructed using OOP. Now we have 2 classes which are <code>Model</code> and <code>Parameters</code>, respectively. We have achieved same results and efficiency when applying these changes. However the extensibility is much larger.</p></li>
-<li><p>The <code>Model</code> class and <code>Parameters</code> class is still under development.</p></li>
+<li><p>The package is now using <code>S3</code> method for <code>SGD_ESTIMATION_DF</code> class.</p></li>
+<li><p>The package has been completely restructured using Object-Oriented Programming (OOP). It now comprises two primary classes, namely <code>Model</code> and <code>Parameters</code>. Despite these structural modifications, the results and efficiency remain consistent with previous implementations. However, the changes have significantly enhanced the system’s extensibility.</p></li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
