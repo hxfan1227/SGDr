@@ -15,5 +15,5 @@ prepare_warm_up(data, length)
 A data.frame containing the input data for the model with the warm-up period.
 }
 \description{
-Prepare the warm-up data
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

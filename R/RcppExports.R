@@ -2,6 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Estimate the SFGD (q0 \[m2/d\]) .
+#' @description `r lifecycle::badge("stable")`
 #' @param inputData A data frame containing the input data for the model.
 #' @param calibratableParams A list of calibratable parameters.
 #' @param constParams A list of constant parameters.
@@ -27,6 +28,7 @@ estimate_sgd <- function(inputData, calibratableParams, constParams, nw = 120L, 
 
 #' Prepare the warm-up data
 #' @rdname prepare_warm_up
+#' @description `r lifecycle::badge("experimental")`
 #' @param data A data.frame containing the input data for the model.
 #' @param length An integer indicating the length of the warm-up period (days).
 #' @return A data.frame containing the input data for the model with the warm-up period.

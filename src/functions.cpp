@@ -2,6 +2,7 @@
 #include "Model.h"
 
 //' Estimate the SFGD (q0 \[m2/d\]) .
+//' @description `r lifecycle::badge("stable")`
 //' @param inputData A data frame containing the input data for the model.
 //' @param calibratableParams A list of calibratable parameters.
 //' @param constParams A list of constant parameters.
@@ -36,6 +37,7 @@ Rcpp::List estimate_sgd(const Rcpp::DataFrame &inputData, const Rcpp::List &cali
 
 //' Prepare the warm-up data
 //' @rdname prepare_warm_up
+//' @description `r lifecycle::badge("experimental")`
 //' @param data A data.frame containing the input data for the model.
 //' @param length An integer indicating the length of the warm-up period (days).
 //' @return A data.frame containing the input data for the model with the warm-up period.

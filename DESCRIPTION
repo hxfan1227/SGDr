@@ -33,6 +33,7 @@ Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Suggests: 
     devtools,
+    lifecycle,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://hxfan1227.github.io/SGDr/

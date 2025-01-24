@@ -19,5 +19,5 @@ change_unknown_pumping(x, input_df, yearly_df, pumping_df)
 A data.frame of the input data with the preferred pumping rate
 }
 \description{
-A function to change the unknown pumping rate to a preferred value.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

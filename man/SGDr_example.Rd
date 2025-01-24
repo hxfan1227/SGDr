@@ -10,6 +10,9 @@ SGDr_example(file = NULL)
 \item{file}{Name of file. If \code{NULL}, the example files will be listed.}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+}
+\details{
 SGDr comes bundled with a number of sample files in its \code{inst/extdata}
 directory. This function make them easy to access
 }

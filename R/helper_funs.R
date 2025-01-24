@@ -10,6 +10,8 @@
 NULL 
 #'  Convert a JSON file to a list of parameters
 #' @name json_to_paramter_list
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @aliases json_to_paramter_list
 #' @rdname json_to_paramter_list
 #' @description This function converts a JSON file to a list of parameters.
@@ -24,6 +26,8 @@ json_to_parameter_list <- function(json_file) {
 
 #' Convert a vector of parameters to a list of parameters (useful for calibrating parameters)
 #' @name paramter_vec_to_list
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @aliases paramter_vec_to_list
 #' @rdname paramter_vec_to_list
 #' @description This function converts a vector of parameters to a list of parameters.
@@ -38,6 +42,8 @@ parameter_vec_to_list <- function(parameter_vec, prameter_skeleton) {
 
 #' Convert a list of parameters to a vector of parameters
 #' @name parameter_list_to_vector
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @aliases parameter_list_to_vector
 #' @rdname parameter_list_to_vector
 #' @description This function converts a list of parameters to a vector of parameters.
@@ -54,6 +60,8 @@ parameter_list_to_vector <- function(parameter_list) {
 
 #' Print the SGD estimation results.
 #' @rdname print.SGD_ESTIMATION_DF
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @param x An object of class \code{SGD_ESTIMATION_DF}. Created by \code{\link{estimate_sgd}}.
 #' @param ... other arguments not used by this method
 #' @export
@@ -64,6 +72,8 @@ print.SGD_ESTIMATION_DF <- function(x, ...) {
 
 #' Summary the SGD estimation results.
 #' @rdname summary
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @param object An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param base_date A valid string that can be transformed into data format using \code{\link[lubridate]{ymd}}.
 #' @param ... other arguments not used by this method
@@ -86,6 +96,8 @@ summary.SGD_ESTIMATION_DF <- function(object, base_date, ...) {
 NULL 
 #' Plot the SGD estimation results
 #' @rdname plot.SGD_ESTIMATION_DF
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param x An object of class \code{sgdEstimation}. Created by \code{\link{estimate_sgd}}.
 #' @param y A data.frame of daily observed groundwater level data. See Details.
 #' @param vars A character vector of the variables to plot. Can be 'all' or a subset of 'hf', 'q0', 'hn', 'xn', 'Wnet', '_Wnet'.
@@ -259,6 +271,8 @@ plot.SGD_ESTIMATION_DF <- function(x, y,
 
 #' A wrapper function to call the model and return result for calibration.
 #' @rdname estimate_sgd_from_pars
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param pars A numeric vector of parameters to calibrate.
 #' @param parnames A character vector of names of the parameters.
 #' @param parset A character vector of names of the to-be-calibrated parameters.
@@ -308,6 +322,8 @@ estimate_sgd_from_pars <- function(pars,
 
 #' A function to change the unknown pumping rate to a preferred value.
 #' @rdname change_unknown_pumping
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param x A numeric value of the preferred pumping rate
 #' @param input_df A data.frame of the input data. See \link{estimate_sgd} for details.
 #' @param yearly_df A data.frame of the yearly pumping data. (2 columns: year, pumping)

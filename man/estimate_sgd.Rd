@@ -27,6 +27,8 @@ estimate_sgd(
 A SGD_ESTIMATION_DF class.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Estimate the SGD volume based on Strack (1976) analytical solution.
 }
 \details{
